@@ -35,10 +35,10 @@ const settingsConfig: FuseSettingsConfigType = {
 	 * The theme object defines the color theme for the application.
 	 */
 	theme: {
-		main: themesConfig.default,
-		navbar: themesConfig.defaultDark,
-		toolbar: themesConfig.default,
-		footer: themesConfig.defaultDark
+		main: themesConfig.emeraldGold,
+		navbar: themesConfig.emeraldGoldDark,
+		toolbar: themesConfig.emeraldGold,
+		footer: themesConfig.emeraldGoldDark
 	},
 
 	/**
@@ -47,7 +47,7 @@ const settingsConfig: FuseSettingsConfigType = {
 	 * To make the whole app accessible without authorization by default set defaultAuth: null
 	 * The individual route configs which have auth option won't be overridden.
 	 */
-	defaultAuth: ['admin'],
+	defaultAuth: ['RL001'],
 
 	/**
 	 * The loginRedirectUrl property defines the default redirect URL for the logged-in user.
