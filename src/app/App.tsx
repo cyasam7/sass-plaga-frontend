@@ -8,8 +8,8 @@ import { CacheProvider } from '@emotion/react';
 import { selectCurrentLanguageDirection } from 'app/store/i18nSlice';
 import themeLayouts from 'app/theme-layouts/themeLayouts';
 import { selectMainTheme } from '@fuse/core/FuseSettings/store/fuseSettingsSlice';
-import MockAdapterProvider from '@mock-api/MockAdapterProvider';
 import axios from 'axios';
+import { QueryClientProvider, QueryClient } from 'react-query';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
 /**
@@ -32,6 +32,8 @@ const emotionCacheOptions = {
 	}
 };
 
+const queryClient = new QueryClient();
+
 /**
  * The main App component.
  */
@@ -47,7 +49,7 @@ function App() {
 	const mainTheme = useSelector(selectMainTheme);
 
 	return (
-		<MockAdapterProvider>
+		<QueryClientProvider client={queryClient}>
 			<CacheProvider value={createCache(emotionCacheOptions[langDirection] as Options)}>
 				<FuseTheme
 					theme={mainTheme}
@@ -69,7 +71,7 @@ function App() {
 					</AuthRouteProvider>
 				</FuseTheme>
 			</CacheProvider>
-		</MockAdapterProvider>
+		</QueryClientProvider>
 	);
 }
 

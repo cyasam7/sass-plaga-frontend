@@ -43,7 +43,6 @@ function Layout1(props: Layout1Props) {
 	const config = useSelector(selectFuseCurrentLayoutConfig) as Layout1ConfigDefaultsType;
 	const appContext = useContext(AppContext);
 	const { routes } = appContext;
-
 	return (
 		<Root
 			id="fuse-layout"

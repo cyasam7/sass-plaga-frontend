@@ -10,19 +10,31 @@ i18next.addResourceBundle('tr', 'examplePage', tr);
 i18next.addResourceBundle('ar', 'examplePage', ar);
 
 const Companies = lazy(() => import('./Companies'));
+const CompaniesDetail = lazy(() => import('./CompanyDetail'));
 
 /**
  * The Example page config.
  */
 const CompaniesConfig: FuseRouteConfigType = {
 	settings: {
-		layout: {}
+		layout: {
+			style: 'layout1',
+			config: {
+				footer: {
+					display: false
+				}
+			}
+		}
 	},
 	auth: ['staff', 'admin'],
 	routes: [
 		{
 			path: 'companies',
 			element: <Companies />
+		},
+		{
+			path: 'companies/details/:id',
+			element: <CompaniesDetail />
 		}
 	]
 };
