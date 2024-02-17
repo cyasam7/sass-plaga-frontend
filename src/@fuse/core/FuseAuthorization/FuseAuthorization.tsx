@@ -79,9 +79,7 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 		}
 
 		const { route }: { route: FuseRouteItemType } = matched;
-
 		const userHasPermission = FuseUtils.hasPermission(route.auth, userRole);
-
 		const ignoredPaths = ['/', '/callback', '/sign-in', '/sign-out', '/logout', '/404'];
 
 		if (matched && !userHasPermission && !ignoredPaths.includes(pathname)) {

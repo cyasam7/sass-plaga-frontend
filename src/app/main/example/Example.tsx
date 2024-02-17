@@ -2,6 +2,8 @@ import DemoContent from '@fuse/core/DemoContent';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
+import { Button } from '@mui/material';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -18,6 +20,12 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function Example() {
 	const { t } = useTranslation('examplePage');
 
+	async function handleSubmit(): Promise<void> {
+		axios.get('/company').then(({ data }) => {
+			console.log(data);
+		});
+	}
+
 	return (
 		<Root
 			header={
@@ -29,7 +37,8 @@ function Example() {
 				<div className="p-24">
 					<h4>Content</h4>
 					<br />
-					<DemoContent />
+					<p>hla</p>
+					<Button onClick={handleSubmit}>Peticion</Button>
 				</div>
 			}
 		/>

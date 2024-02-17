@@ -16,8 +16,8 @@ import { AuthRouteProvider } from './auth/AuthRouteProvider';
  * Axios HTTP Request defaults
  */
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-// axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const emotionCacheOptions = {
 	rtl: {
