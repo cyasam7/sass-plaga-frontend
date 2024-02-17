@@ -10,7 +10,7 @@ i18next.addResourceBundle('tr', 'examplePage', tr);
 i18next.addResourceBundle('ar', 'examplePage', ar);
 
 const Companies = lazy(() => import('./Companies'));
-const CompaniesDetail = lazy(() => import('./CompanyDetail'));
+const CompaniesDetail = lazy(() => import('./CompanyDetails/CompanyDetail'));
 
 /**
  * The Example page config.

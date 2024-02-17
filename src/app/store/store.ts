@@ -11,9 +11,10 @@ import {
 } from '@reduxjs/toolkit';
 import { createDynamicMiddleware } from '@reduxjs/toolkit/react';
 import { AppDispatchType } from 'app/store/types';
-import { useDispatch } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { createLogger } from 'redux-logger';
+import { dialogReducer } from 'src/app/auth/user/store/dialogSlice';
 
 /**
  * The dynamic middleware instance.
@@ -41,7 +42,8 @@ export interface LazyLoadedSlices {}
  */
 const staticReducers: ReducersMapObject = {
 	i18n,
-	[apiService.reducerPath]: apiService.reducer
+	[apiService.reducerPath]: apiService.reducer,
+	dialogReducer
 };
 
 /**
@@ -61,7 +63,7 @@ export function configureAppStore(initialState?: RootState) {
 	const store = configureStore({
 		reducer: rootReducer,
 		preloadedState: initialState,
-		middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middlewares)
+		middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(middlewares)
 	}) as Store<RootState>;
 
 	setupListeners(store.dispatch);
@@ -107,5 +109,7 @@ type Config = {
 export const withAppMiddleware = dynamicInstance.withMiddleware.withTypes<Config>();
 
 const store = configureAppStore();
+
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default store;

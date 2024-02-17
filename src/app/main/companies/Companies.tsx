@@ -21,24 +21,27 @@ function Companies() {
 	const columns: GridColDef<CompanyEntity>[] = [
 		{
 			field: 'name',
-			headerName: 'name',
+			headerName: 'Name',
 			minWidth: 150,
 			flex: 1,
+			sortable: false,
 			disableColumnMenu: true
 		},
 		{
 			field: 'address',
-			headerName: 'address',
+			headerName: 'Address',
 			minWidth: 150,
 			flex: 1,
+			sortable: false,
 			disableColumnMenu: true
 		},
 		{
-			field: 'createdAt',
+			field: 'actions',
 			type: 'actions',
-			headerName: 'address',
-			minWidth: 150,
+			headerName: 'Actions',
+			maxWidth: 100,
 			flex: 1,
+			sortable: false,
 			disableColumnMenu: true,
 			getActions: (params) => {
 				return [
@@ -47,18 +50,21 @@ function Companies() {
 						label="Ver"
 						icon={<RemoveRedEyeIcon />}
 						onClick={() => navigate(`details/${params.row.id}`, { state: { mode: 'see' } })}
+						showInMenu
 					/>,
 					<GridActionsCellItem
 						key={1}
 						label="Editar"
 						icon={<EditIcon />}
 						onClick={() => navigate(`details/${params.row.id}`, { state: { mode: 'edit' } })}
+						showInMenu
 					/>,
 					<GridActionsCellItem
 						key={1}
 						label="Eliminar"
 						icon={<DeleteIcon />}
 						onClick={() => navigate('editr')}
+						showInMenu
 					/>
 				];
 			}
@@ -85,8 +91,8 @@ function Companies() {
 				</div>
 			}
 			content={
-				<div className="p-24">
-					<Box sx={{ height: 'calc(100vh - 128px);' }}>
+				<div className="">
+					<Box sx={{ height: 'calc(100vh - 140px);' }}>
 						<DataGrid
 							loading={isLoading}
 							rows={data?.data ?? []}

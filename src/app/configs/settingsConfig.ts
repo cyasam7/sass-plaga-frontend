@@ -35,10 +35,10 @@ const settingsConfig: FuseSettingsConfigType = {
 	 * The theme object defines the color theme for the application.
 	 */
 	theme: {
-		main: themesConfig.emeraldGold,
-		navbar: themesConfig.emeraldGoldDark,
-		toolbar: themesConfig.emeraldGold,
-		footer: themesConfig.emeraldGoldDark
+		main: themesConfig.charcoalTeal,
+		navbar: themesConfig.charcoalTealDark,
+		toolbar: themesConfig.charcoalTeal,
+		footer: themesConfig.charcoalTealDark
 	},
 
 	/**

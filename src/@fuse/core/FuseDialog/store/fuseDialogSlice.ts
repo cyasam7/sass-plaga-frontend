@@ -25,7 +25,7 @@ export const fuseDialogSlice = createSlice({
 	name: 'fuseDialog',
 	initialState,
 	reducers: {
-		openDialog: (state, action: PayloadAction<{ children: InitialStateProps['children'] }>) => {
+		openDialogFuse: (state, action: PayloadAction<{ children: InitialStateProps['children'] }>) => {
 			state.open = true;
 			state.children = action.payload.children;
 		},
@@ -33,7 +33,7 @@ export const fuseDialogSlice = createSlice({
 	}
 });
 
-export const { closeDialog, openDialog } = fuseDialogSlice.actions;
+export const { closeDialog, openDialogFuse } = fuseDialogSlice.actions;
 
 export const selectFuseDialogState = appSelector((state: AppRootStateType) => state.fuseDialog.open);
 

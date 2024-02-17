@@ -12,6 +12,7 @@ import axios from 'axios';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
+import GlobalDialog from './shared-components/GlobalDialog/GlobalDialog';
 /**
  * Axios HTTP Request defaults
  */
@@ -67,6 +68,7 @@ function App() {
 							}}
 						>
 							<FuseLayout layouts={themeLayouts} />
+							<GlobalDialog />
 						</SnackbarProvider>
 					</AuthRouteProvider>
 				</FuseTheme>
