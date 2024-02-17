@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import jwtDecode, { JwtPayload } from 'jwt-decode';
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
 import { UserLoginResponse, AxiosConfigRetry } from '../../user';
+import { formatUserResponse } from './utils';
 
 const defaultAuthConfig = {
 	tokenStorageKey: 'jwt_access_token',
@@ -152,22 +152,6 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 	}, []);
 
 	/**
-	 * Check if the access token is valid
-	 */
-	const isTokenValid = useCallback((accessToken: string) => {
-		if (accessToken) {
-			try {
-				const decoded = jwtDecode<JwtPayload>(accessToken);
-				const currentTime = Date.now() / 1000;
-				return decoded.exp > currentTime;
-			} catch (error) {
-				return false;
-			}
-		}
-		return false;
-	}, []);
-
-	/**
 	 * Sign in
 	 */
 	const signIn = async (credentials: SignInPayload) => {
@@ -175,20 +159,11 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
 		response.then(
 			(res: AxiosResponse<UserLoginResponse>) => {
-				const { accessToken, refreshToken, ...rest } = res.data;
+				const { accessToken, refreshToken } = res.data;
 
-				const formattedUser = {
-					uid: rest.id,
-					role: rest.role.code,
-					data: {
-						displayName: rest.name,
-						photoURL: rest.name,
-						email: rest.email
-						/* loginRedirectUrl?: string; // The URL to redirect to after login. */
-					}
-				} as User;
+				const formattedUser = formatUserResponse(res.data);
 
-				handleSignInSuccess(formattedUser, accessToken, refreshToken);
+				handleSignInSuccess(formattedUser as User, accessToken, refreshToken);
 
 				return formattedUser;
 			},
@@ -212,22 +187,13 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
 		response.then(
 			(res: AxiosResponse<UserLoginResponse>) => {
-				const { accessToken, refreshToken, ...userData } = res.data;
+				const { accessToken, refreshToken } = res.data;
 
-				const formattedUser = {
-					uid: userData.id,
-					role: userData.role.code,
-					data: {
-						displayName: userData.name,
-						photoURL: userData.name,
-						email: userData.email
-						/* loginRedirectUrl?: string; // The URL to redirect to after login. */
-					}
-				} as User;
+				const formattedUser = formatUserResponse(res.data) as User;
 
 				handleSignUpSuccess(formattedUser, accessToken, refreshToken);
 
-				return userData;
+				return formattedUser;
 			},
 			(error) => {
 				const axiosError = error as AxiosError;
@@ -262,11 +228,8 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 				authConfig.updateUserUrl,
 				userData
 			);
-
 			const updatedUserData = response?.data;
-
 			onUpdateUser(updatedUserData);
-
 			return null;
 		} catch (error) {
 			const axiosError = error as AxiosError;
@@ -361,26 +324,11 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 			try {
 				setIsLoading(true);
 				const response: AxiosResponse<UserLoginResponse> = await axios.get(authConfig.getUserUrl);
-				console.log({ response });
 				const userData = response?.data;
-				const formattedUser = {
-					uid: userData.id,
-					role: userData.role.code,
-					data: {
-						displayName: userData.name,
-						photoURL: userData.name,
-						email: userData.email
-						/* loginRedirectUrl?: string; // The URL to redirect to after login. */
-					}
-				} as User;
-
+				const formattedUser = formatUserResponse(userData) as User;
 				handleSignInSuccess(formattedUser, userData.accessToken, userData.refreshToken);
-
 				return true;
-			} catch /* (error) */ {
-				/* const axiosError = error as AxiosError;
-
-				handleSignInFailure(axiosError); */
+			} catch {
 				return false;
 			}
 		};

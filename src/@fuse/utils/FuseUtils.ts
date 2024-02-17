@@ -23,7 +23,6 @@ export type FuseRouteItemType = RouteObject & {
  */
 export type FuseRoutesType = FuseRouteItemType[];
 
-export type AuthRoles = 'RL001' | 'RL002' | 'RL003';
 /**
  * The FuseRouteConfigType type is a custom type that defines the configuration for a set of routes.
  * It includes an optional routes property, an optional settings property, and an optional auth property.
@@ -31,7 +30,7 @@ export type AuthRoles = 'RL001' | 'RL002' | 'RL003';
 export type FuseRouteConfigType = {
 	routes: FuseRoutesType;
 	settings?: unknown;
-	auth?: AuthRoles[] | [];
+	auth?: string[] | [];
 };
 
 /**

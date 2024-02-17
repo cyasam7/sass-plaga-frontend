@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { useRoutes } from 'react-router-dom';
 import { selectFuseCurrentLayoutConfig } from '@fuse/core/FuseSettings/store/fuseSettingsSlice';
 import { Layout1ConfigDefaultsType } from 'app/theme-layouts/layout1/Layout1Config';
-import Configurator from 'app/theme-layouts/shared-components/configurator/Configurator';
 import FuseSuspense from '@fuse/core/FuseSuspense';
 import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
@@ -63,10 +62,6 @@ function Layout1(props: Layout1Props) {
 					{config.toolbar.display && (
 						<ToolbarLayout1 className={config.toolbar.style === 'fixed' ? 'sticky top-0' : ''} />
 					)}
-
-					<div className="sticky top-0 z-99">
-						<Configurator />
-					</div>
 
 					<div className="relative z-10 flex min-h-0 flex-auto flex-col">
 						<FuseSuspense>{useRoutes(routes)}</FuseSuspense>

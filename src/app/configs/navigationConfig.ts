@@ -18,7 +18,19 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'EXAMPLE',
 		type: 'item',
 		icon: 'heroicons-outline:star',
-		url: 'example'
+		url: 'example',
+		auth: ['admin', 'staff'],
+		children: []
+	},
+	{
+		id: 'companies',
+		title: 'Companies',
+		translate: 'COMPANIES',
+		type: 'item',
+		auth: ['admin', 'staff'],
+		icon: 'material-solid:home_work',
+		url: '/companies',
+		children: []
 	}
 ];
 

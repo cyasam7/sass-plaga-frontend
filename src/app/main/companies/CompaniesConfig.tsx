@@ -9,22 +9,22 @@ i18next.addResourceBundle('en', 'examplePage', en);
 i18next.addResourceBundle('tr', 'examplePage', tr);
 i18next.addResourceBundle('ar', 'examplePage', ar);
 
-const Example = lazy(() => import('./Example'));
+const Companies = lazy(() => import('./Companies'));
 
 /**
  * The Example page config.
  */
-const ExampleConfig: FuseRouteConfigType = {
+const CompaniesConfig: FuseRouteConfigType = {
 	settings: {
 		layout: {}
 	},
 	auth: ['staff', 'admin'],
 	routes: [
 		{
-			path: 'example',
-			element: <Example />
+			path: 'companies',
+			element: <Companies />
 		}
 	]
 };
 
-export default ExampleConfig;
+export default CompaniesConfig;

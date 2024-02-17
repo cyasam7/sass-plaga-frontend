@@ -1,4 +1,5 @@
 import { SxProps } from '@mui/system';
+import { AuthRoles } from '@fuse/utils/FuseUtils';
 import { FuseNavBadgeType } from './FuseNavBadgeType';
 
 /**
@@ -9,7 +10,7 @@ export type FuseNavItemType = {
 	id: string;
 	title?: string;
 	translate?: string;
-	auth?: string[] | string;
+	auth?: AuthRoles[] | string;
 	subtitle?: string;
 	icon?: string;
 	iconClass?: string;
