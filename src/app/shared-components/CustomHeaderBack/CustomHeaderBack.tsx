@@ -1,11 +1,11 @@
-import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Skeleton, Stack, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router';
 import clsx from 'clsx';
 import { ICustomHeaderBackProps } from './ICustomHeaderBackProps';
 
 function CustomHeaderBack(props: ICustomHeaderBackProps) {
-	const { backText, title, subtitle } = props;
+	const { backText, title, subtitle, rightComponent } = props;
 	const navigate = useNavigate();
 	return (
 		<div className="px-16 py-36 flex w-full">
@@ -24,44 +24,42 @@ function CustomHeaderBack(props: ICustomHeaderBackProps) {
 				</div>
 				<Stack
 					direction="row"
-					width="100$"
+					width="100%"
+					mt="16px"
 					justifyContent="space-between"
 				>
-					<Stack
-						mt="4px"
-						ml="20px"
-						spacing={0.5}
-					>
-						<Typography
-							variant="body1"
-							className={clsx('font-medium text-16 sm:text-20')}
-						>
-							{title}
-						</Typography>
-						<Typography
-							className={clsx('font-medium')}
-							variant="caption"
-						>
-							{subtitle}
-						</Typography>
+					<Stack spacing={0.5}>
+						{title ? (
+							<Typography
+								variant="body1"
+								className={clsx('font-medium text-16 sm:text-20')}
+							>
+								{title}
+							</Typography>
+						) : (
+							<Skeleton
+								variant="rectangular"
+								width={210}
+								height={50}
+							/>
+						)}
+
+						{subtitle ? (
+							<Typography
+								className={clsx('font-medium')}
+								variant="caption"
+							>
+								{subtitle}
+							</Typography>
+						) : (
+							<Skeleton
+								variant="rectangular"
+								width={210}
+								height={50}
+							/>
+						)}
 					</Stack>
-					<Stack
-						direction="row"
-						spacing={1}
-					>
-						<Button
-							color="primary"
-							variant="outlined"
-						>
-							Cancelar
-						</Button>
-						<Button
-							color="primary"
-							variant="contained"
-						>
-							Editar
-						</Button>
-					</Stack>
+					{rightComponent}
 				</Stack>
 			</Stack>
 		</div>

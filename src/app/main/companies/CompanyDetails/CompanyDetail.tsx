@@ -1,69 +1,146 @@
 import FusePageCarded from '@fuse/core/FusePageCarded';
 import CustomHeaderBack from 'app/shared-components/CustomHeaderBack/CustomHeaderBack';
 import Tab from '@mui/material/Tab';
-import React from 'react';
-import { Box, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
+import { useParams } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { useQuery, useQueryClient } from 'react-query';
+import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
+import { useCompanyDetail, useCompanyParams } from '../zustand';
+import { CompanyService } from '../services/CompanyService';
+import { IFormCompany } from '../types';
+import BasicInformation from './components/BasicInformation/BasicInformation';
+import Areas from './components/Areas/Areas';
+import RightHeader from './components/RightHeader/RightHeader';
+import SaveAreaDialog from './components/SaveAreaDialog/SaveAreaDialog';
 
 function CompanyDetail() {
-	const [value, setValue] = React.useState('1');
+	const queryClient = useQueryClient();
+	const { id } = useParams();
+	const [tab, setTab] = useState('1');
+	const [openSaveArea, setOpenSaveArea] = useState<boolean>(false);
+	const { isEditing, onChangeEditing, companyName, setCompanyName } = useCompanyDetail();
+	const { areaId, companyId, setAreaId, setCompanyId } = useCompanyParams();
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue(newValue);
+	const { data } = useQuery({
+		queryKey: ['detail-company', companyId],
+		queryFn: () => CompanyService.getCompanyById(companyId)
+	});
+
+	const formHandler = useForm<IFormCompany>({
+		defaultValues: {
+			id: null,
+			name: '',
+			address: ''
+		}
+	});
+
+	useEffect(() => {
+		if (data) {
+			formHandler.reset({
+				id: data.id,
+				name: data.name,
+				address: data.address
+			});
+			setCompanyName(data.name);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		setCompanyId(id);
+	}, [id]);
+
+	const handleChangeTab = (_: React.SyntheticEvent, newValue: string) => {
+		if (isEditing) {
+			openDialog({
+				title: 'Confirmacion requerida',
+				text: '¿Seguro que deseas cambiar de tab sin antes guardar?',
+				onAccept() {
+					onChangeEditing(false);
+					setTab(newValue);
+				}
+			});
+		} else {
+			setTab(newValue);
+		}
 	};
 
+	const handleSubmitBasicInformation = async (data: IFormCompany): Promise<void> => {
+		await CompanyService.save(data);
+		displayToast({
+			message: 'Se guardo correctamente',
+			variant: 'success',
+			autoHideDuration: 1000,
+			anchorOrigin: {
+				horizontal: 'right',
+				vertical: 'top'
+			}
+		});
+		onChangeEditing(false);
+	};
+
+	function handleSaveArea(): void {
+		setOpenSaveArea(false);
+		queryClient.invalidateQueries('areas-by-company');
+		setAreaId('');
+	}
+
 	return (
-		<TabContext value={value}>
+		<TabContext value={tab}>
+			<SaveAreaDialog
+				companyId={companyId}
+				areaId={areaId}
+				onClose={() => setOpenSaveArea(false)}
+				onSave={handleSaveArea}
+				open={openSaveArea}
+			/>
 			<FusePageCarded
 				header={
 					<CustomHeaderBack
-						backText="Companies"
-						title="Coca Cola"
-						subtitle="Details"
+						backText="Compañias"
+						title={companyName}
+						subtitle="Detalles"
+						rightComponent={
+							<RightHeader
+								tab={tab}
+								onSaveBasicInformation={formHandler.handleSubmit(handleSubmitBasicInformation)}
+								onAddAreas={() => setOpenSaveArea(true)}
+							/>
+						}
 					/>
 				}
 				content={
-					<Box sx={{ width: '100%', padding: '8px' }}>
+					<Box sx={{ width: '100%', paddingX: '16px', paddingY: '8px' }}>
 						<TabList
-							onChange={handleChange}
+							onChange={handleChangeTab}
 							aria-label="tabs companies"
 						>
 							<Tab
 								className="w-200"
 								value="1"
-								label="Basic information"
+								label="Informacion basica"
 							/>
 							<Tab
 								className="w-200"
 								value="2"
 								label="Areas"
 							/>
-							<Tab
-								className="w-200"
-								value="3"
-								label="Devices"
-							/>
 						</TabList>
 						<TabPanel value="1">
-							<Box>
-								<Button
-									onClick={() => {
-										openDialog({
-											title: 'confirmar',
-											text: 'Segur que quiere cambiar esto',
-											onAccept: () => {
-												alert('1234');
-											}
-										});
-									}}
-								>
-									Hola
-								</Button>
-							</Box>
+							<BasicInformation formHandler={formHandler} />
 						</TabPanel>
-						<TabPanel value="2">Item Two</TabPanel>
-						<TabPanel value="3">Item Three</TabPanel>
+						<TabPanel value="2">
+							<Areas
+								companyId={companyId}
+								handleEdit={(id: string) => {
+									setOpenSaveArea(true);
+									setAreaId(id);
+								}}
+							/>
+						</TabPanel>
 					</Box>
 				}
 			/>

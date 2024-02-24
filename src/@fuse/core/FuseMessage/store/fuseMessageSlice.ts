@@ -37,6 +37,8 @@ const initialState: initialStateProps = {
 	}
 };
 
+export type ShowToast = Partial<initialStateProps['options']>;
+
 /**
  * The Message slice.
  */
@@ -44,7 +46,7 @@ export const fuseMessageSlice = createSlice({
 	name: 'fuseMessage',
 	initialState,
 	reducers: {
-		showMessage(state, action: PayloadAction<Partial<initialStateProps['options']>>) {
+		showMessage(state, action: PayloadAction<ShowToast>) {
 			state.state = true;
 			state.options = {
 				...initialState.options,

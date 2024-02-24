@@ -62,7 +62,8 @@
         "type-fest": "4.9.0",
         "web-vitals": "3.5.1",
         "yarn": "^1.22.21",
-        "zod": "3.22.4"
+        "zod": "3.22.4",
+        "zustand": "^4.5.1"
     },
     "peerDependencies": {
         "autoprefixer": "10.4.16",

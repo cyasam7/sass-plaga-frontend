@@ -300,7 +300,7 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
 					if (originalRequest.data) {
 						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-						originalRequest.data = JSON.stringify(originalRequest.data);
+						originalRequest.data = JSON.parse(originalRequest.data);
 					}
 
 					return Promise.resolve(
