@@ -31,6 +31,16 @@ const navigationConfig: FuseNavItemType[] = [
 		icon: 'material-solid:home_work',
 		url: '/companies',
 		children: []
+	},
+	{
+		id: 'orders',
+		title: 'Ordenes',
+		translate: 'ORDERS',
+		type: 'item',
+		auth: ['admin', 'staff'],
+		icon: 'material-outline:assignment',
+		url: '/orders',
+		children: []
 	}
 ];
 

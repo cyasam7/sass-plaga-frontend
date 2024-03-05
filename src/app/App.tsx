@@ -10,15 +10,27 @@ import themeLayouts from 'app/theme-layouts/themeLayouts';
 import { selectMainTheme } from '@fuse/core/FuseSettings/store/fuseSettingsSlice';
 import axios from 'axios';
 import { QueryClientProvider, QueryClient } from 'react-query';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+import dayjs from 'dayjs';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
 import GlobalDialog from './shared-components/GlobalDialog/GlobalDialog';
+import 'dayjs/locale/es'; // import locale
+
 /**
  * Axios HTTP Request defaults
  */
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
+dayjs.locale('es');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const emotionCacheOptions = {
 	rtl: {
@@ -57,19 +69,24 @@ function App() {
 					direction={langDirection}
 				>
 					<AuthRouteProvider>
-						<SnackbarProvider
-							maxSnack={5}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'right'
-							}}
-							classes={{
-								containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
-							}}
+						<LocalizationProvider
+							dateAdapter={AdapterDayjs}
+							adapterLocale="es"
 						>
-							<FuseLayout layouts={themeLayouts} />
-							<GlobalDialog />
-						</SnackbarProvider>
+							<SnackbarProvider
+								maxSnack={5}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'right'
+								}}
+								classes={{
+									containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
+								}}
+							>
+								<FuseLayout layouts={themeLayouts} />
+								<GlobalDialog />
+							</SnackbarProvider>
+						</LocalizationProvider>
 					</AuthRouteProvider>
 				</FuseTheme>
 			</CacheProvider>

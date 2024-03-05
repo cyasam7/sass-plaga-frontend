@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { CircularProgress, Grid } from '@mui/material';
 import { AreaService } from '../../../services/AreaService';
@@ -8,6 +8,9 @@ import CrudDevicesDialog from '../CrudDevicesDialog/CrudDevicesDialog';
 
 function Areas(props: IPropsAreas) {
 	const { companyId, handleEdit } = props;
+
+	const [areaIdDevices, setAreaIdDevices] = useState<string>('');
+
 	const { data = [], isLoading } = useQuery(['areas-by-company', companyId], () =>
 		AreaService.getByCompany(companyId)
 	);
@@ -25,7 +28,12 @@ function Areas(props: IPropsAreas) {
 			container
 			spacing={2}
 		>
-			<CrudDevicesDialog />
+			<CrudDevicesDialog
+				areaId={areaIdDevices}
+				companyId={companyId}
+				onClose={() => setAreaIdDevices('')}
+				open={!!areaIdDevices}
+			/>
 			{data.map((i) => (
 				<Grid
 					item
@@ -35,6 +43,7 @@ function Areas(props: IPropsAreas) {
 					key={i.id}
 				>
 					<CardArea
+						openDevices={(areaId) => setAreaIdDevices(areaId)}
 						handleEditArea={handleEdit}
 						area={i}
 					/>

@@ -1,11 +1,19 @@
-import React from 'react';
 import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
-import CustomDataGrid from 'app/shared-components/CustomDataGrid/CustomDataGrid';
-import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { Delete, Edit } from '@mui/icons-material';
+import { useQuery } from 'react-query';
 import { ICrudDevicesDialog } from './ICrudDevicesDialog';
+import { DeviceService } from '../../../services/DevicesService';
 
 function CrudDevicesDialog(props: ICrudDevicesDialog) {
+	const { open, onClose, areaId, companyId } = props;
+
+	const { data = [], isLoading } = useQuery(
+		['crud-device-dialog', companyId, areaId],
+		() => DeviceService.getByCompanyAndArea(companyId, areaId),
+		{ enabled: !!companyId && !!areaId }
+	);
+
 	const columns: GridColDef[] = [
 		{
 			headerName: 'Estacion',
@@ -43,9 +51,13 @@ function CrudDevicesDialog(props: ICrudDevicesDialog) {
 		}
 	];
 
+	function handleClose(): void {
+		onClose();
+	}
+
 	return (
 		<Dialog
-			open
+			open={open}
 			PaperProps={{ sx: { minWidth: '600px' } }}
 		>
 			<DialogTitle>
@@ -55,30 +67,32 @@ function CrudDevicesDialog(props: ICrudDevicesDialog) {
 					justifyContent="space-between"
 				>
 					<Typography variant="h6">Lista de dispositivos</Typography>
-					<Button
-						color="primary"
-						variant="contained"
+					<Stack
+						direction="row"
+						spacing={2}
 					>
-						Agregar
-					</Button>
+						<Button
+							color="secondary"
+							variant="outlined"
+							onClick={handleClose}
+						>
+							Cerrar
+						</Button>
+						<Button
+							color="primary"
+							variant="contained"
+						>
+							Agregar
+						</Button>
+					</Stack>
 				</Stack>
 			</DialogTitle>
 			<DialogContent>
 				<Stack height="400px">
-					<CustomDataGrid
+					<DataGrid
 						columns={columns}
-						rows={[
-							{
-								id: 1,
-								number: 1,
-								isActive: false
-							}
-						]}
-						loading={false}
-						onPageChange={() => {}}
-						onRowsPerPageChange={() => {}}
-						page={1}
-						rowsPerPage={10}
+						rows={data}
+						loading={isLoading}
 					/>
 				</Stack>
 			</DialogContent>

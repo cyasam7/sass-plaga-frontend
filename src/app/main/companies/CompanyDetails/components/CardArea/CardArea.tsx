@@ -9,7 +9,7 @@ import { AreaService } from '../../../services/AreaService';
 function CardArea(props: ICardAreaProps) {
 	const queryClient = useQueryClient();
 
-	const { area, handleEditArea } = props;
+	const { area, handleEditArea, openDevices } = props;
 
 	async function handleDeleteArea(): Promise<void> {
 		openDialog({
@@ -66,6 +66,7 @@ function CardArea(props: ICardAreaProps) {
 				<Button
 					color="primary"
 					variant="contained"
+					onClick={() => openDevices(area.id)}
 				>
 					Ver dispositivos
 				</Button>

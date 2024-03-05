@@ -47,6 +47,8 @@ module.exports = {
 				avoidEscape: true
 			}
 		],
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/await-thenable': 'off',
 		// Disabling because this rule is extremely slow.
 		'import/no-cycle': 'off',
 		// Disabling because this rule is slow and not a common violation.

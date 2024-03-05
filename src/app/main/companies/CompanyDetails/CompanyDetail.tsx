@@ -113,7 +113,7 @@ function CompanyDetail() {
 					/>
 				}
 				content={
-					<Box sx={{ width: '100%', paddingX: '16px', paddingY: '8px' }}>
+					<Box sx={{ width: '100%', paddingX: '16px', paddingY: '16px' }}>
 						<TabList
 							onChange={handleChangeTab}
 							aria-label="tabs companies"
