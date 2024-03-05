@@ -1,9 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
-import { UserLoginResponse, AxiosConfigRetry } from '../../user';
+import { UserLoginResponse, AxiosConfigRetry, User as UserType } from '../../user';
 import { formatUserResponse } from './utils';
+
+export type SignUpPayload = {
+	name: string;
+	phone: string;
+	email: string;
+	password: string;
+	workspaceName: string;
+	companyName: string;
+};
 
 const defaultAuthConfig = {
 	tokenStorageKey: 'jwt_access_token',
@@ -41,9 +50,9 @@ export type JwtAuth<User, SignInPayload, SignUpPayload> = {
 	user: User;
 	isAuthenticated: boolean;
 	isLoading: boolean;
-	signIn: (U: SignInPayload) => Promise<AxiosResponse<User, AxiosError>>;
+	signIn: (U: SignInPayload) => Promise<AxiosResponse<UserLoginResponse, AxiosError>>;
 	signOut: () => void;
-	signUp: (U: SignUpPayload) => Promise<AxiosResponse<User, AxiosError>>;
+	signUp: (U: SignUpPayload) => Promise<AxiosResponse<UserLoginResponse, AxiosError>>;
 	updateUser: (U: PartialDeep<User>) => void;
 	refreshToken: () => void;
 	setIsLoading: (isLoading: boolean) => void;
@@ -63,7 +72,6 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 	props: JwtAuthProps<User>
 ): JwtAuth<User, SignInPayload, SignUpPayload> => {
 	const { config, onSignedIn, onSignedOut, onSignedUp, onError, onUpdateUser } = props;
-
 	// Merge default config with the one from the props
 	const authConfig = _.defaults(config, defaultAuthConfig);
 
@@ -74,10 +82,12 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 	/**
 	 * Set session
 	 */
-	const setSession = useCallback((accessToken: string, refreshToken: string) => {
+	const setSession = useCallback((accessToken: string, refreshToken: string, tenant?: string) => {
 		localStorage.setItem(authConfig.refreshTokenStorageKey, refreshToken);
 		localStorage.setItem(authConfig.tokenStorageKey, accessToken);
 		axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+		axios.defaults.headers.common['x-tenant'] = tenant;
+		axios.defaults.headers.common['Content-Type'] = 'application/json';
 		axios.defaults.headers.common['Content-Type'] = 'application/json';
 	}, []);
 
@@ -85,25 +95,18 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 		localStorage.removeItem(authConfig.tokenStorageKey);
 		localStorage.removeItem(authConfig.refreshTokenStorageKey);
 		delete axios.defaults.headers.common.Authorization;
-	}, []);
-
-	/**
-	 * Get access token from local storage
-	 */
-	const getAccessToken = useCallback(() => {
-		return localStorage.getItem(authConfig.tokenStorageKey);
+		delete axios.defaults.headers.common['x-tenant'];
 	}, []);
 
 	/**
 	 * Handle sign-in success
 	 */
 	const handleSignInSuccess = useCallback((userData: User, accessToken: string, refreshToken: string) => {
-		setSession(accessToken, refreshToken);
+		setSession(accessToken, refreshToken, (userData as UserType).data.tenant);
 
 		setIsAuthenticated(true);
 
 		setUser(userData);
-
 		onSignedIn(userData);
 	}, []);
 	/**
@@ -111,12 +114,11 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 	 */
 
 	const handleSignUpSuccess = useCallback((userData: User, accessToken: string, refreshToken: string) => {
-		setSession(accessToken, refreshToken);
+		setSession(accessToken, refreshToken, (userData as UserType).data.tenant);
 
 		setIsAuthenticated(true);
 
 		setUser(userData);
-
 		onSignedUp(userData);
 	}, []);
 
@@ -165,7 +167,7 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
 				handleSignInSuccess(formattedUser as User, accessToken, refreshToken);
 
-				return formattedUser;
+				return res.data;
 			},
 			(error) => {
 				const axiosError = error as AxiosError;
@@ -193,7 +195,7 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
 				handleSignUpSuccess(formattedUser, accessToken, refreshToken);
 
-				return formattedUser;
+				return res.data;
 			},
 			(error) => {
 				const axiosError = error as AxiosError;
@@ -246,11 +248,14 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 		try {
 			const localRefreshToken = localStorage.getItem(authConfig.refreshTokenStorageKey);
 
-			const { data } = await axios.post<{ accessToken: string }>(authConfig.tokenRefreshUrl, {
-				refreshToken: localRefreshToken
-			});
+			const { data } = await axios.post<{ accessToken: string; user: UserLoginResponse }>(
+				authConfig.tokenRefreshUrl,
+				{
+					refreshToken: localRefreshToken
+				}
+			);
 
-			setSession(data.accessToken, localRefreshToken);
+			setSession(data.accessToken, localRefreshToken, data.user.tenant);
 			return data.accessToken;
 		} catch {
 			signOut();
@@ -264,18 +269,20 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 	 *
 	 */
 	useEffect(() => {
-		axios.interceptors.request.use(async (config) => {
+		/* 	axios.interceptors.request.use(async (config) => {
 			const accessToken = localStorage.getItem(authConfig.tokenStorageKey);
 
 			if (accessToken) {
 				config.headers.Authorization = `Bearer ${accessToken}`;
 			}
-
+			console.log(config.headers);
 			return config;
-		});
+		}); */
 
 		axios.interceptors.response.use(
-			(response) => response,
+			(response) => {
+				return response;
+			},
 			async (error) => {
 				const axiosError = error as AxiosError;
 				const statusError = axiosError.response.status;
@@ -293,19 +300,24 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 						signOut();
 						return Promise.reject(axiosError);
 					}
-
-					originalRequest.headers.Authorization = `Bearer ${updatedToken}`;
-					originalRequest.headers['Content-Type'] = 'application/json';
-					originalRequest.headers.Accept = 'application/json';
+					const newConfig: AxiosRequestConfig = {
+						url: originalRequest.url,
+						method: originalRequest.method,
+						headers: {
+							...originalRequest.headers,
+							Authorization: `Bearer ${updatedToken}`,
+							'Content-Type': 'application/json',
+							Accept: 'application/json'
+						}
+					};
 
 					if (originalRequest.data) {
 						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-						originalRequest.data = JSON.parse(originalRequest.data);
+						newConfig.data = JSON.parse(originalRequest.data);
 					}
+					console.log(newConfig);
 
-					return Promise.resolve(
-						axios({ ...originalRequest, transformResponse: axios.defaults.transformResponse })
-					);
+					return Promise.resolve(axios(newConfig));
 				}
 
 				// Handle other errors

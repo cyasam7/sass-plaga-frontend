@@ -1,4 +1,3 @@
-import { AuthRoles } from '@fuse/utils/FuseUtils';
 import { User, UserLoginResponse } from '../../user';
 
 function toTemplateRole(params: string): string {
@@ -14,13 +13,13 @@ function toTemplateRole(params: string): string {
 export function formatUserResponse(response: UserLoginResponse): User {
 	const user = {
 		uid: response.id,
-		role: toTemplateRole(response.role.code as AuthRoles),
+		role: toTemplateRole(response.role.code),
 		data: {
 			displayName: response.name,
 			photoURL: response.name,
-			email: response.email
+			email: response.email,
+			tenant: response.tenant
 		}
 	} as User;
-	console.log({ user });
 	return user;
 }

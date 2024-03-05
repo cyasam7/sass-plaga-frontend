@@ -20,9 +20,7 @@ function Clients() {
 	const { t } = useTranslation('examplePage');
 
 	async function handleSubmit(): Promise<void> {
-		axios.get('/company').then(({ data }) => {
-			console.log(data);
-		});
+		axios.get('/company');
 	}
 
 	return (

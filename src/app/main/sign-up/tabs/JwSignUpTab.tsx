@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import _ from '@lodash';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import { AxiosError } from 'axios';
 import { SignUpPayload, useAuth } from '../../../auth/AuthRouteProvider';
 
 /**
@@ -15,13 +17,16 @@ import { SignUpPayload, useAuth } from '../../../auth/AuthRouteProvider';
  */
 const schema = z
 	.object({
-		displayName: z.string().nonempty('You must enter your name'),
+		name: z.string().nonempty('You must enter your name'),
 		email: z.string().email('You must enter a valid email').nonempty('You must enter an email'),
+		phone: z.string(),
 		password: z
 			.string()
 			.nonempty('Please enter your password.')
 			.min(8, 'Password is too short - should be 8 chars minimum.'),
 		passwordConfirm: z.string().nonempty('Password confirmation is required'),
+		companyName: z.string().nonempty(FIELD_REQUIRED),
+		workspaceName: z.string().nonempty(FIELD_REQUIRED),
 		acceptTermsConditions: z.boolean().refine((val) => val === true, 'The terms and conditions must be accepted.')
 	})
 	.refine((data) => data.password === data.passwordConfirm, {
@@ -30,9 +35,12 @@ const schema = z
 	});
 
 const defaultValues = {
-	displayName: '',
+	name: '',
 	email: '',
 	password: '',
+	phone: '',
+	companyName: '',
+	workspaceName: '',
 	passwordConfirm: '',
 	acceptTermsConditions: false
 };
@@ -49,20 +57,24 @@ function JwtSignUpTab() {
 	const { isValid, dirtyFields, errors } = formState;
 
 	function onSubmit(formData: SignUpPayload) {
-		const { displayName, email, password } = formData;
 		jwtService
 			.signUp({
-				displayName,
-				password,
-				email
+				...formData
 			})
 			.then(() => {
-				// No need to do anything, registered user data will be set at app/auth/AuthRouteProvider
+				//
 			})
-			.catch((_errors: { type: 'email' | 'password' | `root.${string}` | 'root'; message: string }[]) => {
-				_errors.forEach(({ message, type }) => {
-					setError(type, { type: 'manual', message });
-				});
+			.catch((_errors: AxiosError<{ message: string }>) => {
+				const { message } = _errors.response.data;
+				if (message === 'Ya existe un usuario con ese telefono') {
+					setError('phone', { message });
+				}
+				if (message === 'Ya existe un usuario con ese email') {
+					setError('email', { message });
+				}
+				if (message === 'Ya existe tenant con ese nombre') {
+					setError('workspaceName', { message: 'Ya existe un espacio de trabajo con ese nombre' });
+				}
 			});
 	}
 
@@ -74,18 +86,18 @@ function JwtSignUpTab() {
 			onSubmit={handleSubmit(onSubmit)}
 		>
 			<Controller
-				name="displayName"
+				name="name"
 				control={control}
 				render={({ field }) => (
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Display name"
+						label="Nombre completo"
 						autoFocus
 						type="name"
-						error={!!errors.displayName}
-						helperText={errors?.displayName?.message}
-						variant="outlined"
+						error={!!errors.name}
+						helperText={errors?.name?.message}
+						variant="standard"
 						required
 						fullWidth
 					/>
@@ -103,7 +115,7 @@ function JwtSignUpTab() {
 						type="email"
 						error={!!errors.email}
 						helperText={errors?.email?.message}
-						variant="outlined"
+						variant="standard"
 						required
 						fullWidth
 					/>
@@ -117,11 +129,11 @@ function JwtSignUpTab() {
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Password"
+						label="Contraseña"
 						type="password"
 						error={!!errors.password}
 						helperText={errors?.password?.message}
-						variant="outlined"
+						variant="standard"
 						required
 						fullWidth
 					/>
@@ -135,17 +147,72 @@ function JwtSignUpTab() {
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Password (Confirm)"
+						label="Contraseña (Confirmar)"
 						type="password"
 						error={!!errors.passwordConfirm}
 						helperText={errors?.passwordConfirm?.message}
-						variant="outlined"
+						variant="standard"
 						required
 						fullWidth
 					/>
 				)}
 			/>
-
+			<Controller
+				name="phone"
+				control={control}
+				render={({ field }) => (
+					<TextField
+						{...field}
+						className="mb-24"
+						label="Teléfono"
+						type="text"
+						error={!!errors.phone}
+						helperText={errors?.phone?.message}
+						variant="standard"
+						required
+						fullWidth
+					/>
+				)}
+			/>
+			<Controller
+				name="companyName"
+				control={control}
+				render={({ field }) => (
+					<TextField
+						{...field}
+						className="mb-24"
+						label="Nombre de compañía"
+						type="text"
+						error={!!errors.companyName}
+						helperText={errors?.companyName?.message}
+						variant="standard"
+						required
+						fullWidth
+					/>
+				)}
+			/>
+			<Controller
+				name="workspaceName"
+				control={control}
+				render={({ field }) => (
+					<TextField
+						{...field}
+						onChange={(e) => {
+							const value = e.target.value ?? '';
+							const formattedValue = value.replace(' ', '-').toLowerCase();
+							field.onChange(formattedValue);
+						}}
+						className="mb-24"
+						label="Nombre de espacio de trabajo"
+						type="text"
+						error={!!errors.workspaceName}
+						helperText={errors?.workspaceName?.message}
+						variant="standard"
+						required
+						fullWidth
+					/>
+				)}
+			/>
 			<Controller
 				name="acceptTermsConditions"
 				control={control}
