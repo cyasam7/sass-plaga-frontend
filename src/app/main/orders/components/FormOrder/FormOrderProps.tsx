@@ -6,8 +6,8 @@ export interface IFormOrderProps {
 }
 
 export interface IFormCreatePest {
-	date: Dayjs;
-	price: number;
+	date: Dayjs | null;
+	price: string;
 	observations: string;
 	clientName: string;
 	clientPhone: string;

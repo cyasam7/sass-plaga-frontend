@@ -13,7 +13,8 @@ import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import useCatalogs from 'src/app/shared-hooks/useCatalog';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter/NumericFormatAdapter';
 import { IFormOrderProps } from './FormOrderProps';
 import { CatalogService } from '../../service/CatalogService';
 
@@ -22,7 +23,6 @@ const checkedIcon = <CheckBox fontSize="small" />;
 
 function FormOrder(props: IFormOrderProps) {
 	const { formHandler } = props;
-
 	const { frequency, recommendations, typePlague, typeService } = useCatalogs();
 
 	useEffect(() => {
@@ -347,7 +347,7 @@ function FormOrder(props: IFormOrderProps) {
 				item
 				xs={12}
 				md={3}
-				spacing={2}
+				spacing={1.1}
 			>
 				<Grid
 					item
@@ -367,7 +367,8 @@ function FormOrder(props: IFormOrderProps) {
 									onChange={(newValue) => field.onChange(newValue)}
 									slotProps={{
 										textField: {
-											variant: 'standard'
+											variant: 'standard',
+											color: fieldState.error?.message ? 'error' : undefined
 										}
 									}}
 								/>
@@ -394,8 +395,8 @@ function FormOrder(props: IFormOrderProps) {
 								fullWidth
 								variant="standard"
 								InputProps={{
-									endAdornment: <InputAdornment position="start">$</InputAdornment>
-									/* inputComponent: NumericFormatCustom as any */
+									startAdornment: <InputAdornment position="start">$</InputAdornment>,
+									inputComponent: NumericFormatAdapter
 								}}
 								required
 								error={Boolean(fieldState.error?.message)}

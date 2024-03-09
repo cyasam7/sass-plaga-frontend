@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import dayjs from 'dayjs';
 import { Button, Dialog, DialogContent, DialogTitle, Slide, Stack, Typography } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
@@ -37,8 +36,8 @@ function OrderDialog(props: OrderDialogProps) {
 			clientAddress: '',
 			clientName: '',
 			clientPhone: '',
-			price: 0,
-			date: dayjs(),
+			price: '',
+			date: null,
 			frequency: [],
 			observations: '',
 			recommendations: [],
@@ -51,7 +50,7 @@ function OrderDialog(props: OrderDialogProps) {
 		const formatValues = {
 			...data,
 			date: data.date.toISOString(),
-			price: String(data.price),
+			price: data.price,
 			isFollowUp: false
 		};
 		await OrderService.createOrder(formatValues);
@@ -65,6 +64,7 @@ function OrderDialog(props: OrderDialogProps) {
 			}
 		});
 		await onSubmit();
+		formHandler.reset();
 		handleCancel();
 	}
 

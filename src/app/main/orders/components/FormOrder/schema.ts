@@ -18,12 +18,7 @@ const phoneRegExp =
 	/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const createOrderSchema = yup.object({
-	price: yup
-		.number()
-		.required(FIELD_REQUIRED)
-		.min(1, 'Valor mínimo de 1 peso')
-		.nonNullable()
-		.typeError(FIELD_REQUIRED),
+	price: yup.string().min(1, 'Valor mínimo de 1 peso').required(FIELD_REQUIRED),
 	observations: yup.string(),
 	clientId: yup.string(),
 	clientAddress: yup.string().required(FIELD_REQUIRED),
@@ -31,12 +26,12 @@ export const createOrderSchema = yup.object({
 	clientPhone: yup
 		.string()
 		.required(FIELD_REQUIRED)
-		.matches(phoneRegExp, 'Numero de teléfono no validao')
+		.matches(phoneRegExp, 'Numero de teléfono no valido')
 		.min(10, 'Numero muy corto')
 		.max(10, 'Numero muy largo'),
 	typePlague: yup.array().min(1, AT_LEAST_ONE_OPTION),
 	typeService: yup.array().min(1, AT_LEAST_ONE_OPTION),
 	frequency: yup.array().min(1, AT_LEAST_ONE_OPTION),
-	data: yup.object().nonNullable().typeError(FIELD_REQUIRED),
+	date: yup.mixed().nonNullable().typeError(FIELD_REQUIRED),
 	recommendations: yup.array()
 });
