@@ -1,6 +1,7 @@
-export enum EStatusPlague {
+export enum EStatusOrder {
 	REALIZED = 'REALIZED',
-	NO_REALIZED = 'NO_REALIZED'
+	NO_REALIZED = 'NO_REALIZED',
+	CANCELLED = 'CANCELLED'
 }
 
 export interface ClientEntity {
@@ -37,7 +38,7 @@ export interface OrderEntity {
 	client: ClientEntity;
 	price: number;
 	isFollowUp: boolean;
-	status: EStatusPlague;
+	status: EStatusOrder;
 	observations: string;
 	typePlague: TypePlagueEntity[];
 	typeService: TypeServiceEntity[];

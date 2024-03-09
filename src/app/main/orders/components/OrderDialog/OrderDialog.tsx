@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Dialog, DialogContent, DialogTitle, Slide, Stack, Typography } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQuery } from 'react-query';
+import dayjs from 'dayjs';
+import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import FormOrder from '../FormOrder/FormOrder';
 import { IFormCreatePest } from '../FormOrder/FormOrderProps';
 import { OrderDialogProps } from './OrderDialogProps';
 import { OrderService } from '../../service/OrderService';
 import { createOrderSchema } from '../FormOrder/schema';
+import { defaultValuesOrder } from '../FormOrder/defaultValues';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -27,28 +31,46 @@ const Transition = React.forwardRef(function Transition(
 });
 
 function OrderDialog(props: OrderDialogProps) {
-	const { onCancel, onSubmit, open } = props;
+	const { onCancel, onSubmit, open, id } = props;
+
+	const isUpdating = Boolean(id);
 
 	const formHandler = useForm<IFormCreatePest>({
 		resolver: yupResolver<IFormCreatePest>(createOrderSchema as any),
-		defaultValues: {
-			clientId: '',
-			clientAddress: '',
-			clientName: '',
-			clientPhone: '',
-			price: '',
-			date: null,
-			frequency: [],
-			observations: '',
-			recommendations: [],
-			typePlague: [],
-			typeService: []
-		}
+		defaultValues: defaultValuesOrder
 	});
+
+	const { data } = useQuery({
+		queryKey: ['order-by-id', id],
+		queryFn: () => OrderService.getById(id),
+		enabled: Boolean(id)
+	});
+
+	useEffect(() => {
+		if (data) {
+			formHandler.reset({
+				clientId: data.client.id,
+				clientAddress: data.client.address,
+				clientName: data.client.name,
+				clientPhone: data.client.phone,
+				price: String(data.price),
+				date: dayjs(data.date),
+				frequency: data.frequency.map((i) => i.id),
+				observations: data.observations,
+				recommendations: data.frequency.map((i) => i.id),
+				typePlague: data.typePlague.map((i) => i.id),
+				typeService: data.typeService.map((i) => i.id)
+			});
+		}
+		return () => {
+			formHandler.reset(defaultValuesOrder);
+		};
+	}, [data]);
 
 	async function handleSubmit(data: IFormCreatePest): Promise<void> {
 		const formatValues = {
 			...data,
+			id: isUpdating ? id : undefined,
 			date: data.date.toISOString(),
 			price: data.price,
 			isFollowUp: false
@@ -65,12 +87,23 @@ function OrderDialog(props: OrderDialogProps) {
 		});
 		await onSubmit();
 		formHandler.reset();
-		handleCancel();
+		onCancel();
 	}
 
 	function handleCancel(): void {
-		formHandler.reset();
-		onCancel();
+		if (isUpdating && formHandler.formState.isDirty) {
+			openDialog({
+				title: 'Confirmación requerida',
+				text: '¿Seguro que deseas cancelar sin guardar?',
+				onAccept() {
+					formHandler.reset(defaultValuesOrder);
+					onCancel();
+				}
+			});
+		} else {
+			formHandler.reset(defaultValuesOrder);
+			onCancel();
+		}
 	}
 
 	return (
@@ -108,7 +141,16 @@ function OrderDialog(props: OrderDialogProps) {
 				</Stack>
 			</DialogTitle>
 			<DialogContent>
-				<FormOrder formHandler={formHandler} />
+				<FormOrder
+					formHandler={formHandler}
+					disableSpecificField={
+						isUpdating && {
+							clientAddressField: true,
+							clientNameField: true,
+							clientPhoneField: true
+						}
+					}
+				/>
 			</DialogContent>
 		</Dialog>
 	);

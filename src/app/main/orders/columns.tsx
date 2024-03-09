@@ -4,7 +4,19 @@ import dayjs from 'dayjs';
 
 import { DATE_FORMAT, TIME_FORMAT } from 'src/app/shared-constants/dateFormat';
 import { formatCurrency } from 'src/app/shared-constants/formatCurrency';
-import { EStatusPlague, OrderEntity } from './service/OrderEntity';
+import { OrderEntity } from './service/OrderEntity';
+
+const statusLabel = {
+	REALIZED: 'Realizada',
+	NO_REALIZED: 'No Realizada',
+	CANCELLED: 'Cancelada'
+};
+
+const statusColor = {
+	REALIZED: 'success',
+	NO_REALIZED: 'warning',
+	CANCELLED: 'error'
+};
 
 export const columnsOrders: GridColDef<OrderEntity>[] = [
 	{
@@ -33,16 +45,15 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		disableColumnMenu: true,
 		renderCell({ row }) {
 			const condition = !row.isFollowUp;
-			const isPrimary = condition ? 'primary' : 'secondary';
+
 			return (
 				<Chip
-					color={isPrimary}
+					color="info"
 					label={condition ? 'INICIAL' : 'SEGUIMIENTO'}
 				/>
 			);
 		}
 	},
-
 	{
 		headerName: 'FECHA DE SERVICIO',
 		headerAlign: 'left',
@@ -83,12 +94,11 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		align: 'left',
 		disableColumnMenu: true,
 		renderCell({ row }) {
-			const condition = row.status === EStatusPlague.REALIZED;
-			const isPrimary = condition ? 'success' : 'error';
+			const { status } = row;
 			return (
 				<Chip
-					color={isPrimary}
-					label={condition ? 'Realizada' : 'No realizada'}
+					color={statusColor[status]}
+					label={statusLabel[status]}
 				/>
 			);
 		}

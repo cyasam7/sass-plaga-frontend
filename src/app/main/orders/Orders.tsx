@@ -5,17 +5,23 @@ import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import CommentIcon from '@mui/icons-material/Comment';
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
+import dayjs from 'dayjs';
 import { columnsOrders } from './columns';
 import { OrderService } from './service/OrderService';
 import OrderHeaderTabs from './components/HeaderTabs/HeaderTabs';
 import { ETabsPlagues } from './components/HeaderTabs/IHeaderTabsProps';
-import { OrderEntity } from './service/OrderEntity';
+import { EStatusOrder, OrderEntity } from './service/OrderEntity';
 import OrderDialog from './components/OrderDialog/OrderDialog';
+import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog';
+import OrderChangeStatusDialog from './components/OrderChangeStatusDialog/OrderChangeStatusDialog';
 
 function Order() {
 	const [tabFilter, setTabFilter] = useState<ETabsPlagues>(ETabsPlagues.ALL);
 	const [open, setOpen] = useState<boolean>(false);
+	const [openDetails, setOpenDetails] = useState<boolean>(false);
+	const [openStatus, setOpenStatus] = useState<boolean>(false);
+	const [orderId, setOrderId] = useState<string>('');
 
 	const {
 		data = [],
@@ -36,30 +42,73 @@ function Order() {
 			align: 'center',
 			type: 'actions',
 			disableColumnMenu: true,
-			getActions: () => {
+			getActions: (params) => {
+				const { status } = params.row;
 				return [
 					<GridActionsCellItem
 						key={0}
-						label="AGREGAR OBSERVACIÓN"
-						icon={<CommentIcon />}
+						label="MODIFICAR"
+						icon={<NoteAltIcon />}
 						showInMenu
+						onClick={() => {
+							setOrderId(params.row.id);
+							setOpen(true);
+						}}
+						disabled={status === EStatusOrder.REALIZED}
 					/>,
 					<GridActionsCellItem
 						key={1}
 						label="CAMBIAR ESTATUS"
 						icon={<AutorenewIcon />}
 						showInMenu
+						onClick={() => {
+							setOrderId(params.row.id);
+							setOpenStatus(true);
+						}}
+						disabled={status === EStatusOrder.REALIZED}
 					/>,
 					<GridActionsCellItem
 						key={2}
 						label="VER"
 						icon={<RemoveRedEyeIcon />}
 						showInMenu
+						onClick={() => {
+							setOrderId(params.row.id);
+							setOpenDetails(true);
+						}}
 					/>
 				];
 			}
 		}
 	];
+
+	function filterValues(data: OrderEntity[]): OrderEntity[] {
+		if (tabFilter === ETabsPlagues.TODAY) {
+			data = data.filter((i) => {
+				const date = dayjs(i.date);
+				const startDay = dayjs().startOf('day');
+				const finalDay = dayjs().endOf('day');
+				return date.isAfter(startDay) && date.isBefore(finalDay);
+			});
+		}
+
+		if (tabFilter === ETabsPlagues.TOMORROW) {
+			data = data.filter((i) => {
+				const date = dayjs(i.date);
+				const startDay = dayjs().startOf('day').add(1, 'day');
+				const finalDay = dayjs().endOf('day').add(1, 'day');
+				return date.isAfter(startDay) && date.isBefore(finalDay);
+			});
+		}
+
+		if (tabFilter === ETabsPlagues.PENDING) {
+			data = data.filter((i) => {
+				return i.status === EStatusOrder.NO_REALIZED;
+			});
+		}
+
+		return [...data].reverse();
+	}
 
 	return (
 		<FusePageCarded
@@ -81,9 +130,29 @@ function Order() {
 				<div className="px-10 gap">
 					<OrderDialog
 						open={open}
-						onCancel={() => setOpen(false)}
+						id={orderId}
+						onCancel={() => {
+							setOpen(false);
+							setOrderId('');
+						}}
 						onSubmit={async () => {
 							await refetch();
+						}}
+					/>
+					<OrderDetailDialog
+						open={openDetails}
+						id={orderId}
+						onClose={() => {
+							setOrderId('');
+							setOpenDetails(false);
+						}}
+					/>
+					<OrderChangeStatusDialog
+						open={openStatus}
+						id={orderId}
+						onClose={() => {
+							setOrderId('');
+							setOpenStatus(false);
 						}}
 					/>
 					<OrderHeaderTabs
@@ -93,7 +162,7 @@ function Order() {
 					<Box sx={{ height: 'calc(100vh - 220px)', pt: 2 }}>
 						<DataGrid
 							loading={isLoading}
-							rows={data}
+							rows={filterValues(data)}
 							columns={columns}
 						/>
 					</Box>

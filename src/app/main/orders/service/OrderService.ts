@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { OrderEntity } from './OrderEntity';
+import { EStatusOrder, OrderEntity } from './OrderEntity';
 
 export class OrderService {
 	static async getAll(): Promise<OrderEntity[]> {
@@ -17,5 +17,14 @@ export class OrderService {
 
 	static async createClient(data: any): Promise<void> {
 		await axios.post<void>('clients', data);
+	}
+
+	static async getById(id: string): Promise<OrderEntity> {
+		const { data } = await axios.get<OrderEntity>(`/order/${id}`);
+		return data;
+	}
+
+	static async updateStatus(id: string, status: EStatusOrder): Promise<void> {
+		await axios.patch<OrderEntity>(`/order/${id}`, { status });
 	}
 }

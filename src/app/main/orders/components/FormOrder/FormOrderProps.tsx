@@ -3,6 +3,19 @@ import { UseFormReturn } from 'react-hook-form';
 
 export interface IFormOrderProps {
 	formHandler: UseFormReturn<IFormCreatePest>;
+	disabled?: boolean;
+	disableSpecificField?: {
+		dateField?: boolean;
+		priceField?: boolean;
+		observationsField?: boolean;
+		clientNameField?: boolean;
+		clientPhoneField?: boolean;
+		clientAddressField?: boolean;
+		typePlagueField?: boolean;
+		typeServiceField?: boolean;
+		frequencyField?: boolean;
+		recommendationsField?: boolean;
+	};
 }
 
 export interface IFormCreatePest {

@@ -13,7 +13,7 @@ import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import useCatalogs from 'src/app/shared-hooks/useCatalog';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter/NumericFormatAdapter';
 import { IFormOrderProps } from './FormOrderProps';
 import { CatalogService } from '../../service/CatalogService';
@@ -22,7 +22,21 @@ const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;
 
 function FormOrder(props: IFormOrderProps) {
-	const { formHandler } = props;
+	const { formHandler, disabled, disableSpecificField } = props;
+
+	const {
+		dateField = false,
+		priceField = false,
+		observationsField = false,
+		clientNameField = false,
+		clientPhoneField = false,
+		clientAddressField = false,
+		typePlagueField = false,
+		typeServiceField = false,
+		frequencyField = false,
+		recommendationsField = false
+	} = disableSpecificField;
+
 	const { frequency, recommendations, typePlague, typeService } = useCatalogs();
 
 	useEffect(() => {
@@ -45,6 +59,22 @@ function FormOrder(props: IFormOrderProps) {
 			formHandler.setValue('clientName', '');
 		}
 	}, [formHandler.watch('clientPhone')]);
+
+	const frequencyValue = useMemo(() => {
+		return frequency.filter((i) => formHandler.watch('frequency').includes(i.id));
+	}, [frequency, formHandler.watch('frequency')]);
+
+	const recommendationsValue = useMemo(() => {
+		return recommendations.filter((i) => formHandler.watch('recommendations').includes(i.id));
+	}, [recommendations, formHandler.watch('recommendations')]);
+
+	const typePlagueValue = useMemo(() => {
+		return typePlague.filter((i) => formHandler.watch('typePlague').includes(i.id));
+	}, [typePlague, formHandler.watch('typePlague')]);
+
+	const typeServiceValue = useMemo(() => {
+		return typeService.filter((i) => formHandler.watch('typeService').includes(i.id));
+	}, [typeService, formHandler.watch('typeService')]);
 
 	return (
 		<Grid
@@ -75,6 +105,7 @@ function FormOrder(props: IFormOrderProps) {
 						render={({ field, fieldState }) => (
 							<TextField
 								{...field}
+								disabled={disabled || clientPhoneField}
 								variant="standard"
 								label="Teléfono"
 								required
@@ -97,6 +128,7 @@ function FormOrder(props: IFormOrderProps) {
 						render={({ field, fieldState }) => (
 							<TextField
 								{...field}
+								disabled={disabled || clientNameField}
 								variant="standard"
 								required
 								label="Nombre completo"
@@ -118,6 +150,7 @@ function FormOrder(props: IFormOrderProps) {
 						render={({ field, fieldState }) => (
 							<TextField
 								{...field}
+								disabled={disabled || clientAddressField}
 								variant="standard"
 								label="Dirección"
 								required
@@ -156,6 +189,8 @@ function FormOrder(props: IFormOrderProps) {
 					render={({ field, fieldState }) => (
 						<Autocomplete
 							multiple
+							value={typePlagueValue}
+							disabled={disabled || typePlagueField}
 							options={typePlague}
 							disableCloseOnSelect
 							onChange={(_, value) => field.onChange(value.map((i) => i.id))}
@@ -196,6 +231,8 @@ function FormOrder(props: IFormOrderProps) {
 					render={({ field, fieldState }) => (
 						<Autocomplete
 							multiple
+							value={typeServiceValue}
+							disabled={disabled || typeServiceField}
 							options={typeService}
 							disableCloseOnSelect
 							onChange={(_, value) => field.onChange(value.map((i) => i.id))}
@@ -236,6 +273,8 @@ function FormOrder(props: IFormOrderProps) {
 					render={({ field, fieldState }) => (
 						<Autocomplete
 							multiple
+							value={frequencyValue}
+							disabled={disabled || frequencyField}
 							options={frequency}
 							disableCloseOnSelect
 							onChange={(_, value) => field.onChange(value.map((i) => i.id))}
@@ -275,7 +314,9 @@ function FormOrder(props: IFormOrderProps) {
 					render={({ field, fieldState }) => (
 						<Autocomplete
 							multiple
+							disabled={disabled || recommendationsField}
 							options={recommendations}
+							value={recommendationsValue}
 							disableCloseOnSelect
 							onChange={(_, value) => field.onChange(value.map((i) => i.id))}
 							getOptionLabel={(option) => option.name}
@@ -326,6 +367,7 @@ function FormOrder(props: IFormOrderProps) {
 					render={({ field, fieldState }) => (
 						<TextField
 							{...field}
+							disabled={disabled || observationsField}
 							label="Observaciones"
 							placeholder="Escribir..."
 							multiline
@@ -360,6 +402,7 @@ function FormOrder(props: IFormOrderProps) {
 							<>
 								<DateTimePicker
 									label="Fecha *"
+									disabled={disabled || dateField}
 									timezone="America/Mexico_City"
 									sx={{ width: '100%' }}
 									value={field.value}
@@ -391,6 +434,7 @@ function FormOrder(props: IFormOrderProps) {
 						render={({ field, fieldState }) => (
 							<TextField
 								{...field}
+								disabled={disabled || priceField}
 								label="Costo"
 								fullWidth
 								variant="standard"
