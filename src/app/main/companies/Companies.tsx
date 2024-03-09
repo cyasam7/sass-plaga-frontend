@@ -3,20 +3,27 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import FusePageCarded from '@fuse/core/FusePageCarded';
 import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { useQuery } from 'react-query';
-import { Paginated } from 'src/app/shared-interfaces/Paginated';
 
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router';
+import { useState } from 'react';
+import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
+import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { CompanyEntity } from './services/CompanyEntity';
 import { CompanyService } from './services/CompanyService';
+import CreateCompany from './components/CreateCompany';
 
 function Companies() {
 	const navigate = useNavigate();
 	const { t } = useTranslation('examplePage');
-
-	const { data, isLoading } = useQuery<Paginated<CompanyEntity>>('companies', () => CompanyService.getCompanies());
+	const [open, setOpen] = useState(false);
+	const {
+		data = [],
+		isLoading,
+		refetch
+	} = useQuery<CompanyEntity[]>('companies', () => CompanyService.getCompanies());
 
 	const columns: GridColDef<CompanyEntity>[] = [
 		{
@@ -63,7 +70,25 @@ function Companies() {
 						key={1}
 						label="Eliminar"
 						icon={<DeleteIcon />}
-						onClick={() => navigate('editr')}
+						onClick={() => {
+							openDialog({
+								title: 'Confirmación requerido',
+								text: '¿Seguro que deseas eliminar este registro?',
+								onAccept: async () => {
+									await CompanyService.delete(params.row.id);
+									displayToast({
+										message: 'Se elimino correctamente',
+										variant: 'success',
+										anchorOrigin: {
+											horizontal: 'right',
+											vertical: 'top'
+										},
+										autoHideDuration: 4000
+									});
+									await refetch();
+								}
+							});
+						}}
 						showInMenu
 					/>
 				];
@@ -84,6 +109,7 @@ function Companies() {
 						<Button
 							color="primary"
 							variant="contained"
+							onClick={() => setOpen(true)}
 						>
 							Nuevo
 						</Button>
@@ -92,10 +118,14 @@ function Companies() {
 			}
 			content={
 				<div className="">
+					<CreateCompany
+						open={open}
+						onClose={() => setOpen(false)}
+					/>
 					<Box sx={{ height: 'calc(100vh - 140px);' }}>
 						<DataGrid
 							loading={isLoading}
-							rows={data?.data ?? []}
+							rows={data}
 							columns={columns}
 						/>
 					</Box>

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useQuery, useQueryClient } from 'react-query';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
@@ -20,14 +20,15 @@ import SaveAreaDialog from './components/SaveAreaDialog/SaveAreaDialog';
 function CompanyDetail() {
 	const queryClient = useQueryClient();
 	const { id } = useParams();
+	const navigation = useNavigate();
 	const [tab, setTab] = useState('1');
 	const [openSaveArea, setOpenSaveArea] = useState<boolean>(false);
 	const { isEditing, onChangeEditing, companyName, setCompanyName } = useCompanyDetail();
 	const { areaId, companyId, setAreaId, setCompanyId } = useCompanyParams();
 
 	const { data } = useQuery({
-		queryKey: ['detail-company', companyId],
-		queryFn: () => CompanyService.getCompanyById(companyId)
+		queryKey: ['detail-company', id],
+		queryFn: () => CompanyService.getCompanyById(id)
 	});
 
 	const formHandler = useForm<IFormCompany>({
@@ -56,7 +57,7 @@ function CompanyDetail() {
 	const handleChangeTab = (_: React.SyntheticEvent, newValue: string) => {
 		if (isEditing) {
 			openDialog({
-				title: 'Confirmacion requerida',
+				title: 'Confirmación requerida',
 				text: '¿Seguro que deseas cambiar de tab sin antes guardar?',
 				onAccept() {
 					onChangeEditing(false);
@@ -82,10 +83,31 @@ function CompanyDetail() {
 		onChangeEditing(false);
 	};
 
-	function handleSaveArea(): void {
+	async function handleSaveArea(): Promise<void> {
 		setOpenSaveArea(false);
-		queryClient.invalidateQueries('areas-by-company');
+		await queryClient.invalidateQueries('areas-by-company');
 		setAreaId('');
+	}
+
+	async function handleDeleteCompany(): Promise<void> {
+		openDialog({
+			title: 'Confirmación requerida',
+			text: '¿Estas seguro que deseas eliminarlo?',
+			onAccept: async () => {
+				await CompanyService.delete(id);
+				navigation(-1);
+				displayToast({
+					message: 'Se elimino correctamente',
+					variant: 'success',
+					anchorOrigin: {
+						horizontal: 'right',
+						vertical: 'top'
+					},
+					autoHideDuration: 4000
+				});
+				await queryClient.invalidateQueries('companies');
+			}
+		});
 	}
 
 	return (
@@ -108,6 +130,7 @@ function CompanyDetail() {
 								tab={tab}
 								onSaveBasicInformation={formHandler.handleSubmit(handleSubmitBasicInformation)}
 								onAddAreas={() => setOpenSaveArea(true)}
+								onDelete={handleDeleteCompany}
 							/>
 						}
 					/>

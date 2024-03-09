@@ -13,11 +13,11 @@ function CardArea(props: ICardAreaProps) {
 
 	async function handleDeleteArea(): Promise<void> {
 		openDialog({
-			title: 'Confirmacion requerida',
+			title: 'Confirmación requerida',
 			text: '¿Seguro que desea eliminar esta area?',
 			onAccept: async () => {
 				await AreaService.deleteArea(area.id);
-				queryClient.invalidateQueries('areas-by-company');
+				await queryClient.invalidateQueries('areas-by-company');
 				displayToast({
 					anchorOrigin: {
 						horizontal: 'right',
@@ -44,12 +44,13 @@ function CardArea(props: ICardAreaProps) {
 					direction="row"
 					alignItems="center"
 					spacing={3}
+					py={2}
 				>
 					<Avatar>{area.name[0]}</Avatar>
 					<Typography variant="h6">{area.name}</Typography>
 				</Stack>
 			</CardContent>
-			<CardActions>
+			<CardActions sx={{ justifyContent: 'flex-end', display: 'flex' }}>
 				<Button
 					color="error"
 					onClick={handleDeleteArea}

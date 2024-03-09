@@ -6,7 +6,7 @@ import { IRightHeaderProps } from './IRightHeaderProps';
 
 function RightHeader(props: IRightHeaderProps) {
 	const { onChangeEditing, isEditing } = useCompanyDetail();
-	const { tab, onSaveBasicInformation, onAddAreas } = props;
+	const { tab, onSaveBasicInformation, onAddAreas, onDelete } = props;
 
 	const map = {
 		1: (
@@ -15,6 +15,7 @@ function RightHeader(props: IRightHeaderProps) {
 				onEdit={() => onChangeEditing(true)}
 				onCancel={() => onChangeEditing(false)}
 				onSave={onSaveBasicInformation}
+				onDelete={onDelete}
 			/>
 		),
 		2: (

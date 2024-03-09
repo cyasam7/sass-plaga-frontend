@@ -39,7 +39,6 @@ function Areas(props: IPropsAreas) {
 					item
 					xs={12}
 					sm={6}
-					md={4}
 					key={i.id}
 				>
 					<CardArea
