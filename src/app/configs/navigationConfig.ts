@@ -41,6 +41,16 @@ const navigationConfig: FuseNavItemType[] = [
 		icon: 'material-outline:assignment',
 		url: '/orders',
 		children: []
+	},
+	{
+		id: 'clients',
+		title: 'Clientes',
+		translate: 'CLIENTS',
+		type: 'item',
+		auth: ['admin', 'staff'],
+		icon: 'material-twotone:person_pin',
+		url: '/clients',
+		children: []
 	}
 ];
 
