@@ -36,6 +36,5 @@ jobs:
               run: |
                   yarn install
                   yarn build
-                  npx webpack
                   rm -rf /var/www/frontend/*
                   cp -r build/* /var/www/frontend
