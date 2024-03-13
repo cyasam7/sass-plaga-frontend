@@ -440,7 +440,8 @@ function FormOrder(props: IFormOrderProps) {
 								variant="standard"
 								InputProps={{
 									startAdornment: <InputAdornment position="start">$</InputAdornment>,
-									inputComponent: NumericFormatAdapter
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									inputComponent: NumericFormatAdapter as any
 								}}
 								required
 								error={Boolean(fieldState.error?.message)}

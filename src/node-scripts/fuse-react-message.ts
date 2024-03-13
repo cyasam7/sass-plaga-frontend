@@ -15,4 +15,6 @@ console.log(`**************************************************************
 *  https://fusetheme.com/pricing/                            *
 *                                                            *
 *  Thanks for choosing Fuse React!                           * 
+* "postinstall": "node --loader ts-node/esm ./src/node-scripts/fuse-react-message.ts",
+		"poststart": "node --loader ts-node/esm ./src/node-scripts/fuse-react-message.ts",
 **************************************************************`);

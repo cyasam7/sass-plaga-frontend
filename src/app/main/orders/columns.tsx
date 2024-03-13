@@ -97,7 +97,16 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 			const { status } = row;
 			return (
 				<Chip
-					color={statusColor[status]}
+					color={
+						statusColor[status] as
+							| 'default'
+							| 'primary'
+							| 'secondary'
+							| 'error'
+							| 'info'
+							| 'success'
+							| 'warning'
+					}
 					label={statusLabel[status]}
 				/>
 			);

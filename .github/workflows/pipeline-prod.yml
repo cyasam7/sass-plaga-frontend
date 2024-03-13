@@ -1,22 +1,20 @@
-name: NodeJS with Webpack
+name: Frontend React
 
 on:
-  push:
-    branches: [ "main" ]
+    push:
+        branches: ['main']
 
 jobs:
-  build:
-    runs-on: self-hosted
+    build:
+        runs-on: self-hosted
 
-    steps:
-    - uses: actions/checkout@v3
+        env:
+            VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+        steps:
+            - uses: actions/checkout@v3
 
-    - name: Build
-      run: |
-        npm install
-        npx webpack
+            - run: yarn install
+            - run: yarn build
+            - run: rm -rf /var/www/frontend/*
+            - run: cp -r build/* /var/www/frontend
