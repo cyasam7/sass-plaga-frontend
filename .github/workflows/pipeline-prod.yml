@@ -35,5 +35,5 @@ jobs:
               run: |
                   yarn install
                   yarn build
-                  rm -rf /var/www/frontend/*
-                  cp -r build/* /var/www/frontend
+                  rm -rf /home/cyasam7/frontend/*
+                  cp -r build/* /home/cyasam7/frontend
