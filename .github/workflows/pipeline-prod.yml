@@ -5,28 +5,37 @@ on:
         branches: ['main']
 
 jobs:
-  build:
-    runs-on: self-hosted
+    build:
+        runs-on: self-hosted
 
-    strategy:
-      matrix:
-        node-version: [18.17.0]
-    
-    env:
-        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        strategy:
+            matrix:
+                node-version: [18.17.0]
 
-    steps:
-    - uses: actions/checkout@v3
+        env:
+            VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+        steps:
+            - uses: actions/checkout@v3
 
-    - name: Build
-      run: |
-        yarn install
-        yarn build
-        npx webpack
-        rm -rf /var/www/frontend/*
-        cp -r build/* /var/www/frontend
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - name: Install yarn
+              run: npm i -g yarn
+
+            - name: Caching yarn
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: yarn
+
+            - name: Build
+              run: |
+                  yarn install
+                  yarn build
+                  npx webpack
+                  rm -rf /var/www/frontend/*
+                  cp -r build/* /var/www/frontend
