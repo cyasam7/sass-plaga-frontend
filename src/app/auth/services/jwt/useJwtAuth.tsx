@@ -3,7 +3,6 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
 import { ApiError } from 'src/app/shared-interfaces/ErrorAxios';
-import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { UserLoginResponse, AxiosConfigRetry, User as UserType } from '../../user';
 import { formatUserResponse } from './utils';
 
@@ -89,7 +88,6 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 		localStorage.setItem(authConfig.tokenStorageKey, accessToken);
 		axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 		axios.defaults.headers.common['x-tenant'] = tenant;
-		axios.defaults.headers.common['Content-Type'] = 'application/json';
 		axios.defaults.headers.common['Content-Type'] = 'application/json';
 	}, []);
 
@@ -271,16 +269,14 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 	 *
 	 */
 	useEffect(() => {
-		/* 	axios.interceptors.request.use(async (config) => {
+		axios.interceptors.request.use(async (config) => {
 			const accessToken = localStorage.getItem(authConfig.tokenStorageKey);
 
 			if (accessToken) {
 				config.headers.Authorization = `Bearer ${accessToken}`;
 			}
-			console.log(config.headers);
 			return config;
-		}); */
-
+		});
 		axios.interceptors.response.use(
 			(response) => {
 				return response;
@@ -319,18 +315,6 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 					}
 
 					return Promise.resolve(axios(newConfig));
-				}
-
-				if (axiosError.response.data.message) {
-					displayToast({
-						message: axiosError.response.data.message,
-						variant: 'error',
-						anchorOrigin: {
-							horizontal: 'right',
-							vertical: 'top'
-						},
-						autoHideDuration: 4000
-					});
 				}
 
 				// Handle other errors

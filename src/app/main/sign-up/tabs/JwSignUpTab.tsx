@@ -66,7 +66,7 @@ function JwtSignUpTab() {
 			})
 			.catch((_errors: AxiosError<{ message: string }>) => {
 				const { message } = _errors.response.data;
-				if (message === 'Ya existe un usuario con ese telefono') {
+				if (message === 'Ya existe un usuario con ese teléfono') {
 					setError('phone', { message });
 				}
 				if (message === 'Ya existe un usuario con ese email') {

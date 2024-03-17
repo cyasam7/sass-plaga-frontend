@@ -47,8 +47,8 @@ function jwtSignInTab() {
 	const { isValid, dirtyFields, errors } = formState;
 
 	useEffect(() => {
-		setValue('email', '', { shouldDirty: true, shouldValidate: true });
-		setValue('password', '', { shouldDirty: true, shouldValidate: true });
+		setValue('email', '');
+		setValue('password', '');
 	}, [setValue]);
 
 	function onSubmit(formData: FormType) {
@@ -69,7 +69,6 @@ function jwtSignInTab() {
 					>
 				) => {
 					const errorData = error.response.data;
-
 					errorData.forEach((err) => {
 						setError(err.type, {
 							type: 'manual',
