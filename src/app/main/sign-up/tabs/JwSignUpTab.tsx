@@ -8,7 +8,13 @@ import Button from '@mui/material/Button';
 import _ from '@lodash';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import {
+	FIELD_EMAIL_VALID,
+	FIELD_PASSWORD_MUST_BE_SAME,
+	FIELD_PASSWORD_SHORT,
+	FIELD_REQUIRED,
+	FIELD_TERMS_CONDITIONS
+} from 'src/app/shared-constants/yupMessages';
 import { AxiosError } from 'axios';
 import { SignUpPayload, useAuth } from '../../../auth/AuthRouteProvider';
 
@@ -17,20 +23,17 @@ import { SignUpPayload, useAuth } from '../../../auth/AuthRouteProvider';
  */
 const schema = z
 	.object({
-		name: z.string().nonempty('You must enter your name'),
-		email: z.string().email('You must enter a valid email').nonempty('You must enter an email'),
+		name: z.string().nonempty(FIELD_REQUIRED),
+		email: z.string().email(FIELD_EMAIL_VALID).nonempty(FIELD_REQUIRED),
 		phone: z.string(),
-		password: z
-			.string()
-			.nonempty('Please enter your password.')
-			.min(8, 'Password is too short - should be 8 chars minimum.'),
-		passwordConfirm: z.string().nonempty('Password confirmation is required'),
+		password: z.string().nonempty(FIELD_REQUIRED).min(8, FIELD_PASSWORD_SHORT),
+		passwordConfirm: z.string().nonempty(FIELD_REQUIRED),
 		companyName: z.string().nonempty(FIELD_REQUIRED),
 		workspaceName: z.string().nonempty(FIELD_REQUIRED),
-		acceptTermsConditions: z.boolean().refine((val) => val === true, 'The terms and conditions must be accepted.')
+		acceptTermsConditions: z.boolean().refine((val) => val === true, FIELD_TERMS_CONDITIONS)
 	})
 	.refine((data) => data.password === data.passwordConfirm, {
-		message: 'Passwords must match',
+		message: FIELD_PASSWORD_MUST_BE_SAME,
 		path: ['passwordConfirm']
 	});
 
@@ -222,7 +225,7 @@ function JwtSignUpTab() {
 						error={!!errors.acceptTermsConditions}
 					>
 						<FormControlLabel
-							label="I agree to the Terms of Service and Privacy Policy"
+							label="Acepto los términos y condiciones de la aplicación."
 							control={
 								<Checkbox
 									size="small"
@@ -244,7 +247,7 @@ function JwtSignUpTab() {
 				type="submit"
 				size="large"
 			>
-				Create your free account
+				Crea tu cuenta gratis
 			</Button>
 		</form>
 	);

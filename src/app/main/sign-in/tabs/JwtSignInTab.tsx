@@ -11,16 +11,14 @@ import { Link } from 'react-router-dom';
 import { useAuth } from 'src/app/auth/AuthRouteProvider';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
 
 /**
  * Form Validation Schema
  */
 const schema = z.object({
-	email: z.string().email('You must enter a valid email').nonempty('You must enter an email'),
-	password: z
-		.string()
-		.min(4, 'Password is too short - must be at least 4 chars.')
-		.nonempty('Please enter your password.')
+	email: z.string().email('Coloca un email valido').nonempty(FIELD_REQUIRED),
+	password: z.string().min(4, 'Contraseña muy corta, al menos 4 caracteres').nonempty(FIELD_REQUIRED)
 });
 
 type FormType = {
@@ -131,7 +129,7 @@ function jwtSignInTab() {
 						render={({ field }) => (
 							<FormControl>
 								<FormControlLabel
-									label="Remember me"
+									label="Recordar sesión"
 									control={
 										<Checkbox
 											size="small"
@@ -147,7 +145,7 @@ function jwtSignInTab() {
 						className="text-md font-medium"
 						to="/pages/auth/forgot-password"
 					>
-						Forgot password?
+						¿Olvidaste contraseña?
 					</Link>
 				</div>
 
@@ -160,7 +158,7 @@ function jwtSignInTab() {
 					type="submit"
 					size="large"
 				>
-					Sign in
+					INICIAR
 				</Button>
 			</form>
 		</div>

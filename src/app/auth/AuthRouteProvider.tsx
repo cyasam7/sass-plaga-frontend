@@ -16,6 +16,7 @@ import firebase from 'firebase/compat/app';
 import _ from '@lodash';
 import { useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
+import { useQueryClient } from 'react-query';
 import useJwtAuth, { JwtAuth } from './services/jwt/useJwtAuth';
 import { User } from './user';
 import useFirebaseAuth from './services/firebase/useFirebaseAuth';
@@ -56,6 +57,7 @@ type AuthProviderProps = { children: React.ReactNode };
 function AuthRoute(props: AuthProviderProps) {
 	const { children } = props;
 	const dispatch = useAppDispatch();
+	const queryClient = useQueryClient();
 	const user = useSelector(selectUser);
 	/**
 	 * Get user role from store
@@ -84,6 +86,8 @@ function AuthRoute(props: AuthProviderProps) {
 			setAuthService('jwt');
 		},
 		onSignedOut: () => {
+			queryClient.removeQueries();
+
 			dispatch(resetUser());
 			resetAuthService();
 		},

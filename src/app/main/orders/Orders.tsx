@@ -7,6 +7,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import dayjs from 'dayjs';
+import MoveUpIcon from '@mui/icons-material/MoveUp';
 import { columnsOrders } from './columns';
 import { OrderService } from './service/OrderService';
 import OrderHeaderTabs from './components/HeaderTabs/HeaderTabs';
@@ -15,12 +16,14 @@ import { EStatusOrder, OrderEntity } from './service/OrderEntity';
 import OrderDialog from './components/OrderDialog/OrderDialog';
 import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog';
 import OrderChangeStatusDialog from './components/OrderChangeStatusDialog/OrderChangeStatusDialog';
+import OrderFollowUpDialog from './components/OrderFollowUpDialog/OrderFollowUpDialog';
 
 function Order() {
 	const [tabFilter, setTabFilter] = useState<ETabsPlagues>(ETabsPlagues.ALL);
 	const [open, setOpen] = useState<boolean>(false);
 	const [openDetails, setOpenDetails] = useState<boolean>(false);
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
+	const [openFollow, setOpenFollow] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
 
 	const {
@@ -69,6 +72,16 @@ function Order() {
 					/>,
 					<GridActionsCellItem
 						key={2}
+						label="CREAR SEGUIMIENTO"
+						icon={<MoveUpIcon />}
+						showInMenu
+						onClick={() => {
+							setOrderId(params.row.id);
+							setOpenFollow(true);
+						}}
+					/>,
+					<GridActionsCellItem
+						key={3}
 						label="VER"
 						icon={<RemoveRedEyeIcon />}
 						showInMenu
@@ -135,6 +148,14 @@ function Order() {
 							setOpen(false);
 							setOrderId('');
 						}}
+						onSubmit={async () => {
+							await refetch();
+						}}
+					/>
+					<OrderFollowUpDialog
+						id={orderId}
+						onClose={() => setOpenFollow(false)}
+						open={openFollow}
 						onSubmit={async () => {
 							await refetch();
 						}}

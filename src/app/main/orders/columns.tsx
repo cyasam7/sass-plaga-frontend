@@ -41,14 +41,14 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		field: 'type',
 		sortable: false,
 		flex: 1,
+		minWidth: 150,
 		align: 'left',
 		disableColumnMenu: true,
 		renderCell({ row }) {
 			const condition = !row.isFollowUp;
-
 			return (
 				<Chip
-					color="info"
+					color={condition ? 'info' : 'secondary'}
 					label={condition ? 'INICIAL' : 'SEGUIMIENTO'}
 				/>
 			);
@@ -61,7 +61,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		sortable: true,
 		flex: 1,
 		align: 'left',
-		width: 200,
+		minWidth: 200,
 		disableColumnMenu: true,
 		renderCell: ({ row }) => {
 			return (
@@ -91,6 +91,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		field: 'status',
 		sortable: false,
 		flex: 1,
+		minWidth: 150,
 		align: 'left',
 		disableColumnMenu: true,
 		renderCell({ row }) {
@@ -120,7 +121,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		headerAlign: 'right',
 		flex: 0.5,
 		hideSortIcons: true,
-		width: 200,
+		minWidth: 200,
 		disableColumnMenu: true,
 		valueFormatter({ value }) {
 			return `$${formatCurrency(String(value))}`;

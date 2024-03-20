@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useQuery } from 'react-query';
 import dayjs from 'dayjs';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
+import { LoadingButton } from '@mui/lab';
 import FormOrder from '../FormOrder/FormOrder';
 import { IFormCreatePest } from '../FormOrder/FormOrderProps';
 import { OrderDialogProps } from './OrderDialogProps';
@@ -76,6 +77,7 @@ function OrderDialog(props: OrderDialogProps) {
 			isFollowUp: false
 		};
 		await OrderService.createOrder(formatValues);
+		handleResetForm();
 		displayToast({
 			message: 'Se ha guardado correctamente',
 			autoHideDuration: 4000,
@@ -86,8 +88,6 @@ function OrderDialog(props: OrderDialogProps) {
 			}
 		});
 		await onSubmit();
-		formHandler.reset();
-		onCancel();
 	}
 
 	function handleCancel(): void {
@@ -96,14 +96,17 @@ function OrderDialog(props: OrderDialogProps) {
 				title: 'Confirmación requerida',
 				text: '¿Seguro que deseas cancelar sin guardar?',
 				onAccept() {
-					formHandler.reset(defaultValuesOrder);
-					onCancel();
+					handleResetForm();
 				}
 			});
 		} else {
-			formHandler.reset(defaultValuesOrder);
-			onCancel();
+			handleResetForm();
 		}
+	}
+
+	function handleResetForm(): void {
+		formHandler.reset(defaultValuesOrder);
+		onCancel();
 	}
 
 	return (
@@ -126,23 +129,26 @@ function OrderDialog(props: OrderDialogProps) {
 						<Button
 							color="primary"
 							variant="outlined"
+							disabled={formHandler.formState.isSubmitting}
 							onClick={handleCancel}
 						>
 							Cancelar
 						</Button>
-						<Button
+						<LoadingButton
 							color="primary"
 							variant="contained"
+							loading={formHandler.formState.isSubmitting}
 							onClick={formHandler.handleSubmit(handleSubmit)}
 						>
 							Guardar
-						</Button>
+						</LoadingButton>
 					</Stack>
 				</Stack>
 			</DialogTitle>
 			<DialogContent>
 				<FormOrder
 					formHandler={formHandler}
+					disabled={formHandler.formState.isSubmitting}
 					disableSpecificField={
 						isUpdating && {
 							clientAddressField: true,

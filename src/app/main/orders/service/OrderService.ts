@@ -11,8 +11,8 @@ export class OrderService {
 		await axios.post('/order', data);
 	}
 
-	static async createFollowingOrder(): Promise<void> {
-		await axios.post<OrderEntity[]>('/order');
+	static async createFollowingOrder(data: { id: string; observations: string; date: Date }): Promise<void> {
+		await axios.post<OrderEntity[]>('/order/followUp', data);
 	}
 
 	static async createClient(data: any): Promise<void> {

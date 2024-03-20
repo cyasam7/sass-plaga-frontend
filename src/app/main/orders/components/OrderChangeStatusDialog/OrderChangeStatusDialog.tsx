@@ -98,14 +98,14 @@ function OrderChangeStatusDialog(props: IOrderChangeStatusDialogProps) {
 								row
 							>
 								<FormControlLabel
-									value={EStatusOrder.REALIZED}
-									control={<Radio />}
-									label="Realizada"
-								/>
-								<FormControlLabel
 									value={EStatusOrder.NO_REALIZED}
 									control={<Radio />}
 									label="No realizada"
+								/>
+								<FormControlLabel
+									value={EStatusOrder.REALIZED}
+									control={<Radio />}
+									label="Realizada"
 								/>
 								<FormControlLabel
 									value={EStatusOrder.CANCELLED}
