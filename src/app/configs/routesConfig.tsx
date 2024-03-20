@@ -10,8 +10,8 @@ import Error404Page from '../main/404/Error404Page';
 import ExampleConfig from '../main/example/ExampleConfig';
 import CompaniesConfig from '../main/companies/CompaniesConfig';
 import OrdersConfig from '../main/orders/OrdersConfig';
-import ClientsConfig from '../main/clients/ClientsConfig';
 import CatalogsConfig from '../main/catalogs/CatalogsConfig';
+import ClientsConfig from '../main/clients/ClientsConfig';
 
 const routeConfigs: FuseRouteConfigsType = [
 	SignOutConfig,

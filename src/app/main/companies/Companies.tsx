@@ -11,9 +11,22 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
+import { styled } from '@mui/material/styles';
 import { CompanyEntity } from './services/CompanyEntity';
 import { CompanyService } from './services/CompanyService';
 import CreateCompany from './components/CreateCompany';
+
+const Root = styled(FusePageCarded)(({ theme }) => ({
+	'& .FusePageSimple-header': {
+		backgroundColor: theme.palette.background.paper,
+		borderBottomWidth: 1,
+		borderStyle: 'solid',
+		borderColor: theme.palette.divider
+	},
+	'& .FusePageSimple-content': {},
+	'& .FusePageSimple-sidebarHeader': {},
+	'& .FusePageSimple-sidebarContent': {}
+}));
 
 function Companies() {
 	const navigate = useNavigate();
@@ -97,10 +110,10 @@ function Companies() {
 	];
 
 	return (
-		<FusePageCarded
+		<Root
 			header={
 				<div className="p-24 w-full flex justify-between items-center">
-					<Typography variant="h6">{t('TITLE')}</Typography>
+					<Typography variant="h6">Compañías para revision</Typography>
 					<div className="flex items-center space-x-16">
 						<TextField
 							placeholder="Search"

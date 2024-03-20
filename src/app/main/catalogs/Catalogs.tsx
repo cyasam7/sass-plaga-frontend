@@ -1,6 +1,6 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
+import { Typography } from '@mui/material';
 import CatalogsContent from './components/CatalogsContent/CatalogsContent';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
@@ -16,13 +16,11 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 function Catalogs() {
-	const { t } = useTranslation('CatalogsPage');
-
 	return (
 		<Root
 			header={
 				<div className="p-24">
-					<h4>{t('TITLE')}</h4>
+					<Typography variant="h6">Catálogos</Typography>
 				</div>
 			}
 			content={

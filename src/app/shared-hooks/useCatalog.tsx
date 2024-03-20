@@ -27,7 +27,7 @@ const useCatalogs = (refresh?: boolean): IUsePhoneValues => {
 
 	useEffect(() => {
 		Promise.all([
-			CatalogService.getAllClients(),
+			CatalogService.getClientsBy({}),
 			CatalogService.getFrequency(),
 			CatalogService.getRecommendations(),
 			CatalogService.getTypePlage(),
@@ -35,7 +35,7 @@ const useCatalogs = (refresh?: boolean): IUsePhoneValues => {
 		])
 			.then((data) => {
 				const [clientsData, frequencyData, recommendationsData, typePlagueData, typeServiceData] = data;
-				setClients(clientsData);
+				setClients(clientsData.payload);
 				setFrequency(frequencyData);
 				setRecommendations(recommendationsData);
 				setTypePlague(typePlagueData);

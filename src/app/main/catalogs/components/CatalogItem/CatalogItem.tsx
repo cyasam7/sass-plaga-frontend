@@ -1,9 +1,8 @@
 import { Stack, Typography, Paper, Button } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { Delete, Edit } from '@mui/icons-material';
 import { ICatalogItem } from './CatalogItemProps';
 import { CatalogsService } from '../../service/catalogs.service';
 import { columnsCatalog } from './columns';
@@ -14,15 +13,19 @@ function CatalogItem(props: ICatalogItem) {
 
 	const [open, setOpen] = useState(false);
 
-	const { data = [], isLoading } = useQuery({
+	const {
+		data = [],
+		isLoading,
+		refetch
+	} = useQuery({
 		queryKey: ['CatalogItem', route],
 		queryFn: () => CatalogsService.getCatalog(route),
 		enabled: !!route
 	});
 
 	const columns: GridColDef[] = [
-		...columnsCatalog,
-		{
+		...columnsCatalog
+		/* {
 			field: 'actions',
 			type: 'actions',
 			getActions: () => {
@@ -37,7 +40,7 @@ function CatalogItem(props: ICatalogItem) {
 					/>
 				];
 			}
-		}
+		} */
 	];
 
 	return (
@@ -46,6 +49,9 @@ function CatalogItem(props: ICatalogItem) {
 				open={open}
 				route={route}
 				onClose={() => setOpen(false)}
+				onSubmit={async () => {
+					await refetch();
+				}}
 			/>
 			<Paper>
 				<Stack

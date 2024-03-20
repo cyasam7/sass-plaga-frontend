@@ -12,11 +12,6 @@ interface IQueryClient {
 }
 
 export class CatalogService {
-	static async getAllClients(): Promise<ClientEntity[]> {
-		const { data } = await axios.get<ClientEntity[]>('/clients');
-		return data;
-	}
-
 	static async getClientsBy(query: IQueryClient): Promise<{ error?: AxiosError; payload?: ClientEntity[] }> {
 		try {
 			const { data } = await axios.get<ClientEntity[]>('/clients/query', {
