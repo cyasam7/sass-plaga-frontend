@@ -10,13 +10,14 @@ interface IClientsHeader {
 	loading: boolean;
 	searchFilter: string;
 	setSearchFilter: (value: string) => void;
+	clientsLength: number;
 }
 
 /**
  * The Clients header.
  */
 function ClientsHeader(props: IClientsHeader) {
-	const { loading, searchFilter, setSearchFilter } = props;
+	const { loading, searchFilter, setSearchFilter, clientsLength } = props;
 
 	if (loading) {
 		return null;
@@ -42,7 +43,7 @@ function ClientsHeader(props: IClientsHeader) {
 						className="text-14 font-medium ml-2"
 						color="text.secondary"
 					>
-						{`${10} Clients`}
+						{`${clientsLength} Clients`}
 					</Typography>
 				</motion.span>
 			</div>

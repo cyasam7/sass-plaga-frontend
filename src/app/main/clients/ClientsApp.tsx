@@ -41,6 +41,7 @@ function ContactsApp() {
 					loading={isLoading}
 					searchFilter={searchFilter}
 					setSearchFilter={setSearchFilter}
+					clientsLength={data?.payload.length ?? 0}
 				/>
 			}
 			content={
