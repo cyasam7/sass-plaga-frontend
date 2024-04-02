@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import FusePageCarded from '@fuse/core/FusePageCarded';
 import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
@@ -12,8 +11,8 @@ import { useState } from 'react';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { styled } from '@mui/material/styles';
-import { CompanyEntity } from './services/CompanyEntity';
-import { CompanyService } from './services/CompanyService';
+import { CompanyEntity } from '../../shared/entities/CompanyEntity';
+import { CompanyService } from '../../shared/services/CompanyService';
 import CreateCompany from './components/CreateCompany';
 
 const Root = styled(FusePageCarded)(({ theme }) => ({
@@ -30,7 +29,6 @@ const Root = styled(FusePageCarded)(({ theme }) => ({
 
 function Companies() {
 	const navigate = useNavigate();
-	const { t } = useTranslation('examplePage');
 	const [open, setOpen] = useState(false);
 	const {
 		data = [],
@@ -140,6 +138,7 @@ function Companies() {
 							loading={isLoading}
 							rows={data}
 							columns={columns}
+							getRowId={(i) => i.id}
 						/>
 					</Box>
 				</div>

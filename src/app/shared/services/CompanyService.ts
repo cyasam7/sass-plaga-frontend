@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { CompanyEntity } from './CompanyEntity';
-import { IFormCompany } from '../types';
+import { CompanyEntity } from '../entities/CompanyEntity';
+import { IFormCompany } from '../../main/companies/types';
 
 export class CompanyService {
 	static async getCompanies(): Promise<CompanyEntity[]> {

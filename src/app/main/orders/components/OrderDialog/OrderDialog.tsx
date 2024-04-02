@@ -12,7 +12,7 @@ import { LoadingButton } from '@mui/lab';
 import FormOrder from '../FormOrder/FormOrder';
 import { IFormCreatePest } from '../FormOrder/FormOrderProps';
 import { OrderDialogProps } from './OrderDialogProps';
-import { OrderService } from '../../service/OrderService';
+import { OrderService } from '../../../../shared/services/OrderService';
 import { createOrderSchema } from '../FormOrder/schema';
 import { defaultValuesOrder } from '../FormOrder/defaultValues';
 

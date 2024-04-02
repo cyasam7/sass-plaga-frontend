@@ -4,19 +4,8 @@ import dayjs from 'dayjs';
 
 import { DATE_FORMAT, TIME_FORMAT } from 'src/app/shared-constants/dateFormat';
 import { formatCurrency } from 'src/app/shared-constants/formatCurrency';
-import { OrderEntity } from './service/OrderEntity';
-
-const statusLabel = {
-	REALIZED: 'Realizada',
-	NO_REALIZED: 'No Realizada',
-	CANCELLED: 'Cancelada'
-};
-
-const statusColor = {
-	REALIZED: 'success',
-	NO_REALIZED: 'warning',
-	CANCELLED: 'error'
-};
+import ChipOrder from 'app/shared-components/ChipOrder/ChipOrder';
+import { OrderEntity } from '../../shared/entities/OrderEntity';
 
 export const columnsOrders: GridColDef<OrderEntity>[] = [
 	{
@@ -96,21 +85,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		disableColumnMenu: true,
 		renderCell({ row }) {
 			const { status } = row;
-			return (
-				<Chip
-					color={
-						statusColor[status] as
-							| 'default'
-							| 'primary'
-							| 'secondary'
-							| 'error'
-							| 'info'
-							| 'success'
-							| 'warning'
-					}
-					label={statusLabel[status]}
-				/>
-			);
+			return <ChipOrder status={status} />;
 		}
 	},
 	{

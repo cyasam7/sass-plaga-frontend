@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DeviceEntity } from './DeviceEntity';
+import { DeviceEntity } from '../entities/DeviceEntity';
 
 export class DeviceService {
 	static async getByCompanyAndArea(companyId: string, areaId: string): Promise<DeviceEntity[]> {

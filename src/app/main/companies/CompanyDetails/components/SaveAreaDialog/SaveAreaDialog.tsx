@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { IFormArea } from '../../../types';
 import FormArea from './FormArea';
 import { IAddAreaDialog } from './types';
-import { AreaService } from '../../../services/AreaService';
+import { AreaService } from '../../../../../shared/services/AreaService';
 
 function SaveAreaDialog(props: IAddAreaDialog) {
 	const { onClose, onSave, open, companyId, areaId } = props;

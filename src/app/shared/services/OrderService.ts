@@ -1,9 +1,15 @@
 import axios from 'axios';
-import { EStatusOrder, OrderEntity } from './OrderEntity';
+import { EStatusOrder, OrderEntity } from '../entities/OrderEntity';
+
+export interface IQueryOrder {
+	clientId?: string;
+}
 
 export class OrderService {
-	static async getAll(): Promise<OrderEntity[]> {
-		const { data } = await axios.get<OrderEntity[]>('/order');
+	static async getAll(query?: IQueryOrder): Promise<OrderEntity[]> {
+		const { data } = await axios.get<OrderEntity[]>('/order', {
+			params: query ?? {}
+		});
 		return data;
 	}
 

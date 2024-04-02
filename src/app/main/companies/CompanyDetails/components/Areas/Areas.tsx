@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { CircularProgress, Grid } from '@mui/material';
-import { AreaService } from '../../../services/AreaService';
+import { AreaService } from '../../../../../shared/services/AreaService';
 import CardArea from '../CardArea/CardArea';
 import { IPropsAreas } from './IPropsAreas';
 import CrudDevicesDialog from '../CrudDevicesDialog/CrudDevicesDialog';

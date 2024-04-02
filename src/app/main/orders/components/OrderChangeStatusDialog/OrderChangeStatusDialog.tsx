@@ -16,8 +16,8 @@ import { useQuery, useQueryClient } from 'react-query';
 import { Controller, useForm } from 'react-hook-form';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
-import { EStatusOrder } from '../../service/OrderEntity';
-import { OrderService } from '../../service/OrderService';
+import { EStatusOrder } from '../../../../shared/entities/OrderEntity';
+import { OrderService } from '../../../../shared/services/OrderService';
 import { IOrderChangeStatusDialogProps, IStatusForm } from './IOrderChangeStatusDialogProps';
 
 function OrderChangeStatusDialog(props: IOrderChangeStatusDialogProps) {

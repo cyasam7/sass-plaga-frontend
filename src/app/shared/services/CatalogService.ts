@@ -5,7 +5,7 @@ import {
 	RecommendationEntity,
 	TypePlagueEntity,
 	TypeServiceEntity
-} from './OrderEntity';
+} from '../entities/OrderEntity';
 
 interface IQueryClient {
 	phone?: string;
@@ -14,7 +14,7 @@ interface IQueryClient {
 export class CatalogService {
 	static async getClientsBy(query: IQueryClient): Promise<{ error?: AxiosError; payload?: ClientEntity[] }> {
 		try {
-			const { data } = await axios.get<ClientEntity[]>('/clients/query', {
+			const { data } = await axios.get<ClientEntity[]>('/clients', {
 				params: {
 					...query
 				}

@@ -1,4 +1,4 @@
-import { AreaEntity } from '../../../services/AreaEntity';
+import { AreaEntity } from '../../../../../shared/entities/AreaEntity';
 
 export interface ICardAreaProps {
 	area: AreaEntity;

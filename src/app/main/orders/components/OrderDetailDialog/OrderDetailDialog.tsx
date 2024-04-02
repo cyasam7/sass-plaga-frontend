@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_TIME_FORMAT, TIME_FORMAT } from 'src/app/shared-constants/dateFormat';
 import { useQuery } from 'react-query';
 import { formatCurrency } from 'src/app/shared-constants/formatCurrency';
-import { OrderService } from '../../service/OrderService';
+import { OrderService } from '../../../../shared/services/OrderService';
 import { IOrderDetailDialogProps } from './IOrderDetailDialogProps';
 
 function OrderDetailDialog(props: IOrderDetailDialogProps) {

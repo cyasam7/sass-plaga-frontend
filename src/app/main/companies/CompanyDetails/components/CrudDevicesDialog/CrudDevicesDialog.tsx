@@ -3,7 +3,7 @@ import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { Delete, Edit } from '@mui/icons-material';
 import { useQuery } from 'react-query';
 import { ICrudDevicesDialog } from './ICrudDevicesDialog';
-import { DeviceService } from '../../../services/DevicesService';
+import { DeviceService } from '../../../../../shared/services/DevicesService';
 
 function CrudDevicesDialog(props: ICrudDevicesDialog) {
 	const { open, onClose, areaId, companyId } = props;

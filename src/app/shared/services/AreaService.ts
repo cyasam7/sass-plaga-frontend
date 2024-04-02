@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { AreaEntity } from './AreaEntity';
-import { IFormArea } from '../types';
+import { AreaEntity } from '../entities/AreaEntity';
+import { IFormArea } from '../../main/companies/types';
 
 export class AreaService {
 	static async getByCompany(id: string): Promise<AreaEntity[]> {

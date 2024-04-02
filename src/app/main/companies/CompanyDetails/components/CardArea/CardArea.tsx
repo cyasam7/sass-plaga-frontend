@@ -4,7 +4,7 @@ import { useQueryClient } from 'react-query';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { ICardAreaProps } from './ICardAreaProps';
-import { AreaService } from '../../../services/AreaService';
+import { AreaService } from '../../../../../shared/services/AreaService';
 
 function CardArea(props: ICardAreaProps) {
 	const queryClient = useQueryClient();

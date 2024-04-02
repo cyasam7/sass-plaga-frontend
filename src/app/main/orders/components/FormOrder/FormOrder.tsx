@@ -16,7 +16,7 @@ import useCatalogs from 'src/app/shared-hooks/useCatalog';
 import React, { useEffect, useMemo } from 'react';
 import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter/NumericFormatAdapter';
 import { IFormOrderProps } from './FormOrderProps';
-import { CatalogService } from '../../service/CatalogService';
+import { CatalogService } from '../../../../shared/services/CatalogService';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBox fontSize="small" />;

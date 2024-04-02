@@ -6,13 +6,14 @@ import { useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import MoveUpIcon from '@mui/icons-material/MoveUp';
+import { DatePicker } from '@mui/x-date-pickers';
 import { columnsOrders } from './columns';
-import { OrderService } from './service/OrderService';
+import { OrderService } from '../../shared/services/OrderService';
 import OrderHeaderTabs from './components/HeaderTabs/HeaderTabs';
 import { ETabsPlagues } from './components/HeaderTabs/IHeaderTabsProps';
-import { EStatusOrder, OrderEntity } from './service/OrderEntity';
+import { EStatusOrder, OrderEntity } from '../../shared/entities/OrderEntity';
 import OrderDialog from './components/OrderDialog/OrderDialog';
 import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog';
 import OrderChangeStatusDialog from './components/OrderChangeStatusDialog/OrderChangeStatusDialog';
@@ -20,11 +21,13 @@ import OrderFollowUpDialog from './components/OrderFollowUpDialog/OrderFollowUpD
 
 function Order() {
 	const [tabFilter, setTabFilter] = useState<ETabsPlagues>(ETabsPlagues.ALL);
+	const [calendarFilter, setCalendarFilter] = useState<Dayjs | null>(null);
 	const [open, setOpen] = useState<boolean>(false);
 	const [openDetails, setOpenDetails] = useState<boolean>(false);
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
+	const [openCalendar, setOpenCalendar] = useState<boolean>(false);
 
 	const {
 		data = [],
@@ -120,6 +123,15 @@ function Order() {
 			});
 		}
 
+		if (calendarFilter) {
+			data = data.filter((i) => {
+				const date = dayjs(i.date);
+				const startDate = dayjs(calendarFilter).startOf('day');
+				const finalDate = dayjs(calendarFilter).endOf('day');
+				return date.isAfter(startDate) && date.isBefore(finalDate);
+			});
+		}
+
 		return [...data].reverse();
 	}
 
@@ -141,6 +153,7 @@ function Order() {
 			}
 			content={
 				<div className="px-10 gap">
+					{/* <CalendarDialog open={openCalendar} /> */}
 					<OrderDialog
 						open={open}
 						id={orderId}
@@ -180,6 +193,21 @@ function Order() {
 						onChange={setTabFilter}
 						value={tabFilter}
 					/>
+					{/* <div className="flex w-full justify-end">
+						<Button onClick={() => setOpenCalendar(true)}>Abrir calendario</Button>
+					</div> */}
+					<div className="flex w-full justify-end">
+						<DatePicker
+							value={calendarFilter}
+							onChange={setCalendarFilter}
+							slotProps={{
+								textField: { size: 'small' },
+								field: {
+									clearable: true
+								}
+							}}
+						/>
+					</div>
 					<Box sx={{ height: 'calc(100vh - 220px)', pt: 2 }}>
 						<DataGrid
 							loading={isLoading}

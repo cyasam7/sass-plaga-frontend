@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { useQuery, useQueryClient } from 'react-query';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { useCompanyDetail, useCompanyParams } from '../zustand';
-import { CompanyService } from '../services/CompanyService';
+import { CompanyService } from '../../../shared/services/CompanyService';
 import { IFormCompany } from '../types';
 import BasicInformation from './components/BasicInformation/BasicInformation';
 import Areas from './components/Areas/Areas';

@@ -7,7 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IOrderFollowUpDialogProps } from './IOrderFollowUpDialogProps';
 import { IFollowUpForm, followUppSchema } from './schema';
-import { OrderService } from '../../service/OrderService';
+import { OrderService } from '../../../../shared/services/OrderService';
 
 function OrderFollowUpDialog(props: IOrderFollowUpDialogProps) {
 	const { open, onClose, onSubmit, id } = props;

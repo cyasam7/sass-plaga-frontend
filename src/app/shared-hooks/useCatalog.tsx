@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { CatalogService } from '../main/orders/service/CatalogService';
+import { CatalogService } from '../shared/services/CatalogService';
 import {
 	ClientEntity,
 	FrequencyEntity,
 	RecommendationEntity,
 	TypePlagueEntity,
 	TypeServiceEntity
-} from '../main/orders/service/OrderEntity';
+} from '../shared/entities/OrderEntity';
 
 interface IUsePhoneValues {
 	clients: ClientEntity[];
