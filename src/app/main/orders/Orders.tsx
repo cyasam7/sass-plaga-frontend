@@ -196,7 +196,7 @@ function Order() {
 					{/* <div className="flex w-full justify-end">
 						<Button onClick={() => setOpenCalendar(true)}>Abrir calendario</Button>
 					</div> */}
-					<div className="flex w-full justify-end">
+					<div className="flex w-full justify-end py-8">
 						<DatePicker
 							value={calendarFilter}
 							onChange={setCalendarFilter}
@@ -208,7 +208,7 @@ function Order() {
 							}}
 						/>
 					</div>
-					<Box sx={{ height: 'calc(100vh - 220px)', pt: 2 }}>
+					<Box sx={{ height: 'calc(100vh - 280px)', pt: 2 }}>
 						<DataGrid
 							loading={isLoading}
 							rows={filterValues(data)}
