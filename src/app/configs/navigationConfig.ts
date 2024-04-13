@@ -8,7 +8,7 @@ i18next.addResourceBundle('en', 'navigation', en);
  * The navigationConfig object is an array of navigation items for the Fuse application.
  */
 const navigationConfig: FuseNavItemType[] = [
-	{
+	/* {
 		id: 'example-component',
 		title: 'Example',
 		translate: 'EXAMPLE',
@@ -17,17 +17,8 @@ const navigationConfig: FuseNavItemType[] = [
 		url: 'example',
 		auth: ['admin', 'staff'],
 		children: []
-	},
-	{
-		id: 'companies',
-		title: 'Companies',
-		translate: 'COMPANIES',
-		type: 'item',
-		auth: ['admin', 'staff'],
-		icon: 'material-solid:home_work',
-		url: '/companies',
-		children: []
-	},
+	}, */
+
 	{
 		id: 'orders',
 		title: 'Ordenes',
@@ -56,6 +47,16 @@ const navigationConfig: FuseNavItemType[] = [
 		auth: ['admin', 'staff'],
 		icon: 'heroicons-outline:archive',
 		url: '/catalogs',
+		children: []
+	},
+	{
+		id: 'companies',
+		title: 'Companies',
+		translate: 'COMPANIES',
+		type: 'item',
+		auth: ['admin', 'staff'],
+		icon: 'material-solid:home_work',
+		url: '/companies',
 		children: []
 	}
 ];
