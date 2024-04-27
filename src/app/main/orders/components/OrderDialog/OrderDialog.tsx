@@ -46,21 +46,22 @@ function OrderDialog(props: OrderDialogProps) {
 		queryFn: () => OrderService.getById(id),
 		enabled: Boolean(id)
 	});
-
 	useEffect(() => {
 		if (data) {
 			formHandler.reset({
 				clientId: data.client.id,
-				clientAddress: data.client.address,
+				clientAddress: data.location.address,
 				clientName: data.client.name,
 				clientPhone: data.client.phone,
 				price: String(data.price),
 				date: dayjs(data.date),
 				frequency: data.frequency.map((i) => i.id),
 				observations: data.observations,
-				recommendations: data.frequency.map((i) => i.id),
+				recommendations: data.recommendations.map((i) => i.id),
 				typePlague: data.typePlague.map((i) => i.id),
-				typeService: data.typeService.map((i) => i.id)
+				typeService: data.typeService.map((i) => i.id),
+				clientLatitude: data?.location ? Number(data?.location.latitude) : undefined,
+				clientLongitude: data?.location ? Number(data?.location.longitude) : undefined
 			});
 		}
 		return () => {

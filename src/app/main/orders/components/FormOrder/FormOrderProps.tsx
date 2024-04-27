@@ -25,6 +25,8 @@ export interface IFormCreatePest {
 	clientName: string;
 	clientPhone: string;
 	clientAddress: string;
+	clientLatitude?: number;
+	clientLongitude?: number;
 	clientId: string;
 	typePlague: string[];
 	typeService: string[];

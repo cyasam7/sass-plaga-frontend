@@ -23,6 +23,8 @@ export const createOrderSchema = yup.object({
 	clientId: yup.string(),
 	clientAddress: yup.string().required(FIELD_REQUIRED),
 	clientName: yup.string().required(FIELD_REQUIRED),
+	clientLatitude: yup.number(),
+	clientLongitude: yup.number(),
 	clientPhone: yup
 		.string()
 		.required(FIELD_REQUIRED)

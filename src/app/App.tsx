@@ -15,6 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
+import { APIProvider } from '@vis.gl/react-google-maps';
 import dayjs from 'dayjs';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
@@ -83,7 +84,9 @@ function App() {
 									containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
 								}}
 							>
-								<FuseLayout layouts={themeLayouts} />
+								<APIProvider apiKey={import.meta.env.VITE_GOOGLE_API}>
+									<FuseLayout layouts={themeLayouts} />
+								</APIProvider>
 								<GlobalDialog />
 							</SnackbarProvider>
 						</LocalizationProvider>

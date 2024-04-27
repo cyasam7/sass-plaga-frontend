@@ -20,7 +20,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 			return (
 				<Stack>
 					<Typography variant="subtitle2">{`${row.client.name}. Tel. (${row.client.phone})`}</Typography>
-					<Typography variant="body2">{`${row.client.address}`}</Typography>
+					<Typography variant="body2">{`${row.location.address}`}</Typography>
 				</Stack>
 			);
 		}

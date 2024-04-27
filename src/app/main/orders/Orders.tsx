@@ -27,7 +27,6 @@ function Order() {
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
-	const [openCalendar, setOpenCalendar] = useState<boolean>(false);
 
 	const {
 		data = [],
@@ -37,7 +36,6 @@ function Order() {
 		queryKey: 'orders',
 		queryFn: () => OrderService.getAll()
 	});
-
 	const columns: GridColDef<OrderEntity>[] = [
 		...columnsOrders,
 		{

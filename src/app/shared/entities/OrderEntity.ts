@@ -1,3 +1,5 @@
+import { LocationEntity } from './LocationEntity';
+
 export enum EStatusOrder {
 	REALIZED = 'REALIZED',
 	NO_REALIZED = 'NO_REALIZED',
@@ -47,4 +49,6 @@ export interface OrderEntity {
 	shouldFollowUp?: boolean;
 	daysFollowUp?: number;
 	dateFollowUp?: Date;
+	location?: LocationEntity;
+	// assigned?: UserEntity;
 }

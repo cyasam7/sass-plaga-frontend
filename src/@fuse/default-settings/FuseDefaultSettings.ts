@@ -195,6 +195,13 @@ export const defaultThemeOptions = {
 		MuiTextField: {
 			defaultProps: {
 				color: 'secondary'
+			},
+			styleOverrides: {
+				root: {
+					'& .MuiOutlinedInput-root': {
+						borderRadius: 20
+					}
+				}
 			}
 		},
 		MuiInputLabel: {
