@@ -30,6 +30,16 @@ const navigationConfig: FuseNavItemType[] = [
 		children: []
 	},
 	{
+		id: 'reports',
+		title: 'Reportes',
+		translate: 'REPORTS',
+		type: 'item',
+		auth: ['admin', 'staff'],
+		icon: 'heroicons-outline:archive',
+		url: '/reports',
+		children: []
+	},
+	{
 		id: 'clients',
 		title: 'Clientes',
 		translate: 'CLIENTS',

@@ -12,6 +12,7 @@ import CompaniesConfig from '../main/companies/CompaniesConfig';
 import OrdersConfig from '../main/orders/OrdersConfig';
 import CatalogsConfig from '../main/catalogs/CatalogsConfig';
 import ContactsAppConfig from '../main/clients/ClientsAppConfig';
+import ReportsConfig from '../main/reports/ReportsConfig';
 
 const routeConfigs: FuseRouteConfigsType = [
 	SignOutConfig,
@@ -21,7 +22,8 @@ const routeConfigs: FuseRouteConfigsType = [
 	CompaniesConfig,
 	OrdersConfig,
 	CatalogsConfig,
-	ContactsAppConfig
+	ContactsAppConfig,
+	ReportsConfig
 ];
 
 /**

@@ -4,7 +4,8 @@ const locale = {
 	COMPANIES: 'Companies',
 	ORDERS: 'Orders',
 	CLIENTS: 'Clients',
-	CATALOGS: 'Catalogs'
+	CATALOGS: 'Catalogs',
+	REPORTS: 'Reports'
 };
 
 export default locale;
