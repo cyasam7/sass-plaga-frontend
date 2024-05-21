@@ -1,19 +1,19 @@
 import { Text, View } from '@react-pdf/renderer';
 import React, { ReactElement } from 'react';
-import { mainColorPdf } from '../colors';
 
 interface ICategory {
 	title: string;
 	element: ReactElement;
+	color: string;
 }
 
 function Category(props: ICategory) {
-	const { title, element } = props;
+	const { title, element, color } = props;
 	return (
 		<View>
 			<View
 				style={{
-					backgroundColor: mainColorPdf,
+					backgroundColor: color,
 					height: '35px',
 					justifyContent: 'center',
 					paddingHorizontal: '8px'
@@ -21,7 +21,7 @@ function Category(props: ICategory) {
 			>
 				<Text style={{ color: '#fff', fontSize: '12px' }}>{title}</Text>
 			</View>
-			<View style={{ paddingVertical: '8px' }}>{element}</View>
+			<View style={{ paddingVertical: '8px', paddingHorizontal: '4px' }}>{element}</View>
 		</View>
 	);
 }

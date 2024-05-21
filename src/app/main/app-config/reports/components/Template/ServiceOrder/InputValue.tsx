@@ -1,14 +1,14 @@
 import { Text, View } from '@react-pdf/renderer';
 import React from 'react';
-import { mainColorPdf } from '../colors';
 
 interface IInputValue {
 	displayName: string;
 	value: string;
+	color: string;
 }
 
 function InputValue(props: IInputValue) {
-	const { displayName, value } = props;
+	const { displayName, value, color } = props;
 	return (
 		<View
 			style={{
@@ -17,7 +17,7 @@ function InputValue(props: IInputValue) {
 				gap: '12px'
 			}}
 		>
-			<Text style={{ fontSize: '10px', color: mainColorPdf }}>{displayName}:</Text>
+			<Text style={{ fontSize: '10px', color }}>{displayName}:</Text>
 			<Text style={{ fontSize: '10px' }}>{value}</Text>
 		</View>
 	);

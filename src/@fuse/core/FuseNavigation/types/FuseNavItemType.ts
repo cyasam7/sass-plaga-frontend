@@ -15,7 +15,7 @@ export type FuseNavItemType = {
 	iconClass?: string;
 	url?: string;
 	target?: string;
-	type?: string;
+	type?: 'collapse' | 'group' | 'item';
 	sx?: SxProps;
 	disabled?: boolean;
 	active?: boolean;

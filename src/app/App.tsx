@@ -22,6 +22,7 @@ import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
 import GlobalDialog from './shared-components/GlobalDialog/GlobalDialog';
 import 'dayjs/locale/es'; // import locale
+import { WebSocketProvider } from './shared-hooks/useWebSocket';
 
 /**
  * Axios HTTP Request defaults
@@ -73,28 +74,30 @@ function App() {
 					theme={mainTheme}
 					direction={langDirection}
 				>
-					<AuthRouteProvider>
-						<LocalizationProvider
-							dateAdapter={AdapterDayjs}
-							adapterLocale="es"
-						>
-							<SnackbarProvider
-								maxSnack={5}
-								anchorOrigin={{
-									vertical: 'bottom',
-									horizontal: 'right'
-								}}
-								classes={{
-									containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
-								}}
+					<WebSocketProvider>
+						<AuthRouteProvider>
+							<LocalizationProvider
+								dateAdapter={AdapterDayjs}
+								adapterLocale="es"
 							>
-								<APIProvider apiKey={import.meta.env.VITE_GOOGLE_API}>
-									<FuseLayout layouts={themeLayouts} />
-								</APIProvider>
-								<GlobalDialog />
-							</SnackbarProvider>
-						</LocalizationProvider>
-					</AuthRouteProvider>
+								<SnackbarProvider
+									maxSnack={5}
+									anchorOrigin={{
+										vertical: 'bottom',
+										horizontal: 'right'
+									}}
+									classes={{
+										containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
+									}}
+								>
+									<APIProvider apiKey={import.meta.env.VITE_GOOGLE_API}>
+										<FuseLayout layouts={themeLayouts} />
+									</APIProvider>
+									<GlobalDialog />
+								</SnackbarProvider>
+							</LocalizationProvider>
+						</AuthRouteProvider>
+					</WebSocketProvider>
 				</FuseTheme>
 			</CacheProvider>
 		</QueryClientProvider>
