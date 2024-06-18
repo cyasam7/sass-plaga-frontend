@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useWebSocket } from 'src/app/shared-hooks/useWebSocket';
 import { Button, Paper, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { useWhatsAppStatus } from './state';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
@@ -26,16 +27,16 @@ function WhatsAppConfig() {
 
 	useEffect(() => {
 		if (!socket) return;
-		socket.emit('request-qr', true);
+		socket.emit('request-config-wp');
 
-		socket.on('request-qr', (base64: string) => {
+		socket.on('update-qr', (base64: string) => {
 			changeWhatsAppState({
 				base64,
 				loading: false,
 				user: null
 			});
 		});
-		socket.on('user-logged', (user) => {
+		socket.on('update-user', (user: { [key: string]: string }) => {
 			changeWhatsAppState({
 				base64: '',
 				loading: false,
@@ -45,12 +46,7 @@ function WhatsAppConfig() {
 	}, [socket]);
 
 	function handleClose(): void {
-		/* socket.emit('qr-logout');
-		changeWhatsAppState({
-			base64: '',
-			loading: false,
-			user: null
-		}); */
+		socket.emit('request-logout');
 	}
 
 	return (
@@ -62,10 +58,10 @@ function WhatsAppConfig() {
 			}
 			content={
 				<div className="p-24 w-full flex justify-center">
-					<Paper className="w-lg">
+					<Paper>
 						<div className="p-24">
 							{showQR && (
-								<div className="w-full flex items-center">
+								<div className="w-lg flex items-center">
 									<img
 										src={base64}
 										alt="qr"
@@ -92,9 +88,34 @@ function WhatsAppConfig() {
 								</div>
 							)}
 							{showUserLogged && (
-								<div>
-									<p>{JSON.stringify(user)}</p>
-									<Button onClick={handleClose}>Cerrar Sesion</Button>
+								<div className="w-sm flex flex-col gap-16 justify-center">
+									<Typography
+										variant="h5"
+										className="font-600"
+									>
+										Dispositivo configurado correctamente
+									</Typography>
+									<Typography variant="body2">
+										Tu dispositivo ha sido configurado con éxito. Puedes continuar con el siguiente
+										paso.
+									</Typography>
+									<div className="flex gap-8 justify-end">
+										<Button
+											onClick={handleClose}
+											color="secondary"
+											variant="outlined"
+										>
+											Cerrar sesión
+										</Button>
+										<Button
+											LinkComponent={Link}
+											onClick={handleClose}
+											color="primary"
+											variant="contained"
+										>
+											Continuar
+										</Button>
+									</div>
 								</div>
 							)}
 						</div>

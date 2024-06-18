@@ -3,10 +3,11 @@ import { styled } from '@mui/material/styles';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Grid, Paper, Stack, TextField } from '@mui/material';
-import { SketchPicker } from 'react-color';
+import { Card, Grid, Stack, Typography, CardContent, TextField } from '@mui/material';
 import { useState } from 'react';
+import { SketchPicker } from 'react-color';
 import { BlobProvider } from '@react-pdf/renderer';
+import SignaturaCanvas from 'app/shared-components/SignatureCanvas/SignaturaCanvas';
 import { DocumentCanvasProvider } from './hooks/useDocumentCanvas';
 import ServiceOrderTemplate from './components/Template/ServiceOrder/ServiceOrderTemplate';
 
@@ -27,7 +28,7 @@ function Reports() {
 	const [companyName, setCompanyName] = useState('');
 
 	const handleChangeComplete = (color) => {
-		setColor(color.hex);
+		setColor(color.hex as unknown as string);
 	};
 
 	return (
@@ -42,6 +43,47 @@ function Reports() {
 					content={
 						<div className="p-24 w-full">
 							<Grid container>
+								<Grid
+									item
+									md={6}
+								>
+									<Stack className="px-16">
+										<Card>
+											<CardContent>
+												<Stack>
+													<Typography
+														variant="h5"
+														className="font-600"
+													>
+														Configurar reporte
+													</Typography>
+													<Typography variant="body2">
+														Actualiza el color, logo y firma de tu reporte
+													</Typography>
+												</Stack>
+												<Stack
+													spacing={2}
+													mt={5}
+												>
+													<TextField
+														fullWidth
+														placeholder="Nombre de la empre"
+													/>
+													<SignaturaCanvas />
+													<input type="file" />
+													<TextField
+														fullWidth
+														placeholder="Nombre de la empre"
+													/>
+													<SketchPicker
+														color={color}
+														onChangeComplete={handleChangeComplete}
+													/>
+												</Stack>
+											</CardContent>
+										</Card>
+									</Stack>
+								</Grid>
 								<Grid
 									item
 									md={6}
@@ -69,27 +111,6 @@ function Reports() {
 											);
 										}}
 									</BlobProvider>
-								</Grid>
-								<Grid
-									item
-									md={6}
-								>
-									<Stack className="px-16">
-										<Paper className="w-full">
-											<Stack className="p-16 gap-16">
-												<TextField
-													value={companyName}
-													onChange={(e) => setCompanyName(e.target.value)}
-													label="Nombre de la empresa"
-												/>
-												<TextField label="Dirección" />
-												<SketchPicker
-													color={color}
-													onChangeComplete={handleChangeComplete}
-												/>
-											</Stack>
-										</Paper>
-									</Stack>
 								</Grid>
 							</Grid>
 						</div>
