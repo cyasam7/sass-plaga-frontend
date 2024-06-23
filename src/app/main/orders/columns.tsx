@@ -7,6 +7,12 @@ import { formatCurrency } from 'src/app/shared-constants/formatCurrency';
 import ChipOrder from 'app/shared-components/ChipOrder/ChipOrder';
 import { OrderEntity } from '../../shared/entities/OrderEntity';
 
+const statusLabel = {
+	REALIZED: 'Realizada',
+	NO_REALIZED: 'No Realizada',
+	CANCELLED: 'Cancelada'
+};
+
 export const columnsOrders: GridColDef<OrderEntity>[] = [
 	{
 		headerName: 'CLIENTE',
@@ -16,6 +22,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		minWidth: 300,
 		align: 'left',
 		disableColumnMenu: true,
+		valueGetter: ({ row }) => `${row.client.name}. Tel. (${row.client.phone}) | ${row.client.address}`,
 		renderCell: ({ row }) => {
 			return (
 				<Stack>
@@ -33,12 +40,13 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		minWidth: 150,
 		align: 'left',
 		disableColumnMenu: true,
-		renderCell({ row }) {
+		valueGetter: ({ row }) => (!row.isFollowUp ? 'INICIAL' : 'SEGUIMIENTO'),
+		renderCell({ row, value }) {
 			const condition = !row.isFollowUp;
 			return (
 				<Chip
 					color={condition ? 'info' : 'secondary'}
-					label={condition ? 'INICIAL' : 'SEGUIMIENTO'}
+					label={value as string}
 				/>
 			);
 		}
@@ -83,6 +91,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		minWidth: 150,
 		align: 'left',
 		disableColumnMenu: true,
+		valueGetter: ({ row }) => statusLabel[row.status],
 		renderCell({ row }) {
 			const { status } = row;
 			return <ChipOrder status={status} />;
