@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { AreaEntity } from '../entities/AreaEntity';
 import { IFormArea } from '../../main/companies/types';
+import { AxiosFetcher } from '../fetcher';
 
 export class AreaService {
 	static async getByCompany(id: string): Promise<AreaEntity[]> {
-		const { data } = await axios.get<AreaEntity[]>(`/area?companyId=${id}`);
-		return data;
+		return AxiosFetcher<AreaEntity[]>({ url: `/area?companyId=${id}` });
 	}
 
 	static async save(data: IFormArea): Promise<void> {

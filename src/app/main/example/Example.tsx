@@ -24,15 +24,11 @@ function Example() {
 	const [Loading, setLoading] = useState(true);
 	const socket = useWebSocket();
 
-	console.log(socket);
-
 	useEffect(() => {
-		console.log(socket);
 		if (!socket) return;
 		socket.emit('qr-whats-app');
 
 		socket.on('qr-response-base64', (user) => {
-			console.log(user);
 			setLoading(false);
 		});
 		socket.on('qr-response-user-info', (base64: string) => {
@@ -42,14 +38,12 @@ function Example() {
 	}, [socket]);
 
 	function getQR(): void {
-		console.log(socket);
 		if (!socket) return;
 
 		socket.emit('get-qr-wp', (data: string) => {
 			setQr(data);
 		});
 	}
-	console.log(qr);
 	return (
 		<Root
 			header={

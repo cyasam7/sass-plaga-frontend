@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 });
 
 function ServiceOrderTemplate(props: { MainColor: string; companyName: string }): ReactElement {
-	const { MainColor, companyName } = props;
+	const { MainColor = 'red', companyName = 'Alexander' } = props;
 
 	return (
 		<Document>

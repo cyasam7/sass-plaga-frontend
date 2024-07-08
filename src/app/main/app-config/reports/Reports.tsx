@@ -3,13 +3,12 @@ import { styled } from '@mui/material/styles';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Card, Grid, Stack, Typography, CardContent, TextField } from '@mui/material';
+import { Card, CardContent, Grid, Stack } from '@mui/material';
 import { useState } from 'react';
-import { SketchPicker } from 'react-color';
 import { BlobProvider } from '@react-pdf/renderer';
-import SignaturaCanvas from 'app/shared-components/SignatureCanvas/SignaturaCanvas';
 import { DocumentCanvasProvider } from './hooks/useDocumentCanvas';
 import ServiceOrderTemplate from './components/Template/ServiceOrder/ServiceOrderTemplate';
+import FormReport from './components/FormReport/FormReport';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -24,12 +23,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 function Reports() {
-	const [color, setColor] = useState('#fff');
-	const [companyName, setCompanyName] = useState('');
-
-	const handleChangeComplete = (color) => {
-		setColor(color.hex as unknown as string);
-	};
+	const [companyName, setCompanyName] = useState('Vex Company');
 
 	return (
 		<DocumentCanvasProvider>
@@ -41,7 +35,7 @@ function Reports() {
 						</div>
 					}
 					content={
-						<div className="p-24 w-full">
+						<div className="p-24 w-full h-screen">
 							<Grid container>
 								<Grid
 									item
@@ -50,49 +44,20 @@ function Reports() {
 									<Stack className="px-16">
 										<Card>
 											<CardContent>
-												<Stack>
-													<Typography
-														variant="h5"
-														className="font-600"
-													>
-														Configurar reporte
-													</Typography>
-													<Typography variant="body2">
-														Actualiza el color, logo y firma de tu reporte
-													</Typography>
-												</Stack>
-												<Stack
-													spacing={2}
-													mt={5}
-												>
-													<TextField
-														fullWidth
-														placeholder="Nombre de la empre"
-													/>
-													<SignaturaCanvas />
-													<input type="file" />
-													<TextField
-														fullWidth
-														placeholder="Nombre de la empre"
-													/>
-													<SketchPicker
-														color={color}
-														onChangeComplete={handleChangeComplete}
-													/>
-												</Stack>
+												<FormReport />
 											</CardContent>
 										</Card>
 									</Stack>
 								</Grid>
 								<Grid
 									item
-									md={6}
+									md={12}
 								>
 									<BlobProvider
 										document={
 											<ServiceOrderTemplate
 												companyName={companyName}
-												MainColor={color}
+												MainColor="#004AAD"
 											/>
 										}
 									>
@@ -105,6 +70,7 @@ function Reports() {
 											}
 											return (
 												<iframe
+													title="Report"
 													src={url}
 													style={{ width: '100%', height: '500px' }}
 												/>

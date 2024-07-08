@@ -9,44 +9,53 @@ i18next.addResourceBundle('en', 'navigation', en);
  */
 const navigationConfig: FuseNavItemType[] = [
 	{
-		id: 'example-component',
-		title: 'Example',
-		translate: 'EXAMPLE',
-		type: 'item',
-		icon: 'heroicons-outline:star',
-		url: 'example',
+		id: 'modules-app',
+		title: 'Módulos',
+		translate: 'MODULES',
 		auth: ['admin', 'staff'],
-		children: []
-	},
-	{
-		id: 'orders',
-		title: 'Ordenes',
-		translate: 'ORDERS',
-		type: 'item',
-		auth: ['admin', 'staff'],
-		icon: 'material-outline:assignment',
-		url: '/orders',
-		children: []
-	},
-	{
-		id: 'clients',
-		title: 'Clientes',
-		translate: 'CLIENTS',
-		type: 'item',
-		auth: ['admin', 'staff'],
-		icon: 'material-twotone:person_pin',
-		url: '/clients',
-		children: []
-	},
-	{
-		id: 'catalogs',
-		title: 'Catalogs',
-		translate: 'CATALOGS',
-		type: 'item',
-		auth: ['admin', 'staff'],
-		icon: 'heroicons-outline:archive',
-		url: '/catalogs',
-		children: []
+		type: 'group',
+
+		children: [
+			{
+				id: 'users',
+				title: 'Users',
+				translate: 'USERS',
+				type: 'item',
+				icon: 'heroicons-outline:users',
+				auth: ['admin', 'staff'],
+				url: '/users'
+			},
+			{
+				id: 'orders',
+				title: 'Ordenes',
+				translate: 'ORDERS',
+				type: 'item',
+				auth: ['admin', 'staff'],
+				icon: 'material-outline:assignment',
+				url: '/orders',
+				children: []
+			},
+			{
+				id: 'clients',
+				title: 'Clientes',
+				translate: 'CLIENTS',
+				type: 'item',
+				auth: ['admin', 'staff'],
+				icon: 'material-twotone:person_pin',
+				url: '/clients',
+				children: []
+			},
+			{
+				id: 'catalogs',
+				title: 'Catalogs',
+				translate: 'CATALOGS',
+				type: 'item',
+				auth: ['admin', 'staff'],
+				icon: 'heroicons-outline:archive',
+				url: '/catalogs',
+				children: []
+			}
+		]
 	},
 	{
 		id: 'companies',
@@ -63,7 +72,7 @@ const navigationConfig: FuseNavItemType[] = [
 		title: 'Configuraciones',
 		translate: 'CONFIGURATION',
 		auth: ['admin', 'staff'],
-		type: 'collapse',
+		type: 'group',
 		icon: 'heroicons-solid:adjustments',
 		children: [
 			{

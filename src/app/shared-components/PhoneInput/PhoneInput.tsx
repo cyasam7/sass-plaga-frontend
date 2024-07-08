@@ -1,21 +1,26 @@
 import 'react-international-phone/style.css';
 
 import { BaseTextFieldProps, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
-import React from 'react';
 import { CountryIso2, defaultCountries, FlagImage, parseCountry, usePhoneInput } from 'react-international-phone';
+import { isPhoneValid } from './yupValidations';
 
 export interface MUIPhoneProps extends BaseTextFieldProps {
 	value: string;
 	onChange: (phone: string) => void;
+	onErrorChange: (value: string) => void;
 }
 
-export function PhoneInput({ value, onChange, ...restProps }: MUIPhoneProps) {
+export function PhoneInput({ value, onChange, onErrorChange, ...restProps }: MUIPhoneProps) {
 	const { inputValue, handlePhoneValueChange, inputRef, country, setCountry } = usePhoneInput({
-		defaultCountry: 'us',
+		defaultCountry: 'mx',
 		value,
 		countries: defaultCountries,
 		onChange: (data) => {
-			onChange(data.phone);
+			if (data.phone !== `+${data.country.dialCode}`) {
+				onChange(data.phone);
+				const isValid = isPhoneValid(data.inputValue);
+				onErrorChange(isValid ? '' : 'El numero no es valido');
+			}
 		}
 	});
 

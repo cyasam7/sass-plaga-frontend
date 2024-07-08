@@ -58,7 +58,6 @@ export function DocumentCanvasProvider(props: { children: React.ReactElement }) 
 			...itemsDraggable,
 			[item.id]: item
 		};
-		console.log(copy);
 		setItemsDraggable(copy);
 	}
 
