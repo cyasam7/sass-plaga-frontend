@@ -6,6 +6,7 @@ import { selectUser, selectUserRole } from 'src/app/auth/user/store/userSlice';
 import { useSelector } from 'react-redux';
 import { useQuery } from 'react-query';
 import { TenantService } from 'src/app/shared/services/TenantService';
+import { ERoleCode } from 'src/app/shared/entities/UserEntity';
 import { IFormUserProps } from './IFormUser';
 import { ROLE_CATALOG } from './constant';
 
@@ -78,7 +79,7 @@ function FormUser(props: IFormUserProps) {
 					fullWidth
 					select
 				>
-					{ROLE_CATALOG.map((i, index) => (
+					{ROLE_CATALOG.filter((i) => i.value !== ERoleCode.SUPER_ADMIN).map((i, index) => (
 						<MenuItem
 							value={i.value}
 							key={index}

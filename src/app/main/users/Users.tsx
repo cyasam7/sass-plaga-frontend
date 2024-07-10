@@ -1,12 +1,12 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
-import { Paper, Stack } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import { Paper, Stack, Typography } from '@mui/material';
+import { DataGrid, GridActionsCellItem, GridActionsCellItemProps, GridColDef } from '@mui/x-data-grid';
 import { useQuery } from 'react-query';
 import { UserService } from 'src/app/shared/services/UserService';
-import { Edit, SignLanguageOutlined, RemoveCircle } from '@mui/icons-material';
-import { useMemo, useState } from 'react';
+import { Visibility, NotInterested, HistoryEdu, NoteAlt, RemoveCircleOutline } from '@mui/icons-material';
+import { ReactElement, useMemo, useState } from 'react';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import useQueryInvalidator from 'src/app/shared-hooks/useQueryInvalidator';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
@@ -16,6 +16,8 @@ import { IDataGridUserRow } from 'src/app/shared/entities/UserEntity';
 import { columnsUsers } from './columns';
 import HeaderGrid from './components/HeaderGrid/HeaderGrid';
 import DialogUser from './components/DialogUser/DialogUser';
+import DialogSigner from '../../shared-components/DialogSigner/DialogSigner';
+import SignViewer from './components/SignViewer/SignViewer';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -33,6 +35,9 @@ function Users() {
 	const { t } = useTranslation('examplePage');
 
 	const [userId, setUserId] = useState('');
+	const [openSigner, setOpenSigner] = useState(false);
+	const [openPreviewSign, setOpenPreviewSign] = useState(false);
+	const [previewURL, setPreviewURL] = useState('');
 	const [search, setSearch] = useState('');
 	const [isActive, setIsActive] = useState<boolean | null>(null);
 	const { invalidate } = useQueryInvalidator();
@@ -48,6 +53,50 @@ function Users() {
 	const columns: GridColDef<IDataGridUserRow>[] = [
 		...columnsUsers,
 		{
+			field: 'sign',
+			headerName: 'FIRMA',
+			flex: 1,
+			disableColumnMenu: true,
+			type: 'actions',
+			getActions: (params) => {
+				const { sign } = params.row;
+				const result: ReactElement<GridActionsCellItemProps>[] = [];
+				if (sign) {
+					result.push(
+						<GridActionsCellItem
+							icon={<Visibility />}
+							key={0}
+							label="Visualizar"
+							onClick={() => {
+								setPreviewURL(sign);
+								setOpenPreviewSign(true);
+							}}
+						/>
+					);
+				} else {
+					result.push(
+						<GridActionsCellItem
+							icon={<NotInterested />}
+							key={1}
+							label="No existe"
+							onClick={() => {
+								displayToast({
+									anchorOrigin: {
+										horizontal: 'right',
+										vertical: 'top'
+									},
+									message: 'Aun no tiene firma registrada',
+									variant: 'warning'
+								});
+							}}
+						/>
+					);
+				}
+
+				return result;
+			}
+		},
+		{
 			field: 'actions',
 			headerName: 'ACCIONES',
 			width: 100,
@@ -58,7 +107,7 @@ function Users() {
 					<GridActionsCellItem
 						key={0}
 						label="MODIFICAR"
-						icon={<Edit />}
+						icon={<NoteAlt />}
 						showInMenu
 						onClick={() => {
 							setUserId(params.row.userId);
@@ -68,7 +117,7 @@ function Users() {
 					<GridActionsCellItem
 						key={0}
 						label="ELIMINAR"
-						icon={<RemoveCircle />}
+						icon={<RemoveCircleOutline />}
 						showInMenu
 						onClick={() => {
 							openDialog({
@@ -92,9 +141,12 @@ function Users() {
 					<GridActionsCellItem
 						key={0}
 						label="ACTUALIZAR FIRMA"
-						icon={<SignLanguageOutlined />}
+						icon={<HistoryEdu />}
 						showInMenu
-						onClick={() => {}}
+						onClick={() => {
+							setUserId(params.row.userId);
+							setOpenSigner(true);
+						}}
 					/>
 				];
 			}
@@ -123,21 +175,51 @@ function Users() {
 		return copyData;
 	}, [search, isActive, data]);
 
+	async function handleSubmitOnSign(data: Blob): Promise<void> {
+		await UserService.saveSign({ userId, sign: data });
+		invalidate('users-registered');
+		setUserId('');
+		setOpenSigner(false);
+		displayToast({
+			anchorOrigin: {
+				horizontal: 'right',
+				vertical: 'top'
+			},
+			message: 'Se guardo correctamente',
+			variant: 'success'
+		});
+	}
+
+	function handleClosePreviewSigner() {
+		setPreviewURL('');
+		setOpenPreviewSign(false);
+	}
+
 	return (
 		<Root
 			header={
 				<div className="p-24">
-					<h4>{t('TITLE')}</h4>
+					<Typography variant="h6">Usuarios</Typography>
 				</div>
 			}
 			content={
 				<div className="p-24 w-full">
 					<Paper className="p-24 w-full">
 						<Stack sx={{ height: 'calc(100vh - 240px)' }}>
+							<DialogSigner
+								open={openSigner}
+								onClose={() => setOpenSigner(false)}
+								onSubmit={handleSubmitOnSign}
+							/>
 							<DialogUser
 								userId={userId}
 								open={openUserDialog}
 								onClose={() => setOpenUserDialog(false)}
+							/>
+							<SignViewer
+								open={openPreviewSign}
+								url={previewURL}
+								onClose={handleClosePreviewSigner}
 							/>
 							<HeaderGrid
 								onChangeIsActive={setIsActive}

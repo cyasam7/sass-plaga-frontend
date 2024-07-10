@@ -1,13 +1,14 @@
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
-import FusePageCarded from '@fuse/core/FusePageCarded';
 import { useQuery } from 'react-query';
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import dayjs, { Dayjs } from 'dayjs';
 import MoveUpIcon from '@mui/icons-material/MoveUp';
+import FusePageSimple from '@fuse/core/FusePageSimple';
+import { styled } from '@mui/material/styles';
 import { columnsOrders } from './columns';
 import { OrderService } from '../../shared/services/OrderService';
 import { ETabsPlagues } from './components/HeaderTabs/IHeaderTabsProps';
@@ -17,6 +18,18 @@ import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog'
 import OrderChangeStatusDialog from './components/OrderChangeStatusDialog/OrderChangeStatusDialog';
 import OrderFollowUpDialog from './components/OrderFollowUpDialog/OrderFollowUpDialog';
 import HeaderFilters from './components/HeaderFilters/HeaderFilters';
+
+const Root = styled(FusePageSimple)(({ theme }) => ({
+	'& .FusePageSimple-header': {
+		backgroundColor: theme.palette.background.paper,
+		borderBottomWidth: 1,
+		borderStyle: 'solid',
+		borderColor: theme.palette.divider
+	},
+	'& .FusePageSimple-content': {},
+	'& .FusePageSimple-sidebarHeader': {},
+	'& .FusePageSimple-sidebarContent': {}
+}));
 
 function Order() {
 	const [tabFilter, setTabFilter] = useState<ETabsPlagues | undefined>(ETabsPlagues.ALL);
@@ -133,11 +146,11 @@ function Order() {
 	}
 
 	return (
-		<FusePageCarded
+		<Root
 			header={
 				<div className="p-24 w-full flex justify-between items-center">
 					<Typography variant="h6">Ordenes de servicio</Typography>
-					<div className="flex items-center space-x-16">
+					<div className="flex items-center">
 						<Button
 							color="primary"
 							variant="contained"
@@ -149,7 +162,7 @@ function Order() {
 				</div>
 			}
 			content={
-				<div className="px-10 gap">
+				<div className="p-24 w-full">
 					<OrderDialog
 						open={open}
 						id={orderId}
@@ -185,22 +198,24 @@ function Order() {
 							setOpenStatus(false);
 						}}
 					/>
-					<Box sx={{ height: 'calc(100vh - 280px)', pt: 2 }}>
-						<DataGrid
-							slots={{
-								toolbar: HeaderFilters
-							}}
-							slotProps={{
-								toolbar: {
-									onChangeDate: setCalendarFilter,
-									onChangeDay: setTabFilter
-								}
-							}}
-							loading={isLoading}
-							rows={filterValues(data)}
-							columns={columns}
-						/>
-					</Box>
+					<Paper className="p-24 w-full">
+						<Stack sx={{ height: 'calc(100vh - 240px)' }}>
+							<DataGrid
+								slots={{
+									toolbar: HeaderFilters
+								}}
+								slotProps={{
+									toolbar: {
+										onChangeDate: setCalendarFilter,
+										onChangeDay: setTabFilter
+									}
+								}}
+								loading={isLoading}
+								rows={filterValues(data)}
+								columns={columns}
+							/>
+						</Stack>
+					</Paper>
 				</div>
 			}
 		/>

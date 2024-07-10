@@ -17,6 +17,7 @@ function HeaderGrid(props: IHeaderGridProps) {
 				<TextField
 					size="small"
 					fullWidth
+					sx={{ width: '500px' }}
 					placeholder="Buscar"
 					onChange={(e) => onChangeSearch(e.target.value)}
 				/>

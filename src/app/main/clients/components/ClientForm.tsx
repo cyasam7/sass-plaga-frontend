@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { Grid, TextField } from '@mui/material';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { ClientService, ISaveClient } from 'src/app/shared/services/ClientService';
-import { PhoneInput } from 'app/shared-components/PhoneInput/PhoneInput';
+import { PhoneInput } from 'app/shared-components/Form/PhoneInput/PhoneInput';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 
 interface IClientForm {
@@ -176,21 +176,12 @@ function ClientForm() {
 								control={formHandler.control}
 								name="phone"
 								render={({ field, fieldState }) => (
-									<>
-										<PhoneInput
-											value={field.value}
-											onChange={field.onChange}
-											variant="standard"
-										/>
-										{/* <TextField
-											{...field}
-											variant="standard"
-											fullWidth
-											label="Teléfono"
-											error={!!fieldState.error}
-											helperText={fieldState.error?.message}
-										/> */}
-									</>
+									<PhoneInput
+										value={field.value}
+										onChange={field.onChange}
+										variant="standard"
+										onErrorChange={() => {}}
+									/>
 								)}
 							/>
 						</Grid>

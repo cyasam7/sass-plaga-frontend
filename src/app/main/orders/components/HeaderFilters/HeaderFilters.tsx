@@ -17,7 +17,6 @@ function HeaderFilters(props: IHeaderFiltersProps) {
 		<Stack
 			direction="row"
 			spacing={2}
-			pt={2}
 		>
 			<Autocomplete
 				disablePortal
@@ -42,6 +41,7 @@ function HeaderFilters(props: IHeaderFiltersProps) {
 					}
 				}}
 			/>
+			
 		</Stack>
 	);
 }

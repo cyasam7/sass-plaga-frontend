@@ -1,4 +1,4 @@
-import { IUserEntity, IUserCreator, IDataGridUserRow } from '../entities/UserEntity';
+import { IUserEntity, IUserCreator, IDataGridUserRow, ISaveSignUser } from '../entities/UserEntity';
 import { AxiosFetcher } from '../fetcher';
 
 export class UserService {
@@ -8,6 +8,20 @@ export class UserService {
 
 	static async getById(id: string): Promise<IDataGridUserRow> {
 		return AxiosFetcher<IDataGridUserRow>({ url: `/user/${id}`, method: 'GET' });
+	}
+
+	static async saveSign(data: ISaveSignUser): Promise<void> {
+		const form = new FormData();
+		form.append('file', data.sign, `${data.userId}-sign.png`);
+		form.append('userId', data.userId);
+		await AxiosFetcher<void>({
+			url: `/user/sign`,
+			method: 'POST',
+			data: form,
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		});
 	}
 
 	static async getUsersDatagrid(userId: string): Promise<IDataGridUserRow[]> {

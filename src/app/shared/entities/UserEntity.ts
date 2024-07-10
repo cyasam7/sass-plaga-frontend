@@ -45,4 +45,10 @@ export interface IDataGridUserRow {
 	tenant: string;
 	tenantId: string;
 	isActive: boolean;
+	sign: string | null;
+}
+
+export interface ISaveSignUser {
+	userId: string;
+	sign: Blob;
 }

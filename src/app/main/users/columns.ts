@@ -36,6 +36,7 @@ export const columnsUsers: GridColDef<IDataGridUserRow>[] = [
 		field: 'isActive',
 		headerName: 'ACTIVADO',
 		flex: 1,
-		disableColumnMenu: true
+		disableColumnMenu: true,
+		type: 'boolean'
 	}
 ];

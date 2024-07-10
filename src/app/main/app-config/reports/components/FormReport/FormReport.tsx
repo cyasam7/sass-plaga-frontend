@@ -1,7 +1,8 @@
 import { Button, Divider, Stack, TextField, Typography } from '@mui/material';
-import ColorPicker from 'app/shared-components/ColorPicker/ColorPicker';
-import FileChooser from 'app/shared-components/FileChooser/FileChooser';
+import ColorPicker from 'app/shared-components/Form/ColorPicker/ColorPicker';
+import FileChooser from 'app/shared-components/Form/FileChooser/FileChooser';
 import SignaturaCanvas from 'app/shared-components/SignatureCanvas/SignaturaCanvas';
+
 import React from 'react';
 
 function FormReport() {
