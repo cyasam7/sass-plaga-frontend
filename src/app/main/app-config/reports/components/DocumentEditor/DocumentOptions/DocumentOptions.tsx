@@ -7,9 +7,7 @@ function DocumentOptions() {
 	const { setUpCanvas, addItemToCanvas, canvas, downloadDocument } = useDocumentCanvas();
 
 	const handleFileChange = async (e: InputHTMLAttributes<HTMLInputElement>) => {
-		const file = e.target.files[0] as unknown as Blob;
-		if (!file) return;
-		setUpCanvas(file);
+		console.log(e);
 	};
 
 	function handleAddItem(): void {

@@ -72,7 +72,7 @@ function ServiceOrderTemplate(props: { MainColor: string; companyName: string })
 	return (
 		<Document>
 			<Page size="A4">
-				<View style={[styles.header, { backgroundColor: MainColor }]} yarn add cloudinary/>
+				<View style={[styles.header, { backgroundColor: MainColor }]} />
 			</Page>
 		</Document>
 	);
