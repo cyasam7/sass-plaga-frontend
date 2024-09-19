@@ -7,8 +7,8 @@ import { Card, CardContent, Grid, Stack } from '@mui/material';
 import { useState } from 'react';
 import { BlobProvider } from '@react-pdf/renderer';
 import { DocumentCanvasProvider } from './hooks/useDocumentCanvas';
-import ServiceOrderTemplate from './components/Template/ServiceOrder/ServiceOrderTemplate';
 import FormReport from './components/FormReport/FormReport';
+import { ServiceOrderV2 } from './components/ServiceOrderV2/ServiceOrderV2';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -53,14 +53,7 @@ function Reports() {
 									item
 									md={12}
 								>
-									<BlobProvider
-										document={
-											<ServiceOrderTemplate
-												companyName={companyName}
-												MainColor="#004AAD"
-											/>
-										}
-									>
+									<BlobProvider document={<ServiceOrderV2 />}>
 										{({ blob, url, loading, error }) => {
 											if (loading) {
 												return <div>Loading document...</div>;

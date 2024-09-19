@@ -6,7 +6,7 @@ interface IObject {
 }
 
 interface IProps {
-	style: IObject;
+	style?: IObject;
 	text?: string;
 	children?: React.ReactNode;
 }
