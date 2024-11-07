@@ -1,45 +1,26 @@
 import { useEffect, useState } from 'react';
 import { CatalogService } from '../shared/services/CatalogService';
-import {
-	ClientEntity,
-	FrequencyEntity,
-	RecommendationEntity,
-	TypePlagueEntity,
-	TypeServiceEntity
-} from '../shared/entities/OrderEntity';
+import { ClientEntity } from '../shared/entities/OrderEntity';
+import { BusinessRow } from '../shared/entities/BusinessEntity';
 
 interface IUsePhoneValues {
 	clients: ClientEntity[];
-	frequency: FrequencyEntity[];
-	recommendations: RecommendationEntity[];
-	typePlague: TypePlagueEntity[];
-	typeService: TypeServiceEntity[];
+	business: BusinessRow[];
 	loading: boolean;
 }
 
 const useCatalogs = (refresh?: boolean): IUsePhoneValues => {
 	const [clients, setClients] = useState<ClientEntity[]>([]);
-	const [frequency, setFrequency] = useState<FrequencyEntity[]>([]);
-	const [recommendations, setRecommendations] = useState<RecommendationEntity[]>([]);
-	const [typePlague, setTypePlague] = useState<TypePlagueEntity[]>([]);
-	const [typeService, setTypeService] = useState<TypeServiceEntity[]>([]);
+	const [business, setBusiness] = useState<BusinessRow[]>([]);
+
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		Promise.all([
-			CatalogService.getClientsBy({}),
-			CatalogService.getFrequency(),
-			CatalogService.getRecommendations(),
-			CatalogService.getTypePlage(),
-			CatalogService.getTypeService()
-		])
+		Promise.all([CatalogService.getClientsBy({}), CatalogService.getBusiness()])
 			.then((data) => {
-				const [clientsData, frequencyData, recommendationsData, typePlagueData, typeServiceData] = data;
+				const [clientsData, businessData] = data;
 				setClients(clientsData.payload);
-				setFrequency(frequencyData);
-				setRecommendations(recommendationsData);
-				setTypePlague(typePlagueData);
-				setTypeService(typeServiceData);
+				setBusiness(businessData);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -48,10 +29,7 @@ const useCatalogs = (refresh?: boolean): IUsePhoneValues => {
 
 	return {
 		clients,
-		frequency,
-		recommendations,
-		typePlague,
-		typeService,
+		business,
 		loading
 	};
 };

@@ -11,8 +11,8 @@ import { useState } from 'react';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { styled } from '@mui/material/styles';
-import { CompanyEntity } from '../../shared/entities/CompanyEntity';
-import { CompanyService } from '../../shared/services/CompanyService';
+import { BusinessRow } from 'src/app/shared/entities/BusinessEntity';
+import { BusinessService } from '../../shared/services/CompanyService';
 import CreateCompany from './components/CreateCompany';
 
 const Root = styled(FusePageCarded)(({ theme }) => ({
@@ -30,13 +30,9 @@ const Root = styled(FusePageCarded)(({ theme }) => ({
 function Companies() {
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
-	const {
-		data = [],
-		isLoading,
-		refetch
-	} = useQuery<CompanyEntity[]>('companies', () => CompanyService.getCompanies());
+	const { data = [], isLoading, refetch } = useQuery<BusinessRow[]>('business', () => BusinessService.getBy());
 
-	const columns: GridColDef<CompanyEntity>[] = [
+	const columns: GridColDef<BusinessRow>[] = [
 		{
 			field: 'name',
 			headerName: 'Name',
@@ -48,6 +44,22 @@ function Companies() {
 		{
 			field: 'address',
 			headerName: 'Address',
+			minWidth: 150,
+			flex: 1,
+			sortable: false,
+			disableColumnMenu: true
+		},
+		{
+			field: 'contactName',
+			headerName: 'Nombre de contacto',
+			minWidth: 150,
+			flex: 1,
+			sortable: false,
+			disableColumnMenu: true
+		},
+		{
+			field: 'contactPhone',
+			headerName: 'Teléfono de contacto',
 			minWidth: 150,
 			flex: 1,
 			sortable: false,
@@ -67,14 +79,14 @@ function Companies() {
 						key={1}
 						label="Ver"
 						icon={<RemoveRedEyeIcon />}
-						onClick={() => navigate(`details/${params.row.id}`, { state: { mode: 'see' } })}
+						onClick={() => {}}
 						showInMenu
 					/>,
 					<GridActionsCellItem
 						key={1}
 						label="Editar"
 						icon={<EditIcon />}
-						onClick={() => navigate(`details/${params.row.id}`, { state: { mode: 'edit' } })}
+						onClick={() => {}}
 						showInMenu
 					/>,
 					<GridActionsCellItem
@@ -86,7 +98,6 @@ function Companies() {
 								title: 'Confirmación requerido',
 								text: '¿Seguro que deseas eliminar este registro?',
 								onAccept: async () => {
-									await CompanyService.delete(params.row.id);
 									displayToast({
 										message: 'Se elimino correctamente',
 										variant: 'success',

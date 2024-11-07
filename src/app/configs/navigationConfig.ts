@@ -44,16 +44,6 @@ const navigationConfig: FuseNavItemType[] = [
 				icon: 'material-twotone:person_pin',
 				url: '/clients',
 				children: []
-			},
-			{
-				id: 'catalogs',
-				title: 'Catalogs',
-				translate: 'CATALOGS',
-				type: 'item',
-				auth: ['admin', 'staff'],
-				icon: 'heroicons-outline:archive',
-				url: '/catalogs',
-				children: []
 			}
 		]
 	},
@@ -66,32 +56,6 @@ const navigationConfig: FuseNavItemType[] = [
 		icon: 'material-solid:home_work',
 		url: '/companies',
 		children: []
-	},
-	{
-		id: 'configurations-app',
-		title: 'Configuraciones',
-		translate: 'CONFIGURATION',
-		auth: ['admin', 'staff'],
-		type: 'group',
-		icon: 'heroicons-solid:adjustments',
-		children: [
-			{
-				id: 'configurations-whatsapp',
-				title: 'WhatsApp',
-				translate: 'WHATS_APP',
-				type: 'item',
-				auth: ['admin', 'staff'],
-				url: '/configuration/whats-app'
-			},
-			{
-				id: 'configurations-reports',
-				title: 'Reportes',
-				translate: 'REPORTS',
-				type: 'item',
-				auth: ['admin', 'staff'],
-				url: '/configuration/reports'
-			}
-		]
 	}
 ];
 

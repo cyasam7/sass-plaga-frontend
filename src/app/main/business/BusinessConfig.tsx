@@ -7,7 +7,7 @@ import es from './i18n/es';
 i18next.addResourceBundle('en', 'examplePage', en);
 i18next.addResourceBundle('es', 'examplePage', es);
 
-const Companies = lazy(() => import('./Companies'));
+const Companies = lazy(() => import('./Business'));
 const CompaniesDetail = lazy(() => import('./CompanyDetails/CompanyDetail'));
 
 /**

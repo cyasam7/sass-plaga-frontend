@@ -15,14 +15,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-import { APIProvider } from '@vis.gl/react-google-maps';
 import dayjs from 'dayjs';
 import { pdfjs } from 'react-pdf';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
 import GlobalDialog from './shared-components/GlobalDialog/GlobalDialog';
 import 'dayjs/locale/es'; // import locale
-import { WebSocketProvider } from './shared-hooks/useWebSocket';
 
 /**
  * Axios HTTP Request defaults
@@ -74,30 +72,26 @@ function App() {
 					theme={mainTheme}
 					direction={langDirection}
 				>
-					<WebSocketProvider>
-						<AuthRouteProvider>
-							<LocalizationProvider
-								dateAdapter={AdapterDayjs}
-								adapterLocale="es"
+					<AuthRouteProvider>
+						<LocalizationProvider
+							dateAdapter={AdapterDayjs}
+							adapterLocale="es"
+						>
+							<SnackbarProvider
+								maxSnack={5}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'right'
+								}}
+								classes={{
+									containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
+								}}
 							>
-								<SnackbarProvider
-									maxSnack={5}
-									anchorOrigin={{
-										vertical: 'bottom',
-										horizontal: 'right'
-									}}
-									classes={{
-										containerRoot: 'bottom-0 right-0 mb-52 md:mb-68 mr-8 lg:mr-80 z-99'
-									}}
-								>
-									<APIProvider apiKey={import.meta.env.VITE_GOOGLE_API}>
-										<FuseLayout layouts={themeLayouts} />
-									</APIProvider>
-									<GlobalDialog />
-								</SnackbarProvider>
-							</LocalizationProvider>
-						</AuthRouteProvider>
-					</WebSocketProvider>
+								<FuseLayout layouts={themeLayouts} />
+								<GlobalDialog />
+							</SnackbarProvider>
+						</LocalizationProvider>
+					</AuthRouteProvider>
 				</FuseTheme>
 			</CacheProvider>
 		</QueryClientProvider>

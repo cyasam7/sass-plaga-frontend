@@ -1,11 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import {
-	ClientEntity,
-	FrequencyEntity,
-	RecommendationEntity,
-	TypePlagueEntity,
-	TypeServiceEntity
-} from '../entities/OrderEntity';
+import { ClientEntity } from '../entities/OrderEntity';
+import { AxiosFetcher } from '../fetcher';
+import { BusinessRow } from '../entities/BusinessEntity';
 
 interface IQueryClient {
 	phone?: string;
@@ -25,23 +21,11 @@ export class CatalogService {
 		}
 	}
 
-	static async getFrequency(): Promise<FrequencyEntity[]> {
-		const { data } = await axios.get<FrequencyEntity[]>('frequency');
-		return data;
-	}
-
-	static async getRecommendations(): Promise<RecommendationEntity[]> {
-		const { data } = await axios.get<RecommendationEntity[]>('recommendation');
-		return data;
-	}
-
-	static async getTypePlage(): Promise<TypePlagueEntity[]> {
-		const { data } = await axios.get<TypePlagueEntity[]>('typePlague');
-		return data;
-	}
-
-	static async getTypeService(): Promise<TypeServiceEntity[]> {
-		const { data } = await axios.get<TypeServiceEntity[]>('typeService');
+	static async getBusiness(): Promise<BusinessRow[]> {
+		const data = AxiosFetcher<BusinessRow[]>({
+			url: '/business',
+			method: 'GET'
+		});
 		return data;
 	}
 }

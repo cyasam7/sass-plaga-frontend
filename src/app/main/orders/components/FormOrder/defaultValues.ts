@@ -1,15 +1,10 @@
 export const defaultValuesOrder = {
-	clientId: '',
-	clientAddress: '',
+	dateScheduled: null,
+	timeScheduled: null,
+	businessId: '',
+	clientId: undefined,
 	clientName: '',
+	clientAddress: '',
 	clientPhone: '',
-	clientLatitude: undefined,
-	clientLongitude: undefined,
-	price: '',
-	date: null,
-	frequency: [],
-	observations: '',
-	recommendations: [],
-	typePlague: [],
-	typeService: []
+	comments: ''
 };

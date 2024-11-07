@@ -2,7 +2,7 @@ import { Dayjs } from 'dayjs';
 import { UseFormReturn } from 'react-hook-form';
 
 export interface IFormOrderProps {
-	formHandler: UseFormReturn<IFormCreatePest>;
+	formHandler: UseFormReturn<IFormCreateAppointment>;
 	disabled?: boolean;
 	disableSpecificField?: {
 		dateField?: boolean;
@@ -18,18 +18,22 @@ export interface IFormOrderProps {
 	};
 }
 
-export interface IFormCreatePest {
-	date: Dayjs | null;
-	price: string;
-	observations: string;
+export interface IFormCreateAppointment {
+	dateScheduled: Dayjs | null;
+	timeScheduled: Dayjs | null;
+	businessId: string;
+	clientId?: string;
 	clientName: string;
-	clientPhone: string;
 	clientAddress: string;
-	clientLatitude?: number;
-	clientLongitude?: number;
-	clientId: string;
-	typePlague: string[];
-	typeService: string[];
-	frequency: string[];
-	recommendations: string[];
+	clientPhone: string;
+	comments: string;
+}
+export interface ICreateAppointment {
+	dateScheduled: Dayjs | null;
+	businessId: string;
+	clientId?: string;
+	clientName: string;
+	clientAddress: string;
+	clientPhone: string;
+	comments: string;
 }

@@ -1,19 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Dialog, DialogContent, DialogTitle, Slide, Stack, Typography } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useQuery } from 'react-query';
-import dayjs from 'dayjs';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { LoadingButton } from '@mui/lab';
 import FormOrder from '../FormOrder/FormOrder';
-import { IFormCreatePest } from '../FormOrder/FormOrderProps';
+import { IFormCreateAppointment } from '../FormOrder/FormOrderProps';
 import { OrderDialogProps } from './OrderDialogProps';
 import { OrderService } from '../../../../shared/services/OrderService';
-import { createOrderSchema } from '../FormOrder/schema';
 import { defaultValuesOrder } from '../FormOrder/defaultValues';
 
 const Transition = React.forwardRef(function Transition(
@@ -36,8 +33,8 @@ function OrderDialog(props: OrderDialogProps) {
 
 	const isUpdating = Boolean(id);
 
-	const formHandler = useForm<IFormCreatePest>({
-		resolver: yupResolver<IFormCreatePest>(createOrderSchema as any),
+	const formHandler = useForm<IFormCreateAppointment>({
+		/* resolver: yupResolver<IFormCreateAppointment>(createOrderSchema as any), */
 		defaultValues: defaultValuesOrder
 	});
 
@@ -46,38 +43,19 @@ function OrderDialog(props: OrderDialogProps) {
 		queryFn: () => OrderService.getById(id),
 		enabled: Boolean(id)
 	});
-	useEffect(() => {
+
+	/* useEffect(() => {
 		if (data) {
-			formHandler.reset({
-				clientId: data.client.id,
-				clientAddress: data.location.address,
-				clientName: data.client.name,
-				clientPhone: data.client.phone,
-				price: String(data.price),
-				date: dayjs(data.date),
-				frequency: data.frequency.map((i) => i.id),
-				observations: data.observations,
-				recommendations: data.recommendations.map((i) => i.id),
-				typePlague: data.typePlague.map((i) => i.id),
-				typeService: data.typeService.map((i) => i.id),
-				clientLatitude: data?.location ? Number(data?.location.latitude) : undefined,
-				clientLongitude: data?.location ? Number(data?.location.longitude) : undefined
-			});
+			formHandler.reset({});
 		}
 		return () => {
 			formHandler.reset(defaultValuesOrder);
 		};
-	}, [data]);
+	}, [data]); */
 
-	async function handleSubmit(data: IFormCreatePest): Promise<void> {
-		const formatValues = {
-			...data,
-			id: isUpdating ? id : undefined,
-			date: data.date.toISOString(),
-			price: data.price,
-			isFollowUp: false
-		};
-		await OrderService.createOrder(formatValues);
+	async function handleSubmit(data: IFormCreateAppointment): Promise<void> {
+		console.log({ ...data, date: data.dateScheduled.toISOString() });
+
 		handleResetForm();
 		displayToast({
 			message: 'Se ha guardado correctamente',

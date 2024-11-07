@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { CompanyEntity } from '../entities/CompanyEntity';
-import { IFormCompany } from '../../main/companies/types';
+import { BusinessRow, CompanyEntity, IFormSaveBusiness } from '../entities/BusinessEntity';
 
-export class CompanyService {
-	static async getCompanies(): Promise<CompanyEntity[]> {
-		const { data } = await axios.get<CompanyEntity[]>('/company');
+export class BusinessService {
+	static async getBy(): Promise<BusinessRow[]> {
+		const { data } = await axios.get<BusinessRow[]>('/business');
 		return data;
 	}
 
@@ -13,8 +12,8 @@ export class CompanyService {
 		return data;
 	}
 
-	static async save(data: IFormCompany): Promise<void> {
-		await axios.post(`/company`, data);
+	static async save(data: IFormSaveBusiness): Promise<void> {
+		await axios.post(`/business`, data);
 	}
 
 	static async delete(id: string): Promise<void> {

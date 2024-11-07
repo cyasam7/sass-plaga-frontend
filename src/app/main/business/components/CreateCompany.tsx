@@ -1,10 +1,13 @@
-import { Button, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material';
-import axios from 'axios';
+import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
+import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
+import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';
+import { BusinessService } from 'src/app/shared/services/CompanyService';
+import { IFormSaveBusiness } from 'src/app/shared/entities/CompanyEntity';
 import { ICreateCompanyProps } from './ICreateCompanyProps';
 import { schemaCreateCompany } from './schema';
 
@@ -12,17 +15,19 @@ function CreateCompany(props: ICreateCompanyProps) {
 	const queryClient = useQueryClient();
 
 	const { open, onClose } = props;
-	const formHandler = useForm({
+	const formHandler = useForm<IFormSaveBusiness>({
 		resolver: yupResolver(schemaCreateCompany),
 		defaultValues: {
 			name: '',
+			contactName: '',
+			contactPhone: '',
 			address: ''
 		}
 	});
 
-	async function onSubmit(params: { name: string; address: string }): Promise<void> {
-		await axios.post('company', params);
-		await queryClient.invalidateQueries('companies');
+	async function onSubmit(params: IFormSaveBusiness): Promise<void> {
+		await BusinessService.save(params);
+		await queryClient.invalidateQueries('business');
 		displayToast({
 			message: 'Se creo correctamente el registro',
 			anchorOrigin: {
@@ -79,34 +84,33 @@ function CreateCompany(props: ICreateCompanyProps) {
 			</DialogTitle>
 			<DialogContent>
 				<Stack spacing={2}>
-					<Controller
-						control={formHandler.control}
+					<TextFieldForm
 						name="name"
-						render={({ field, fieldState }) => (
-							<TextField
-								{...field}
-								variant="standard"
-								label="Nombre"
-								error={!!fieldState.error}
-								helperText={fieldState.error?.message && fieldState.error?.message}
-							/>
-						)}
-					/>
-					<Controller
 						control={formHandler.control}
+						variant="standard"
+						label="Nombre"
+					/>
+					<TextFieldForm
+						name="contactName"
+						control={formHandler.control}
+						variant="standard"
+						label="Nombre de contacto"
+					/>
+					<PhoneInputForm
+						name="contactPhone"
+						control={formHandler.control}
+						label="Teléfono"
+						fullWidth
+						variant="standard"
+					/>
+					<TextFieldForm
 						name="address"
-						render={({ field, fieldState }) => (
-							<TextField
-								{...field}
-								variant="standard"
-								label="Dirección"
-								multiline
-								rows={5}
-								maxRows={5}
-								error={!!fieldState.error}
-								helperText={fieldState.error?.message && fieldState.error?.message}
-							/>
-						)}
+						control={formHandler.control}
+						variant="standard"
+						label="Dirección"
+						multiline
+						rows={5}
+						maxRows={5}
 					/>
 				</Stack>
 			</DialogContent>

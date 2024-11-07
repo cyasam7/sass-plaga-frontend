@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AreaEntity } from '../entities/AreaEntity';
-import { IFormArea } from '../../main/companies/types';
+import { IFormArea } from '../../main/business/types';
 import { AxiosFetcher } from '../fetcher';
 
 export class AreaService {
