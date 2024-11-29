@@ -9,7 +9,7 @@ import { AreaService } from '../../../../../shared/services/AreaService';
 function CardArea(props: ICardAreaProps) {
 	const queryClient = useQueryClient();
 
-	const { area, handleEditArea, openDevices } = props;
+	const { area, handleEditArea, openCreateDevicesDialog, openListDevicesDialog } = props;
 
 	async function handleDeleteArea(): Promise<void> {
 		openDialog({
@@ -65,11 +65,18 @@ function CardArea(props: ICardAreaProps) {
 					Editar
 				</Button>
 				<Button
-					color="primary"
+					color="secondary"
 					variant="contained"
-					onClick={() => openDevices(area.id)}
+					onClick={() => openListDevicesDialog(area.id)}
 				>
 					Ver dispositivos
+				</Button>
+				<Button
+					color="primary"
+					variant="contained"
+					onClick={() => openCreateDevicesDialog(area.id)}
+				>
+					Agregar dispositivos
 				</Button>
 			</CardActions>
 		</Card>

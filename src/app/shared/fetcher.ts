@@ -1,5 +1,5 @@
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
-import axios, { AxiosRequestConfig, isAxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 
 export interface IAxiosConfig {
 	url: string;
@@ -12,13 +12,14 @@ export async function AxiosFetcher<T>(config: AxiosRequestConfig): Promise<T> {
 		return data;
 	} catch (error) {
 		if (isAxiosError(error)) {
+			const err = error as AxiosError<{ message: string }>;
 			displayToast({
 				anchorOrigin: {
 					horizontal: 'right',
 					vertical: 'top'
 				},
 				autoHideDuration: 2000,
-				message: error.response.data?.message ?? 'Algo salio mal en la peticion',
+				message: err.response.data?.message ?? 'Algo salio mal en la peticion',
 				variant: 'error'
 			});
 		}

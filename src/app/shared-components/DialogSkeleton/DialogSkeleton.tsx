@@ -9,6 +9,7 @@ function DialogSkeleton(props: IDialogSkeletonProps) {
 		<Dialog
 			open={open}
 			maxWidth={maxWidth}
+			fullWidth
 		>
 			<DialogTitle>{header}</DialogTitle>
 			<DialogContent>

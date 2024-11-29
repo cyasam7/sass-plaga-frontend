@@ -20,4 +20,21 @@ export class DeviceService {
 			data: values
 		});
 	}
+
+	static async remove(id: string): Promise<void> {
+		await AxiosFetcher({
+			url: `/device/${id}`,
+			method: 'DELETE'
+		});
+	}
+
+	static async updateStatusActive(id: string, value: boolean): Promise<void> {
+		await AxiosFetcher({
+			url: `/device/statusActive/${id}`,
+			method: 'PATCH',
+			data: {
+				value
+			}
+		});
+	}
 }

@@ -8,6 +8,8 @@ export interface DeviceEntity {
 	stationNumber: string;
 	isActive: boolean;
 	type: TypeDevice;
+	areaId: string;
+	companyId: string;
 }
 
 export interface ICreateDeviceEntity {
