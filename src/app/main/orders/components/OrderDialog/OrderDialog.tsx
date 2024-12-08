@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Dialog, DialogContent, DialogTitle, Slide, Stack, Typography } from '@mui/material';
-import { TransitionProps } from '@mui/material/transitions';
+import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQuery } from 'react-query';
@@ -15,21 +14,7 @@ import { OrderDialogProps } from './OrderDialogProps';
 import { OrderService } from '../../../../shared/services/OrderService';
 import { createOrderSchema } from '../FormOrder/schema';
 import { defaultValuesOrder } from '../FormOrder/defaultValues';
-
-const Transition = React.forwardRef(function Transition(
-	props: TransitionProps & {
-		children: React.ReactElement<unknown>;
-	},
-	ref: React.Ref<unknown>
-) {
-	return (
-		<Slide
-			direction="up"
-			ref={ref}
-			{...props}
-		/>
-	);
-});
+import { Transition } from './transition';
 
 function OrderDialog(props: OrderDialogProps) {
 	const { onCancel, onSubmit, open, id } = props;
@@ -46,22 +31,17 @@ function OrderDialog(props: OrderDialogProps) {
 		queryFn: () => OrderService.getById(id),
 		enabled: Boolean(id)
 	});
+
 	useEffect(() => {
 		if (data) {
 			formHandler.reset({
 				clientId: data.client.id,
-				clientAddress: data.location.address,
+				clientAddress: data.client.address,
 				clientName: data.client.name,
 				clientPhone: data.client.phone,
 				price: String(data.price),
 				date: dayjs(data.date),
-				frequency: data.frequency.map((i) => i.id),
-				observations: data.observations,
-				recommendations: data.recommendations.map((i) => i.id),
-				typePlague: data.typePlague.map((i) => i.id),
-				typeService: data.typeService.map((i) => i.id),
-				clientLatitude: data?.location ? Number(data?.location.latitude) : undefined,
-				clientLongitude: data?.location ? Number(data?.location.longitude) : undefined
+				observations: data.observations
 			});
 		}
 		return () => {
@@ -114,7 +94,7 @@ function OrderDialog(props: OrderDialogProps) {
 		<Dialog
 			open={open}
 			TransitionComponent={Transition}
-			maxWidth="lg"
+			maxWidth="md"
 		>
 			<DialogTitle>
 				<Stack

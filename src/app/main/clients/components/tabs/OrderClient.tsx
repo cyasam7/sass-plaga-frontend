@@ -21,7 +21,7 @@ function OrderClient(props: IOrderClientProps) {
 	});
 
 	const columns: GridColDef<OrderEntity>[] = [
-		{
+		/* 	{
 			field: 'typeService',
 			headerName: 'Servicio',
 			hideSortIcons: true,
@@ -30,7 +30,7 @@ function OrderClient(props: IOrderClientProps) {
 			valueGetter: (params) => {
 				return params.row.typeService.map((i) => i.name).join(', ');
 			}
-		},
+		}, */
 		{
 			field: 'status',
 			headerName: 'Estatus',

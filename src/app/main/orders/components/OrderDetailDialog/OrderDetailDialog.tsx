@@ -16,11 +16,11 @@ function OrderDetailDialog(props: IOrderDetailDialogProps) {
 		enabled: Boolean(id)
 	});
 
+	const isFollowUp = !!order?.isFollowUp;
+
 	function handleClose(): void {
 		onClose();
 	}
-
-	const doesHaveFollowUp = order?.dateFollowUp;
 
 	return (
 		<Dialog
@@ -66,22 +66,22 @@ function OrderDetailDialog(props: IOrderDetailDialogProps) {
 								spacing={0.2}
 							>
 								<Typography variant="subtitle2">¿Tuvo seguimiento?:</Typography>
-								<Typography variant="body2">{`${doesHaveFollowUp ? 'Si' : 'No'}`}</Typography>
+								<Typography variant="body2">{`${isFollowUp ? 'Si' : 'No'}`}</Typography>
 							</Stack>
-							{doesHaveFollowUp && (
+							{isFollowUp && (
 								<Stack
 									direction="row"
 									alignItems="center"
 									spacing={0.2}
 								>
 									<Typography variant="subtitle2">Fecha:</Typography>
-									<Typography variant="body2">{`${dayjs(order?.dateFollowUp).format(
+									<Typography variant="body2">{`${dayjs(order?.date).format(
 										DATE_TIME_FORMAT
 									)}`}</Typography>
 								</Stack>
 							)}
 						</Stack>
-						<Stack>
+						{/* 			<Stack>
 							<Stack
 								direction="row"
 								alignItems="center"
@@ -116,7 +116,7 @@ function OrderDetailDialog(props: IOrderDetailDialogProps) {
 						<Stack spacing={0.2}>
 							<Typography variant="subtitle2">Observaciones:</Typography>
 							<Typography variant="body2">{order?.observations}</Typography>
-						</Stack>
+						</Stack> */}
 						<Stack spacing={0.2}>
 							<Typography variant="subtitle2">Costo:</Typography>
 							<Typography variant="body2">{`$ ${formatCurrency(order?.price)}`}</Typography>

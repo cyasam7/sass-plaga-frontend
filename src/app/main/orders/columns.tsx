@@ -5,13 +5,8 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT, TIME_FORMAT } from 'src/app/shared-constants/dateFormat';
 import { formatCurrency } from 'src/app/shared-constants/formatCurrency';
 import ChipOrder from 'app/shared-components/ChipOrder/ChipOrder';
+import { statusLabel } from 'app/shared-components/ChipOrder/const';
 import { OrderEntity } from '../../shared/entities/OrderEntity';
-
-const statusLabel = {
-	REALIZED: 'Realizada',
-	NO_REALIZED: 'No Realizada',
-	CANCELLED: 'Cancelada'
-};
 
 export const columnsOrders: GridColDef<OrderEntity>[] = [
 	{
@@ -22,12 +17,11 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		minWidth: 300,
 		align: 'left',
 		disableColumnMenu: true,
-		valueGetter: ({ row }) => `${row.client.name}. Tel. (${row.client.phone}) | ${row.client.address}`,
 		renderCell: ({ row }) => {
 			return (
 				<Stack>
 					<Typography variant="subtitle2">{`${row.client.name}. Tel. (${row.client.phone})`}</Typography>
-					<Typography variant="body2">{`${row.location.address}`}</Typography>
+					<Typography variant="body2">{`${row.client.address}`}</Typography>
 				</Stack>
 			);
 		}
