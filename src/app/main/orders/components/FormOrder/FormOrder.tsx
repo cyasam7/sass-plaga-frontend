@@ -2,9 +2,10 @@ import { Divider, FormHelperText, Grid, InputAdornment, TextField, Typography } 
 import { Controller } from 'react-hook-form';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter/NumericFormatAdapter';
 import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';
 import { IFormOrderProps } from './FormOrderProps';
 import { CatalogService } from '../../../../shared/services/CatalogService';
 import { AutocompleteMaps } from '../AutocompleteMaps/AutocompleteMaps';
@@ -21,9 +22,9 @@ function FormOrder(props: IFormOrderProps) {
 		clientAddressField = false
 	} = disableSpecificField;
 
-	useEffect(() => {
+	async function handleAutoCompleteClient(): Promise<void> {
 		const phone = formHandler.watch('clientPhone');
-		if (phone.length === 10) {
+		if (phone) {
 			CatalogService.getClientsBy({ phone }).then(({ payload }) => {
 				if (payload) {
 					const [phoneFounded] = payload;
@@ -35,12 +36,8 @@ function FormOrder(props: IFormOrderProps) {
 					}
 				}
 			});
-		} else {
-			formHandler.setValue('clientAddress', '');
-			formHandler.setValue('clientId', '');
-			formHandler.setValue('clientName', '');
 		}
-	}, [formHandler.watch('clientPhone')]);
+	}
 
 	return (
 		<Grid
@@ -75,23 +72,16 @@ function FormOrder(props: IFormOrderProps) {
 							item
 							xs={12}
 						>
-							<Controller
-								control={formHandler.control}
+							<PhoneInputForm
 								name="clientPhone"
-								render={({ field, fieldState }) => (
-									<TextField
-										{...field}
-										size="small"
-										disabled={disabled || clientPhoneField}
-										variant="outlined"
-										label="Teléfono"
-										required
-										fullWidth
-										placeholder="Escribe el teléfono del cliente"
-										error={!!fieldState.error}
-										helperText={fieldState.error?.message && fieldState.error?.message}
-									/>
-								)}
+								control={formHandler.control}
+								variant="outlined"
+								label="Teléfono"
+								size="small"
+								disabled={disabled || clientPhoneField}
+								fullWidth
+								required
+								onBlur={handleAutoCompleteClient}
 							/>
 						</Grid>
 						<Grid

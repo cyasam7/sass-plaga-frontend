@@ -19,20 +19,30 @@ export interface IUserEntity {
 	name: string;
 	phone: string;
 	email: string;
-	password: string;
-	roleId: ERoleCode;
+	password?: string;
+	roleId: string;
 	tenantId?: string;
 	accessToken?: string;
 	refreshToken?: string;
 }
 
-export interface IUserQuery {
+export class IQueryUser {
+	id?: string;
+
 	email?: string;
-	roleId?: ERoleCode;
+
+	roleCode?: string;
+
 	phone?: string;
+
+	tenantId?: string;
+
 	accessToken?: string;
+
 	refreshToken?: string;
 }
+
+
 
 export interface IDataGridUserRow {
 	userId: string;

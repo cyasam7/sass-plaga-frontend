@@ -1,4 +1,4 @@
-import { IUserEntity, IUserCreator, IDataGridUserRow, ISaveSignUser } from '../entities/UserEntity';
+import { IUserEntity, IUserCreator, IDataGridUserRow, ISaveSignUser, IQueryUser } from '../entities/UserEntity';
 import { AxiosFetcher } from '../fetcher';
 
 export class UserService {
@@ -26,6 +26,10 @@ export class UserService {
 
 	static async getUsersDatagrid(userId: string): Promise<IDataGridUserRow[]> {
 		return AxiosFetcher<IDataGridUserRow[]>({ url: `/user/datagrid`, method: 'GET', params: { userId } });
+	}
+
+	static async getUsersByQuery(query: IQueryUser): Promise<IUserEntity[]> {
+		return AxiosFetcher<IUserEntity[]>({ url: `/user`, method: 'GET', params: query });
 	}
 
 	static async remove(id: string): Promise<void> {

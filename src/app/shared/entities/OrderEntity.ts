@@ -66,3 +66,18 @@ export interface OrderEntity {
 	client: ClientEntity;
 	assigned?: IUserEntity;
 }
+
+export interface DatagridRowOrder {
+	id: string;
+	date: Date;
+	client: {
+		name: string;
+		phone: string;
+		address: string;
+	};
+	status: EStatusOrder;
+	price: number;
+	isFollowUp: boolean;
+	assignedId?: string;
+	assignedName?: string;
+}

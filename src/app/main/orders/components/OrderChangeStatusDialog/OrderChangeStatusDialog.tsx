@@ -5,20 +5,21 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	FormControlLabel,
 	FormLabel,
-	Radio,
-	RadioGroup,
+	MenuItem,
+	Stack,
 	Typography
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
+import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { EStatusOrder } from '../../../../shared/entities/OrderEntity';
 import { OrderService } from '../../../../shared/services/OrderService';
 import { IOrderChangeStatusDialogProps, IStatusForm } from './IOrderChangeStatusDialogProps';
+import { translateOrderStatus } from '../../utils';
 
 function OrderChangeStatusDialog(props: IOrderChangeStatusDialogProps) {
 	const { open, id, onClose } = props;
@@ -60,22 +61,20 @@ function OrderChangeStatusDialog(props: IOrderChangeStatusDialogProps) {
 	}
 
 	async function onSubmit(data: IStatusForm): Promise<void> {
-		if ((data.status as EStatusOrder) === EStatusOrder.REALIZED) {
-			openDialog({
-				title: 'Confirmación requerida',
-				text: '¿Estas seguro que deseas confirmar orden?, una vez confirmada no podrás editar la orden.',
-				onAccept: async () => {
-					await successRequest(data);
-				}
-			});
-		} else {
-			await successRequest(data);
-		}
+		openDialog({
+			title: 'Confirmación requerida',
+			text: '¿Estas seguro que deseas confirmar orden?, una vez confirmada no podrás editar la orden.',
+			onAccept: async () => {
+				await successRequest(data);
+			}
+		});
 	}
 
 	function handleClose(): void {
 		onClose();
 	}
+
+	const options = Object.values(EStatusOrder);
 
 	return (
 		<Dialog
@@ -87,35 +86,28 @@ function OrderChangeStatusDialog(props: IOrderChangeStatusDialogProps) {
 				<Typography variant="h6">Estatus de orden</Typography>
 			</DialogTitle>
 			<DialogContent>
-				<FormControl>
-					<FormLabel>Selecciona el estatus a actualizar</FormLabel>
-					<Controller
-						control={formHandler.control}
-						name="status"
-						render={({ field }) => (
-							<RadioGroup
-								{...field}
-								row
-							>
-								<FormControlLabel
-									value={EStatusOrder.NO_REALIZED}
-									control={<Radio />}
-									label="No realizada"
-								/>
-								<FormControlLabel
-									value={EStatusOrder.REALIZED}
-									control={<Radio />}
-									label="Realizada"
-								/>
-								<FormControlLabel
-									value={EStatusOrder.CANCELLED}
-									control={<Radio />}
-									label="Cancelar"
-								/>
-							</RadioGroup>
-						)}
-					/>
-				</FormControl>
+				<Stack className="w-full">
+					<FormControl>
+						<FormLabel>Selecciona el estatus a actualizar</FormLabel>
+						<TextFieldForm
+							control={formHandler.control}
+							name="status"
+							label=""
+							className="pt-8"
+							select
+							fullWidth
+						>
+							{options.map((i) => (
+								<MenuItem
+									key={i}
+									value={i}
+								>
+									{translateOrderStatus(i)}
+								</MenuItem>
+							))}
+						</TextFieldForm>
+					</FormControl>
+				</Stack>
 			</DialogContent>
 			<DialogActions>
 				<Button

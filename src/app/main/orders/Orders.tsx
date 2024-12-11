@@ -9,15 +9,18 @@ import dayjs, { Dayjs } from 'dayjs';
 import MoveUpIcon from '@mui/icons-material/MoveUp';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { columnsOrders } from './columns';
 import { OrderService } from '../../shared/services/OrderService';
 import { ETabsPlagues } from './components/HeaderTabs/IHeaderTabsProps';
-import { EStatusOrder, OrderEntity } from '../../shared/entities/OrderEntity';
+import { DatagridRowOrder, EStatusOrder } from '../../shared/entities/OrderEntity';
 import OrderDialog from './components/OrderDialog/OrderDialog';
 import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog';
 import OrderChangeStatusDialog from './components/OrderChangeStatusDialog/OrderChangeStatusDialog';
 import OrderFollowUpDialog from './components/OrderFollowUpDialog/OrderFollowUpDialog';
 import HeaderFilters from './components/HeaderFilters/HeaderFilters';
+import { validateIfOrderIsPending } from './utils';
+import AssignOrderDialog from './components/AssignOrderDialog/AssignOrderDialog';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -33,10 +36,12 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 function Order() {
 	const [tabFilter, setTabFilter] = useState<ETabsPlagues | undefined>(ETabsPlagues.ALL);
+	const [statusFilter, setStatusFilter] = useState<EStatusOrder | undefined>();
 	const [calendarFilter, setCalendarFilter] = useState<Dayjs | undefined>(null);
 	const [open, setOpen] = useState<boolean>(false);
 	const [openDetails, setOpenDetails] = useState<boolean>(false);
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
+	const [openAssign, setOpenAssign] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
 
@@ -46,9 +51,9 @@ function Order() {
 		refetch
 	} = useQuery({
 		queryKey: 'orders',
-		queryFn: () => OrderService.getAll()
+		queryFn: () => OrderService.getDatagridOrders()
 	});
-	const columns: GridColDef<OrderEntity>[] = [
+	const columns: GridColDef<DatagridRowOrder>[] = [
 		...columnsOrders,
 		{
 			headerName: 'ACCIONES',
@@ -59,7 +64,7 @@ function Order() {
 			type: 'actions',
 			disableColumnMenu: true,
 			getActions: (params) => {
-				const { status } = params.row;
+				const { status, assignedId } = params.row;
 				return [
 					<GridActionsCellItem
 						key={0}
@@ -70,10 +75,21 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpen(true);
 						}}
-						disabled={status === EStatusOrder.REALIZED}
+						/* disabled={status === EStatusOrder.} */
 					/>,
 					<GridActionsCellItem
 						key={1}
+						label={assignedId ? 'RE-ASIGNAR' : 'ASIGNAR'}
+						icon={<AssignmentIndIcon />}
+						showInMenu
+						onClick={() => {
+							setOrderId(params.row.id);
+							setOpenAssign(true);
+						}}
+						/* disabled={status === EStatusOrder.REALIZED} */
+					/>,
+					<GridActionsCellItem
+						key={2}
 						label="CAMBIAR ESTATUS"
 						icon={<AutorenewIcon />}
 						showInMenu
@@ -81,10 +97,10 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpenStatus(true);
 						}}
-						disabled={status === EStatusOrder.REALIZED}
+						/* disabled={status === EStatusOrder.REALIZED} */
 					/>,
 					<GridActionsCellItem
-						key={2}
+						key={3}
 						label="CREAR SEGUIMIENTO"
 						icon={<MoveUpIcon />}
 						showInMenu
@@ -94,7 +110,7 @@ function Order() {
 						}}
 					/>,
 					<GridActionsCellItem
-						key={3}
+						key={4}
 						label="VER"
 						icon={<RemoveRedEyeIcon />}
 						showInMenu
@@ -108,7 +124,7 @@ function Order() {
 		}
 	];
 
-	function filterValues(data: OrderEntity[]): OrderEntity[] {
+	function filterValues(data: DatagridRowOrder[]): DatagridRowOrder[] {
 		if (tabFilter === ETabsPlagues.TODAY) {
 			data = data.filter((i) => {
 				const date = dayjs(i.date);
@@ -129,7 +145,9 @@ function Order() {
 
 		if (tabFilter === ETabsPlagues.PENDING) {
 			data = data.filter((i) => {
-				return i.status === EStatusOrder.NO_REALIZED;
+				const dateOrder = dayjs(i.date);
+				const today = dayjs();
+				return dateOrder.isAfter(today) && validateIfOrderIsPending(i.status);
 			});
 		}
 
@@ -139,6 +157,12 @@ function Order() {
 				const startDate = dayjs(calendarFilter).startOf('day');
 				const finalDate = dayjs(calendarFilter).endOf('day');
 				return date.isAfter(startDate) && date.isBefore(finalDate);
+			});
+		}
+
+		if (statusFilter) {
+			data = data.filter((i) => {
+				return i.status === statusFilter;
 			});
 		}
 
@@ -174,6 +198,11 @@ function Order() {
 							await refetch();
 						}}
 					/>
+					<AssignOrderDialog
+						orderId={orderId}
+						open={openAssign}
+						onClose={() => setOpenAssign(false)}
+					/>
 					<OrderFollowUpDialog
 						id={orderId}
 						onClose={() => setOpenFollow(false)}
@@ -207,7 +236,8 @@ function Order() {
 								slotProps={{
 									toolbar: {
 										onChangeDate: setCalendarFilter,
-										onChangeDay: setTabFilter
+										onChangeDay: setTabFilter,
+										onChangeStatus: setStatusFilter
 									}
 								}}
 								loading={isLoading}

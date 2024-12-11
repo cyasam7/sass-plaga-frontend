@@ -1,5 +1,4 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import { Paper, Stack, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridActionsCellItemProps, GridColDef } from '@mui/x-data-grid';
@@ -32,8 +31,6 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 function Users() {
-	const { t } = useTranslation('examplePage');
-
 	const [userId, setUserId] = useState('');
 	const [openSigner, setOpenSigner] = useState(false);
 	const [openPreviewSign, setOpenPreviewSign] = useState(false);

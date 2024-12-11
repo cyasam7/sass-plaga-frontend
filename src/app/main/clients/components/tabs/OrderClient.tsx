@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import ChipOrder from 'app/shared-components/ChipOrder/ChipOrder';
+import ChipOrder from 'src/app/main/orders/components/ChipOrder/ChipOrder';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useQuery } from 'react-query';

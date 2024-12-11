@@ -1,3 +1,5 @@
+import { EStatusOrder } from 'src/app/shared/entities/OrderEntity';
+
 export const statusLabel = {
 	CREATED: 'Creada',
 	ASSIGNED: 'Asignada',
@@ -21,3 +23,12 @@ export const statusColor: Record<string, StatusOrderColors> = {
 	FINISHED: 'success',
 	CANCELED: 'error'
 };
+
+const finalStatus = [EStatusOrder.DONE, EStatusOrder.FINISHED, EStatusOrder.CANCELED];
+export function validateIfOrderIsPending(value: EStatusOrder): boolean {
+	return !finalStatus.includes(value);
+}
+
+export function translateOrderStatus(value: string): string {
+	return statusLabel[value as keyof typeof statusLabel];
+}
