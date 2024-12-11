@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import ChipOrder from 'app/shared-components/ChipOrder/ChipOrder';
+import ChipOrder from 'src/app/main/orders/components/ChipOrder/ChipOrder';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useQuery } from 'react-query';
@@ -21,7 +21,7 @@ function OrderClient(props: IOrderClientProps) {
 	});
 
 	const columns: GridColDef<OrderEntity>[] = [
-		{
+		/* 	{
 			field: 'typeService',
 			headerName: 'Servicio',
 			hideSortIcons: true,
@@ -30,7 +30,7 @@ function OrderClient(props: IOrderClientProps) {
 			valueGetter: (params) => {
 				return params.row.typeService.map((i) => i.name).join(', ');
 			}
-		},
+		}, */
 		{
 			field: 'status',
 			headerName: 'Estatus',

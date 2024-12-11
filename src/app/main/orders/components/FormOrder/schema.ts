@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import dayjs from 'dayjs';
-import { AT_LEAST_ONE_OPTION, FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
 import * as yup from 'yup';
 
 yup.addMethod(yup.object, 'dayjs', function method(message: string) {
@@ -29,9 +29,5 @@ export const createOrderSchema = yup.object({
 		.matches(phoneRegExp, 'Numero de teléfono no valido')
 		.min(10, 'Numero muy corto')
 		.max(10, 'Numero muy largo'),
-	typePlague: yup.array().min(1, AT_LEAST_ONE_OPTION),
-	typeService: yup.array().min(1, AT_LEAST_ONE_OPTION),
-	frequency: yup.array().min(1, AT_LEAST_ONE_OPTION),
-	date: yup.mixed().nonNullable().typeError(FIELD_REQUIRED),
-	recommendations: yup.array()
+	date: yup.mixed().nonNullable().typeError(FIELD_REQUIRED)
 });

@@ -10,5 +10,6 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},
-	"cSpell.language": "en,es"
+	"cSpell.language": "en,es",
+	"cSpell.words": ["Previzualizar"]
 }

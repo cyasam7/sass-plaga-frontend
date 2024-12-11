@@ -1,20 +1,9 @@
+import { Dayjs } from 'dayjs';
+import { EStatusOrder } from 'src/app/shared/entities/OrderEntity';
 import { ETabsPlagues } from '../HeaderTabs/IHeaderTabsProps';
 
-export const CatalogOptionsDay = [
-	{
-		value: ETabsPlagues.ALL,
-		title: 'Todas'
-	},
-	{
-		value: ETabsPlagues.TODAY,
-		title: 'Hoy'
-	},
-	{
-		value: ETabsPlagues.TOMORROW,
-		title: 'Mañana'
-	},
-	{
-		value: ETabsPlagues.PENDING,
-		title: 'Pendientes'
-	}
-];
+export interface IHeaderFiltersProps {
+	onChangeDay?: (value?: ETabsPlagues) => void;
+	onChangeDate?: (value?: Dayjs) => void;
+	onChangeStatus?: (value?: EStatusOrder) => void;
+}

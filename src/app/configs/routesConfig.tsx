@@ -12,16 +12,22 @@ import CompaniesConfig from '../main/companies/CompaniesConfig';
 import OrdersConfig from '../main/orders/OrdersConfig';
 import CatalogsConfig from '../main/catalogs/CatalogsConfig';
 import ContactsAppConfig from '../main/clients/ClientsAppConfig';
+import AppConfigurationsConfig from '../main/app-config/AppConfig-Config';
+import UsersConfig from '../main/users/UsersConfig';
+import forgotPasswordPagesConfig from '../main/forgot-password/forgotPasswordPagesConfig';
 
 const routeConfigs: FuseRouteConfigsType = [
 	SignOutConfig,
 	SignInConfig,
 	SignUpConfig,
+	forgotPasswordPagesConfig,
 	ExampleConfig,
 	CompaniesConfig,
 	OrdersConfig,
 	CatalogsConfig,
-	ContactsAppConfig
+	ContactsAppConfig,
+	AppConfigurationsConfig,
+	UsersConfig
 ];
 
 /**

@@ -9,3 +9,15 @@ export interface IFormArea {
 	name: string;
 	companyId: string;
 }
+
+export interface IFormDevices {
+	rodents: number;
+	crawling: number;
+	flyers: number;
+}
+
+export enum TypeDevice {
+	RODENTS = 'RODENTS',
+	CRAWLING = 'CRAWLING',
+	FLYERS = 'FLYERS'
+}

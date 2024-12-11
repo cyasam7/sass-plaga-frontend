@@ -4,16 +4,11 @@ import dayjs from 'dayjs';
 
 import { DATE_FORMAT, TIME_FORMAT } from 'src/app/shared-constants/dateFormat';
 import { formatCurrency } from 'src/app/shared-constants/formatCurrency';
-import ChipOrder from 'app/shared-components/ChipOrder/ChipOrder';
-import { OrderEntity } from '../../shared/entities/OrderEntity';
+import ChipOrder from 'src/app/main/orders/components/ChipOrder/ChipOrder';
+import { DatagridRowOrder } from '../../shared/entities/OrderEntity';
+import { statusLabel } from './utils';
 
-const statusLabel = {
-	REALIZED: 'Realizada',
-	NO_REALIZED: 'No Realizada',
-	CANCELLED: 'Cancelada'
-};
-
-export const columnsOrders: GridColDef<OrderEntity>[] = [
+export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 	{
 		headerName: 'CLIENTE',
 		field: 'client',
@@ -22,7 +17,6 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		minWidth: 300,
 		align: 'left',
 		disableColumnMenu: true,
-		valueGetter: ({ row }) => `${row.client.name}. Tel. (${row.client.phone}) | ${row.client.address}`,
 		renderCell: ({ row }) => {
 			return (
 				<Stack>
@@ -33,24 +27,20 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		}
 	},
 	{
-		headerName: 'INICIAL',
-		field: 'type',
+		headerName: 'ESTATUS',
+		field: 'status',
 		sortable: false,
 		flex: 1,
-		minWidth: 150,
+		minWidth: 140,
 		align: 'left',
 		disableColumnMenu: true,
-		valueGetter: ({ row }) => (!row.isFollowUp ? 'INICIAL' : 'SEGUIMIENTO'),
-		renderCell({ row, value }) {
-			const condition = !row.isFollowUp;
-			return (
-				<Chip
-					color={condition ? 'info' : 'secondary'}
-					label={value as string}
-				/>
-			);
+		valueGetter: ({ row }) => statusLabel[row.status],
+		renderCell({ row }) {
+			const { status } = row;
+			return <ChipOrder status={status} />;
 		}
 	},
+
 	{
 		headerName: 'FECHA DE SERVICIO',
 		headerAlign: 'left',
@@ -84,17 +74,36 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		}
 	},
 	{
-		headerName: 'ESTATUS',
-		field: 'status',
+		headerName: 'INICIAL',
+		field: 'type',
 		sortable: false,
 		flex: 1,
 		minWidth: 150,
 		align: 'left',
 		disableColumnMenu: true,
-		valueGetter: ({ row }) => statusLabel[row.status],
-		renderCell({ row }) {
-			const { status } = row;
-			return <ChipOrder status={status} />;
+		valueGetter: ({ row }) => (!row.isFollowUp ? 'INICIAL' : 'SEGUIMIENTO'),
+		renderCell({ row, value }) {
+			const condition = !row.isFollowUp;
+			return (
+				<Chip
+					color={condition ? 'info' : 'secondary'}
+					label={value as string}
+				/>
+			);
+		}
+	},
+	{
+		headerName: 'ASIGNADA',
+		field: 'assignedName',
+		sortable: false,
+		align: 'left',
+		headerAlign: 'left',
+		flex: 0.5,
+		hideSortIcons: true,
+		minWidth: 200,
+		disableColumnMenu: true,
+		valueGetter({ value }) {
+			return (value || 'Sin asignar') as string;
 		}
 	},
 	{
@@ -105,7 +114,7 @@ export const columnsOrders: GridColDef<OrderEntity>[] = [
 		headerAlign: 'right',
 		flex: 0.5,
 		hideSortIcons: true,
-		minWidth: 200,
+		minWidth: 150,
 		disableColumnMenu: true,
 		valueFormatter({ value }) {
 			return `$${formatCurrency(String(value))}`;

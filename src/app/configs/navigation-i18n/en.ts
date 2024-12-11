@@ -4,7 +4,12 @@ const locale = {
 	COMPANIES: 'Companies',
 	ORDERS: 'Orders',
 	CLIENTS: 'Clients',
-	CATALOGS: 'Catalogs'
+	CATALOGS: 'Catalogs',
+	REPORTS: 'Reports',
+	CONFIGURATION: 'Configuraciones',
+	WHATS_APP: 'Whats App',
+	MODULES: 'Modulos',
+	USERS: 'Usuarios'
 };
 
 export default locale;

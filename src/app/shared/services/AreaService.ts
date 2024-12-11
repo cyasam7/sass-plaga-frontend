@@ -1,23 +1,32 @@
-import axios from 'axios';
 import { AreaEntity } from '../entities/AreaEntity';
 import { IFormArea } from '../../main/companies/types';
+import { AxiosFetcher } from '../fetcher';
 
 export class AreaService {
 	static async getByCompany(id: string): Promise<AreaEntity[]> {
-		const { data } = await axios.get<AreaEntity[]>(`/area?companyId=${id}`);
-		return data;
+		return AxiosFetcher<AreaEntity[]>({ url: `/area?companyId=${id}` });
 	}
 
 	static async save(data: IFormArea): Promise<void> {
-		await axios.put(`/area`, data);
+		await AxiosFetcher({
+			url: `/area`,
+			method: 'PUT',
+			data
+		});
 	}
 
 	static async getById(id: string): Promise<AreaEntity> {
-		const { data } = await axios.get<AreaEntity>(`/area/${id}`);
-		return data;
+		const area = await AxiosFetcher<AreaEntity>({
+			url: `/area/${id}`,
+			method: 'GET'
+		});
+		return area;
 	}
 
 	static async deleteArea(id: string): Promise<void> {
-		await axios.delete(`/area/${id}`);
+		await AxiosFetcher({
+			url: `/area/${id}`,
+			method: 'DELETE'
+		});
 	}
 }

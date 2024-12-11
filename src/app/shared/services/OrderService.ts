@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { EStatusOrder, OrderEntity } from '../entities/OrderEntity';
+import { DatagridRowOrder, EStatusOrder, OrderEntity } from '../entities/OrderEntity';
+import { AxiosFetcher } from '../fetcher';
 
 export interface IQueryOrder {
 	clientId?: string;
@@ -31,6 +32,30 @@ export class OrderService {
 	}
 
 	static async updateStatus(id: string, status: EStatusOrder): Promise<void> {
-		await axios.patch<OrderEntity>(`/order/${id}`, { status });
+		await AxiosFetcher({
+			url: `/order/status/${id}`,
+			method: 'PATCH',
+			data: {
+				status
+			}
+		});
+	}
+
+	static async updateOrderAssigned(data: { orderId: string; userId: string }): Promise<void> {
+		await AxiosFetcher({
+			url: `/order/assign-user/${data.orderId}`,
+			method: 'PATCH',
+			data: {
+				userId: data.userId
+			}
+		});
+	}
+
+	static async getDatagridOrders(): Promise<DatagridRowOrder[]> {
+		const data = await AxiosFetcher<DatagridRowOrder[]>({
+			url: `/order/datagrid`,
+			method: 'GET'
+		});
+		return data;
 	}
 }

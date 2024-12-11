@@ -11,10 +11,6 @@ export interface IFormOrderProps {
 		clientNameField?: boolean;
 		clientPhoneField?: boolean;
 		clientAddressField?: boolean;
-		typePlagueField?: boolean;
-		typeServiceField?: boolean;
-		frequencyField?: boolean;
-		recommendationsField?: boolean;
 	};
 }
 
@@ -26,8 +22,4 @@ export interface IFormCreatePest {
 	clientPhone: string;
 	clientAddress: string;
 	clientId: string;
-	typePlague: string[];
-	typeService: string[];
-	frequency: string[];
-	recommendations: string[];
 }

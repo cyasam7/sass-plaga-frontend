@@ -5,9 +5,5 @@ export const defaultValuesOrder = {
 	clientPhone: '',
 	price: '',
 	date: null,
-	frequency: [],
-	observations: '',
-	recommendations: [],
-	typePlague: [],
-	typeService: []
+	observations: ''
 };

@@ -1,6 +1,8 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { useWebSocket } from 'src/app/shared-hooks/useWebSocket';
 import { Button } from '@mui/material';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
@@ -18,8 +20,30 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function Example() {
 	const { t } = useTranslation('examplePage');
 
-	async function handleSubmit(): Promise<void> {}
+	const [qr, setQr] = useState<string>('');
+	const [Loading, setLoading] = useState(true);
+	const socket = useWebSocket();
 
+	useEffect(() => {
+		if (!socket) return;
+		socket.emit('qr-whats-app');
+
+		socket.on('qr-response-base64', (user) => {
+			setLoading(false);
+		});
+		socket.on('qr-response-user-info', (base64: string) => {
+			setQr(base64);
+			setLoading(false);
+		});
+	}, [socket]);
+
+	function getQR(): void {
+		if (!socket) return;
+
+		socket.emit('get-qr-wp', (data: string) => {
+			setQr(data);
+		});
+	}
 	return (
 		<Root
 			header={
@@ -32,7 +56,13 @@ function Example() {
 					<h4>Content</h4>
 					<br />
 					<p>hla</p>
-					<Button onClick={handleSubmit}>Peticion</Button>
+					<Button onClick={getQR}>Get Base</Button>
+					<img
+						src={qr}
+						alt=""
+						width={400}
+						height={400}
+					/>
 				</div>
 			}
 		/>
