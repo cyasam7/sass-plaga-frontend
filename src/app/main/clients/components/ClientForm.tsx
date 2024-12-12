@@ -180,7 +180,6 @@ function ClientForm() {
 										value={field.value}
 										onChange={field.onChange}
 										variant="standard"
-										onErrorChange={() => {}}
 									/>
 								)}
 							/>

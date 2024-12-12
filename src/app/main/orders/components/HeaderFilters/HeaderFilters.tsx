@@ -4,8 +4,7 @@ import React from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { TabContext, TabList } from '@mui/lab';
 import { EStatusOrder } from 'src/app/shared/entities/OrderEntity';
-import { IHeaderFiltersProps } from './HeaderFilterProps';
-import { ETabsPlagues } from '../HeaderTabs/IHeaderTabsProps';
+import { ETabsPlagues, IHeaderFiltersProps } from './HeaderFilterProps';
 import { translateOrderStatus } from '../../utils';
 
 function HeaderFilters(props: IHeaderFiltersProps) {

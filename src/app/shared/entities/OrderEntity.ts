@@ -11,16 +11,6 @@ export enum EStatusOrder {
 	CANCELED = 'CANCELED'
 }
 
-export enum EInfestationLevel {
-	LOW = 'LOW',
-	MODERATE = 'MODERATE',
-	HIGH = 'HIGH'
-}
-export enum EAreaToTreat {
-	INTERIOR = 'INTERIOR',
-	EXTERIOR = 'EXTERIOR'
-}
-
 export enum EClientType {
 	ORGANIZATIONAL,
 	GENERAL_PUBLIC
@@ -32,27 +22,6 @@ export interface ClientEntity {
 	address: string;
 	phone: string;
 	typeClient: EClientType;
-}
-
-export interface TypePlagueEntity {
-	id: string;
-	name: string;
-}
-
-export interface FrequencyEntity {
-	id: string;
-	name: string;
-}
-
-export interface RecommendationEntity {
-	id: string;
-	name: string;
-}
-
-export interface TypeServiceEntity {
-	id: string;
-	name: string;
-	price?: number;
 }
 
 export interface OrderEntity {

@@ -1,11 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import {
-	ClientEntity,
-	FrequencyEntity,
-	RecommendationEntity,
-	TypePlagueEntity,
-	TypeServiceEntity
-} from '../entities/OrderEntity';
+import { ClientEntity } from '../entities/OrderEntity';
+import { ECatalogType } from '../entities/CatalogEntities';
+import { AxiosFetcher } from '../fetcher';
 
 interface IQueryClient {
 	phone?: string;
@@ -25,23 +21,37 @@ export class CatalogService {
 		}
 	}
 
-	static async getFrequency(): Promise<FrequencyEntity[]> {
-		const { data } = await axios.get<FrequencyEntity[]>('frequency');
+	static async getCatalogType<T>(catalogType: ECatalogType): Promise<T[]> {
+		const data = await AxiosFetcher<T[]>({
+			url: '/catalogs',
+			method: 'GET',
+			params: {
+				catalogType
+			}
+		});
 		return data;
 	}
 
-	static async getRecommendations(): Promise<RecommendationEntity[]> {
-		const { data } = await axios.get<RecommendationEntity[]>('recommendation');
-		return data;
+	static async getCatalogTypeById<T>(data: { id: string; catalogType: ECatalogType }): Promise<T> {
+		const { catalogType, id } = data;
+		return AxiosFetcher<T>({
+			url: `/catalogs/${id}`,
+			method: 'GET',
+			params: {
+				catalogType
+			}
+		});
 	}
 
-	static async getTypePlage(): Promise<TypePlagueEntity[]> {
-		const { data } = await axios.get<TypePlagueEntity[]>('typePlague');
-		return data;
-	}
-
-	static async getTypeService(): Promise<TypeServiceEntity[]> {
-		const { data } = await axios.get<TypeServiceEntity[]>('typeService');
-		return data;
+	static async save(data: { type: ECatalogType; data: unknown }): Promise<void> {
+		const { data: body, type } = data;
+		await AxiosFetcher({
+			url: '/catalogs',
+			method: 'PUT',
+			data: body,
+			params: {
+				catalogType: type
+			}
+		});
 	}
 }

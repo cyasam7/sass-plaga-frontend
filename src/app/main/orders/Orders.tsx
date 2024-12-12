@@ -12,7 +12,6 @@ import { styled } from '@mui/material/styles';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { columnsOrders } from './columns';
 import { OrderService } from '../../shared/services/OrderService';
-import { ETabsPlagues } from './components/HeaderTabs/IHeaderTabsProps';
 import { DatagridRowOrder, EStatusOrder } from '../../shared/entities/OrderEntity';
 import OrderDialog from './components/OrderDialog/OrderDialog';
 import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog';
@@ -21,6 +20,7 @@ import OrderFollowUpDialog from './components/OrderFollowUpDialog/OrderFollowUpD
 import HeaderFilters from './components/HeaderFilters/HeaderFilters';
 import { validateIfOrderIsPending } from './utils';
 import AssignOrderDialog from './components/AssignOrderDialog/AssignOrderDialog';
+import { ETabsPlagues } from './components/HeaderFilters/HeaderFilterProps';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {

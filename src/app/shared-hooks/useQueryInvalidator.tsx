@@ -7,8 +7,10 @@ interface UseQueryInvalidator {
 const useQueryInvalidator = (): UseQueryInvalidator => {
 	const queryClient = useQueryClient();
 
-	function invalidate(value: string | string[]): void {
-		queryClient.invalidateQueries(value);
+	function invalidate(value?: string | string[]): void {
+		if (value) {
+			queryClient.invalidateQueries(value);
+		}
 	}
 
 	return { invalidate };
