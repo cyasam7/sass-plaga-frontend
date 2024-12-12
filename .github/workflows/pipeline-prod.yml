@@ -22,18 +22,9 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
 
-            - name: Install yarn
-              run: npm i -g yarn
-
-            - name: Caching yarn
-              uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: yarn
-
             - name: Build
               run: |
-                  yarn install
-                  yarn build
+                  npm ci
+                  npm run build
                   rm -rf /home/cyasam7/frontend/*
                   cp -r build/* /home/cyasam7/frontend
