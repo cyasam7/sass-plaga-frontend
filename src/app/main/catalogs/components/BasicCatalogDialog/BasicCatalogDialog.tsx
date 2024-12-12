@@ -29,7 +29,7 @@ function BasicCatalogDialog(props: IBasicCatalogDialog) {
 
 	useEffect(() => {
 		if (data) {
-			formHandler.reset({ name: data.name as string });
+			formHandler.reset({ name: (data as { name: string }).name ?? '' });
 		}
 		return () => {
 			formHandler.reset({ name: '' });
