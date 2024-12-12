@@ -2,7 +2,6 @@ import { Divider, FormHelperText, Grid, InputAdornment, TextField, Typography } 
 import { Controller } from 'react-hook-form';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import React from 'react';
 import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter/NumericFormatAdapter';
 import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
 import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';

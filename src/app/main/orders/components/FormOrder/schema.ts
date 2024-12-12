@@ -1,33 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import dayjs from 'dayjs';
-import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import { FIELD_PHONE_ERROR_MESSAGE, FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import { yupPhoneProperty } from 'src/app/shared-constants/yupPhone';
 import * as yup from 'yup';
 
-yup.addMethod(yup.object, 'dayjs', function method(message: string) {
-	return this.test('dayjs', message, function validate(value) {
-		if (!value) {
-			return true;
-		}
-		return dayjs.isDayjs(value);
-	});
-});
-
-const phoneRegExp =
-	/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-export const createOrderSchema = yup.object({
+export const createOrderSchema = yup.object().shape({
 	price: yup.string().min(1, 'Valor mínimo de 1 peso').required(FIELD_REQUIRED),
 	observations: yup.string(),
 	clientId: yup.string(),
 	clientAddress: yup.string().required(FIELD_REQUIRED),
 	clientName: yup.string().required(FIELD_REQUIRED),
-	clientPhone: yup
-		.string()
-		.required(FIELD_REQUIRED)
-		.matches(phoneRegExp, 'Numero de teléfono no valido')
-		.min(10, 'Numero muy corto')
-		.max(10, 'Numero muy largo'),
+	clientPhone: yupPhoneProperty(FIELD_PHONE_ERROR_MESSAGE),
 	date: yup.mixed().nonNullable().typeError(FIELD_REQUIRED)
 });

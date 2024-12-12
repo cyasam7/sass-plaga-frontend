@@ -1,3 +1,5 @@
+import * as yup from 'yup';
+
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
@@ -5,7 +7,13 @@ const phoneUtil = PhoneNumberUtil.getInstance();
 export const isPhoneValid = (phone: string) => {
 	try {
 		return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
-	} catch {
+	} catch (e) {
 		return false;
 	}
 };
+
+export function yupPhoneProperty(errorMessage: string) {
+	return yup.string().test('phone', errorMessage, (value) => {
+		return isPhoneValid(value);
+	});
+}
