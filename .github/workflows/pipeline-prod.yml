@@ -24,7 +24,7 @@ jobs:
 
             - name: Build
               run: |
-                  npm ci
+                  npm i
                   npm run build
                   rm -rf /home/cyasam7/frontend/*
                   cp -r build/* /home/cyasam7/frontend
