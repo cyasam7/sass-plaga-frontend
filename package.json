@@ -209,5 +209,8 @@
 			"last 1 firefox version",
 			"last 3 safari version"
 		]
+	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "*"
 	}
 }
