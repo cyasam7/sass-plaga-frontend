@@ -5,7 +5,9 @@ export enum ECatalogType {
 	INSECTICIDE = 'INSECTICIDE'
 }
 
-export type CatalogType = ITypeService | IApplicationType | ITypePlague | IInsecticide;
+export type CatalogType = (ITypeService | IApplicationType | ITypePlague | IInsecticide) & {
+	type: ECatalogType;
+};
 
 export const enum EInfestationLevel {
 	LOW = 'LOW',

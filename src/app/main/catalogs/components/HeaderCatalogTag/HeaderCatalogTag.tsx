@@ -42,7 +42,7 @@ function HeaderCatalogTag(props: IHeaderCatalogTagProps) {
 						color="primary"
 						onClick={onClickOpenModal}
 					>
-						Abrir modal
+						{`CREAR ${translateCatalogs(value as ECatalogType)}`}
 					</Button>
 				</Stack>
 			</Tabs>

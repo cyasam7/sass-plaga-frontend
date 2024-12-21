@@ -1,3 +1,4 @@
+import { ClientEntity } from './ClientsEntities';
 import { IUserEntity } from './UserEntity';
 
 export enum EStatusOrder {
@@ -9,19 +10,6 @@ export enum EStatusOrder {
 	DONE = 'DONE',
 	FINISHED = 'FINISHED',
 	CANCELED = 'CANCELED'
-}
-
-export enum EClientType {
-	ORGANIZATIONAL,
-	GENERAL_PUBLIC
-}
-
-export interface ClientEntity {
-	id: string;
-	name: string;
-	address: string;
-	phone: string;
-	typeClient: EClientType;
 }
 
 export interface OrderEntity {

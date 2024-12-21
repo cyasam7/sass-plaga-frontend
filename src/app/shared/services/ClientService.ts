@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ClientEntity } from '../entities/OrderEntity';
+import { ClientEntity } from '../entities/ClientsEntities';
 
 export interface ISaveClient {
 	id: string | null;

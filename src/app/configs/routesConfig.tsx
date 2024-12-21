@@ -37,7 +37,7 @@ const routes: FuseRoutesType = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
 	{
 		path: '/',
-		element: <Navigate to="/example" />,
+		element: <Navigate to="/users" />,
 		auth: settingsConfig.defaultAuth
 	},
 	{

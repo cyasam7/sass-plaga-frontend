@@ -24,7 +24,7 @@ function BasicCatalogDialog(props: IBasicCatalogDialog) {
 	const { data } = useQuery({
 		queryKey: ['BasicCatalogDialog', type, id],
 		queryFn: () => CatalogService.getCatalogTypeById<CatalogType>({ catalogType: type, id }),
-		enabled: !!id && !!type
+		enabled: !!id && !!type && open
 	});
 
 	useEffect(() => {
@@ -53,7 +53,6 @@ function BasicCatalogDialog(props: IBasicCatalogDialog) {
 
 	function handleClose(): void {
 		onClose();
-		formHandler.reset({ name: '' });
 	}
 
 	return (

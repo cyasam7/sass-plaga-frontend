@@ -9,16 +9,22 @@ import { useSelector } from 'react-redux';
 import { selectMainTheme } from '@fuse/core/FuseSettings/store/fuseSettingsSlice';
 import { Controller, useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { Grid, TextField } from '@mui/material';
+import { Grid, MenuItem, TextField } from '@mui/material';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { ClientService, ISaveClient } from 'src/app/shared/services/ClientService';
-import { PhoneInput } from 'app/shared-components/Form/PhoneInput/PhoneInput';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
+import { EClientType } from 'src/app/shared/entities/ClientsEntities';
+import { yupResolver } from '@hookform/resolvers/yup';
+import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';
+import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
+import { translateClientType } from '../utils';
+import { clientFormSchema } from './yupSchema';
 
 interface IClientForm {
 	name: string;
 	address: string;
 	phone: string;
+	typeClient: EClientType;
 }
 
 /**
@@ -27,6 +33,7 @@ interface IClientForm {
 function ClientForm() {
 	const routeParams = useParams();
 	const theme = useSelector(selectMainTheme);
+	const navigate = useNavigate();
 
 	const { id: clientId } = routeParams as { id: string };
 	const isUpdating = clientId !== 'new';
@@ -41,15 +48,23 @@ function ClientForm() {
 		enabled: isUpdating
 	});
 
-	const formHandler = useForm<IClientForm>();
-	const navigate = useNavigate();
+	const formHandler = useForm<IClientForm>({
+		resolver: yupResolver(clientFormSchema),
+		defaultValues: {
+			address: '',
+			name: '',
+			phone: '',
+			typeClient: EClientType.GENERAL_PUBLIC
+		}
+	});
 
 	useEffect(() => {
 		if (isUpdating && client) {
 			formHandler.reset({
 				address: client.address,
 				name: client.name,
-				phone: client.phone
+				phone: client.phone,
+				typeClient: client.typeClient
 			});
 		}
 	}, [client, isUpdating]);
@@ -153,7 +168,7 @@ function ClientForm() {
 								render={({ field, fieldState }) => (
 									<TextField
 										{...field}
-										variant="standard"
+										variant="outlined"
 										fullWidth
 										label="Nombre"
 										error={!!fieldState.error}
@@ -166,23 +181,36 @@ function ClientForm() {
 							item
 							xs={12}
 							md={6}
-						/>
+						>
+							<PhoneInputForm
+								name="phone"
+								control={formHandler.control}
+								variant="outlined"
+								label="Teléfono"
+								fullWidth
+								required
+							/>
+						</Grid>
+
 						<Grid
 							item
 							xs={12}
-							md={6}
 						>
-							<Controller
+							<TextFieldForm<IClientForm>
 								control={formHandler.control}
-								name="phone"
-								render={({ field, fieldState }) => (
-									<PhoneInput
-										value={field.value}
-										onChange={field.onChange}
-										variant="standard"
-									/>
-								)}
-							/>
+								label="Tipo de cliente"
+								variant="outlined"
+								name="typeClient"
+								fullWidth
+								select
+							>
+								<MenuItem value={EClientType.GENERAL_PUBLIC}>
+									{translateClientType(EClientType.GENERAL_PUBLIC)}
+								</MenuItem>
+								<MenuItem value={EClientType.ORGANIZATIONAL}>
+									{translateClientType(EClientType.ORGANIZATIONAL)}
+								</MenuItem>
+							</TextFieldForm>
 						</Grid>
 						<Grid
 							item
@@ -194,7 +222,7 @@ function ClientForm() {
 								render={({ field, fieldState }) => (
 									<TextField
 										{...field}
-										variant="standard"
+										variant="outlined"
 										fullWidth
 										label="Dirección"
 										multiline

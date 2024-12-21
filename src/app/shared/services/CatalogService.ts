@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import { ClientEntity } from '../entities/OrderEntity';
 import { ECatalogType } from '../entities/CatalogEntities';
 import { AxiosFetcher } from '../fetcher';
+import { ClientEntity } from '../entities/ClientsEntities';
 
 interface IQueryClient {
 	phone?: string;
@@ -37,6 +37,17 @@ export class CatalogService {
 		return AxiosFetcher<T>({
 			url: `/catalogs/${id}`,
 			method: 'GET',
+			params: {
+				catalogType
+			}
+		});
+	}
+
+	static async deleteCatalogTypeById<T>(data: { id: string; catalogType: ECatalogType }): Promise<T> {
+		const { catalogType, id } = data;
+		return AxiosFetcher<T>({
+			url: `/catalogs/${id}`,
+			method: 'DELETE',
 			params: {
 				catalogType
 			}

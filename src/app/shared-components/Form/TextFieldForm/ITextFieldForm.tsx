@@ -1,9 +1,9 @@
 // ReusableTextField.tsx
 import { TextFieldProps } from '@mui/material';
-import { Control } from 'react-hook-form';
+import { Control, Path } from 'react-hook-form';
 
-export type ITextFieldFormProps = {
-	name: string;
-	control: Control<any>;
+export type ITextFieldFormProps<T> = {
+	name: Path<T>;
+	control: Control<T>;
 	label: string;
 } & TextFieldProps;
