@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import FuseLoading from '@fuse/core/FuseLoading';
+import { ClientEntity } from 'src/app/shared/entities/ClientsEntities';
 import ContactListItem from './ClientListItem';
-import { ClientEntity } from '../../shared/entities/OrderEntity';
 
 interface IClientsListProps {
 	clients: ClientEntity[];

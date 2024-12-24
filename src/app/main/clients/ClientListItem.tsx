@@ -5,7 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
 import ListItemButton from '@mui/material/ListItemButton';
-import { ClientEntity } from '../../shared/entities/OrderEntity';
+import { ClientEntity } from 'src/app/shared/entities/ClientsEntities';
 
 interface IContactListItemProps {
 	client: ClientEntity;
