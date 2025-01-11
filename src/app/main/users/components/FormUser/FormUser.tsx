@@ -12,8 +12,10 @@ import { ROLE_CATALOG } from './constant';
 
 function FormUser(props: IFormUserProps) {
 	const { hook } = props;
+
 	const role = useSelector(selectUserRole);
 	const user = useSelector(selectUser);
+
 	const { data: tenants = [] } = useQuery({
 		queryFn: () => TenantService.getByUserId(user.uid),
 		queryKey: [user.uid],
@@ -111,6 +113,37 @@ function FormUser(props: IFormUserProps) {
 						</MenuItem>
 					))}
 				</TextFieldForm>
+			</Grid>
+			<Grid
+				item
+				xs={12}
+				pt={3}
+			/>
+			<Grid
+				item
+				xs={12}
+				md={6}
+			>
+				<TextFieldForm
+					name="password"
+					type="password"
+					control={hook.control}
+					label="Contraseña"
+					fullWidth
+				/>
+			</Grid>
+			<Grid
+				item
+				xs={12}
+				md={6}
+			>
+				<TextFieldForm
+					name="confirmPassword"
+					type="password"
+					control={hook.control}
+					label="Confirmar contraseña"
+					fullWidth
+				/>
 			</Grid>
 		</Grid>
 	);

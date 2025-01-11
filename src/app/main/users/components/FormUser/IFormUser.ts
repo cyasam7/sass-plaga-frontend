@@ -6,6 +6,8 @@ export interface IFormUser {
 	phone: string;
 	roleId: string;
 	tenantId: string;
+	password: string;
+	confirmPassword: string;
 }
 
 export interface IFormUserProps {

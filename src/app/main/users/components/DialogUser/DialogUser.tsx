@@ -45,6 +45,13 @@ function DialogUser(props: IDialogUserProps) {
 
 	async function handleSubmit(values: IFormUser): Promise<void> {
 		try {
+			if (values.password !== values.confirmPassword) {
+				formHandler.setError('confirmPassword', {
+					message: 'Las contraseñas no coinciden'
+				});
+				return;
+			}
+
 			await UserService.save({
 				id: userId,
 				email: values.email,
@@ -52,7 +59,7 @@ function DialogUser(props: IDialogUserProps) {
 				phone: values.phone,
 				roleCode: values.roleId,
 				tenantId: values.tenantId,
-				password: ''
+				password: values.password
 			});
 			invalidate('users-registered');
 			invalidate([userId]);
@@ -73,7 +80,7 @@ function DialogUser(props: IDialogUserProps) {
 	}
 
 	function handleClose(): void {
-		formHandler.reset();
+		formHandler.reset(defaultValuesFormUser);
 		onClose();
 	}
 

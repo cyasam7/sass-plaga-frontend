@@ -4,7 +4,7 @@ function toTemplateRole(params: string): string {
 	const map = {
 		RL000: 'admin',
 		RL001: 'staff',
-		RL002: 'user'
+		RL002: 'fumigador'
 	};
 
 	return map[params] as string;

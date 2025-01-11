@@ -3,5 +3,7 @@ export const defaultValuesFormUser = {
 	email: '',
 	phone: '',
 	roleId: '',
-	tenantId: ''
+	tenantId: '',
+	password: '',
+	confirmPassword: ''
 };
