@@ -120,8 +120,8 @@ function Catalogs() {
 					<Paper className="p-24 w-full">
 						<Stack sx={{ height: 'calc(100vh - 240px)' }}>
 							<BasicCatalogDialog
-								type={catalog}
 								id={catalogId}
+								type={catalog}
 								open={isOpenDialogCatalogBasic}
 								onClose={() => {
 									setIsOpenDialogCatalogBasic(false);

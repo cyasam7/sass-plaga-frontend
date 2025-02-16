@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { DatagridRowOrder, EStatusOrder, OrderEntity } from '../entities/OrderEntity';
 import { AxiosFetcher } from '../fetcher';
+import { ResponseId } from '../entities/UserEntity';
 
 export interface IQueryOrder {
 	clientId?: string;
@@ -14,8 +15,9 @@ export class OrderService {
 		return data;
 	}
 
-	static async createOrder(data: any): Promise<void> {
-		await axios.post('/order', data);
+	static async createOrder(data: any): Promise<ResponseId> {
+		const { data: resp } = await axios.post<ResponseId>('/order', data);
+		return resp;
 	}
 
 	static async createFollowingOrder(data: { id: string; observations: string; date: Date }): Promise<void> {

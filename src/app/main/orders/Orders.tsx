@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import { Button, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import dayjs, { Dayjs } from 'dayjs';
 import MoveUpIcon from '@mui/icons-material/MoveUp';
@@ -43,6 +42,7 @@ function Order() {
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
 	const [openAssign, setOpenAssign] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
+	const [shouldOpenDialogAssign, setShouldOpenDialogAssign] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
 
 	const {
@@ -65,6 +65,7 @@ function Order() {
 			disableColumnMenu: true,
 			getActions: (params) => {
 				const { status, assignedId } = params.row;
+
 				return [
 					<GridActionsCellItem
 						key={0}
@@ -75,7 +76,7 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpen(true);
 						}}
-						/* disabled={status === EStatusOrder.} */
+						disabled={[EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
 					/>,
 					<GridActionsCellItem
 						key={1}
@@ -86,9 +87,9 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpenAssign(true);
 						}}
-						/* disabled={status === EStatusOrder.REALIZED} */
+						disabled={[EStatusOrder.DONE, EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
 					/>,
-					<GridActionsCellItem
+					/* <GridActionsCellItem
 						key={2}
 						label="CAMBIAR ESTATUS"
 						icon={<AutorenewIcon />}
@@ -97,8 +98,9 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpenStatus(true);
 						}}
-						/* disabled={status === EStatusOrder.REALIZED} */
+						disabled={status === EStatusOrder.REALIZED} 
 					/>,
+					*/
 					<GridActionsCellItem
 						key={3}
 						label="CREAR SEGUIMIENTO"
@@ -178,7 +180,10 @@ function Order() {
 						<Button
 							color="primary"
 							variant="contained"
-							onClick={() => setOpen(true)}
+							onClick={() => {
+								setOpen(true);
+								setShouldOpenDialogAssign(true);
+							}}
 						>
 							Nuevo
 						</Button>
@@ -187,6 +192,7 @@ function Order() {
 			}
 			content={
 				<div className="p-24 w-full">
+					{/* TODO: PENDIENTE <DialogReport /> */}
 					<OrderDialog
 						open={open}
 						id={orderId}
@@ -194,8 +200,14 @@ function Order() {
 							setOpen(false);
 							setOrderId('');
 						}}
-						onSubmit={async () => {
+						shouldOpenDialogAssign={shouldOpenDialogAssign}
+						onSubmit={async (orderId, shouldOpenDialogAssign) => {
 							await refetch();
+							if (shouldOpenDialogAssign) {
+								setOrderId(orderId);
+								setOpenAssign(true);
+							}
+							setShouldOpenDialogAssign(false);
 						}}
 					/>
 					<AssignOrderDialog

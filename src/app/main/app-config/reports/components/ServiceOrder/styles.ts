@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
 		paddingTop: 16
 	},
 	signatureBox: {
-		height: 40,
+		height: 100,
 		borderWidth: 1,
 		borderColor: '#d1d5db',
 		borderRadius: 8

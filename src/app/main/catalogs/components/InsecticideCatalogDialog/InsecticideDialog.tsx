@@ -1,4 +1,4 @@
-import { Button, Stack } from '@mui/material';
+import { Button, Divider, IconButton, Paper, Stack, Typography } from '@mui/material';
 import DialogSkeleton from 'app/shared-components/DialogSkeleton/DialogSkeleton';
 import HeaderDialog from 'app/shared-components/DialogSkeleton/HeaderDialog/HeaderDialog';
 import { useEffect } from 'react';
@@ -10,6 +10,7 @@ import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Delete } from '@mui/icons-material';
 import { translateCatalogs } from '../HeaderCatalogTag/utils';
 import {
 	defaultValuesInsecticideForm,
@@ -80,6 +81,12 @@ function InsecticideCatalogDialog(props: IInsecticideCatalogDialog) {
 		}
 	}
 
+	function handleRemoveDose(text: string): void {
+		const doses = formHandler.getValues('doses');
+		const newDoses = doses.filter((i) => i !== text);
+		formHandler.setValue('doses', newDoses);
+	}
+
 	return (
 		<DialogSkeleton
 			open={open}
@@ -107,6 +114,8 @@ function InsecticideCatalogDialog(props: IInsecticideCatalogDialog) {
 						label="Compuesto químico"
 						variant="outlined"
 					/>
+					<Divider />
+					<Typography variant="subtitle1">Dosis</Typography>
 					<Stack
 						width="100%"
 						direction="row"
@@ -120,13 +129,42 @@ function InsecticideCatalogDialog(props: IInsecticideCatalogDialog) {
 							label="Dosis"
 							variant="outlined"
 						/>
-						<Button onClick={handleAddDose}>Agregar dosis</Button>
+						<Stack>
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={handleAddDose}
+							>
+								Agregar
+							</Button>
+						</Stack>
 					</Stack>
-					<ul>
+					<Stack
+						padding={2}
+						spacing={1}
+					>
 						{formHandler.watch('doses').map((i, index) => (
-							<li key={index}>{i}</li>
+							<Paper>
+								<Stack
+									padding={1}
+									paddingX={2}
+									flexDirection="row"
+									justifyContent="space-between"
+									alignItems="center"
+								>
+									<Typography
+										variant="subtitle2"
+										key={index}
+									>{`${index + 1}.- ${i}`}</Typography>
+									<Stack>
+										<IconButton onClick={() => handleRemoveDose(i)}>
+											<Delete />
+										</IconButton>
+									</Stack>
+								</Stack>
+							</Paper>
 						))}
-					</ul>
+					</Stack>
 				</Stack>
 			}
 			maxWidth="sm"

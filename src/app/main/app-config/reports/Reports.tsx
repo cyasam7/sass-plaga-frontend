@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { BlobProvider } from '@react-pdf/renderer';
 import { DocumentCanvasProvider } from './hooks/useDocumentCanvas';
 import FormReport from './components/FormReport/FormReport';
-import { ServiceOrderV2 } from './components/ServiceOrderV2/ServiceOrderV2';
+import Certificate from './components/Cert/Cert';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -24,7 +24,23 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 function Reports() {
 	const [companyName, setCompanyName] = useState('Vex Company');
-
+	const report = {
+		amountPaid: '10000',
+		clientAddress: 'Rcda. Ramírez, Zona Centro, 34000 Durango, Dgo., México',
+		clientName: 'Alexander Serrano',
+		clientPhone: '+526183240572',
+		companyAddress: 'Ramirez ',
+		companyName: 'jajaja',
+		date: '2024-12-15',
+		daysFollowUp: '0',
+		includeCertificate: true,
+		observations: 'dsadsadsa',
+		scheduleFollowUp: true,
+		servicePrice: '10000',
+		residualAmount: '0',
+		services: ['1a5e0c45-09ca-4422-b5f0-4f26b0325ea7'],
+		totalPrice: '10000'
+	};
 	return (
 		<DocumentCanvasProvider>
 			<DndProvider backend={HTML5Backend}>
@@ -53,7 +69,7 @@ function Reports() {
 									item
 									md={12}
 								>
-									<BlobProvider document={<ServiceOrderV2 />}>
+									<BlobProvider document={<Certificate />}>
 										{({ blob, url, loading, error }) => {
 											if (loading) {
 												return <div>Loading document...</div>;

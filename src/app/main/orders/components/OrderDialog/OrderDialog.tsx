@@ -17,7 +17,7 @@ import { defaultValuesOrder } from '../FormOrder/defaultValues';
 import { Transition } from './transition';
 
 function OrderDialog(props: OrderDialogProps) {
-	const { onCancel, onSubmit, open, id } = props;
+	const { onCancel, onSubmit, open, id, shouldOpenDialogAssign } = props;
 
 	const isUpdating = Boolean(id);
 
@@ -57,7 +57,7 @@ function OrderDialog(props: OrderDialogProps) {
 			price: data.price,
 			isFollowUp: false
 		};
-		await OrderService.createOrder(formatValues);
+		const { id: orderIdSaved } = await OrderService.createOrder(formatValues);
 		handleResetForm();
 		displayToast({
 			message: 'Se ha guardado correctamente',
@@ -68,7 +68,7 @@ function OrderDialog(props: OrderDialogProps) {
 				vertical: 'top'
 			}
 		});
-		await onSubmit();
+		await onSubmit?.(orderIdSaved, shouldOpenDialogAssign);
 	}
 
 	function handleCancel(): void {

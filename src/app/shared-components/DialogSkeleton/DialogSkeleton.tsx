@@ -3,12 +3,13 @@ import React from 'react';
 import { IDialogSkeletonProps } from './IDialogSkeletonProps';
 
 function DialogSkeleton(props: IDialogSkeletonProps) {
-	const { content, header, open, maxWidth } = props;
+	const { content, header, open, maxWidth, sx } = props;
 
 	return (
 		<Dialog
 			open={open}
 			maxWidth={maxWidth}
+			sx={sx}
 			fullWidth
 		>
 			<DialogTitle>{header}</DialogTitle>

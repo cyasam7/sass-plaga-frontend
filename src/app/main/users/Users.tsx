@@ -211,7 +211,10 @@ function Users() {
 							<DialogUser
 								userId={userId}
 								open={openUserDialog}
-								onClose={() => setOpenUserDialog(false)}
+								onClose={() => {
+									setUserId('');
+									setOpenUserDialog(false);
+								}}
 							/>
 							<SignViewer
 								open={openPreviewSign}

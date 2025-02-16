@@ -42,8 +42,6 @@ export class IQueryUser {
 	refreshToken?: string;
 }
 
-
-
 export interface IDataGridUserRow {
 	userId: string;
 	name: string;
@@ -61,4 +59,8 @@ export interface IDataGridUserRow {
 export interface ISaveSignUser {
 	userId: string;
 	sign: Blob;
+}
+
+export interface ResponseId {
+	id: string;
 }
