@@ -9,6 +9,9 @@ import MoveUpIcon from '@mui/icons-material/MoveUp';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import { Delete } from '@mui/icons-material';
+import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
+import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { columnsOrders } from './columns';
 import { OrderService } from '../../shared/services/OrderService';
 import { DatagridRowOrder, EStatusOrder } from '../../shared/entities/OrderEntity';
@@ -119,6 +122,31 @@ function Order() {
 						onClick={() => {
 							setOrderId(params.row.id);
 							setOpenDetails(true);
+						}}
+					/>,
+					<GridActionsCellItem
+						key={5}
+						label="ELIMINAR"
+						icon={<Delete />}
+						showInMenu
+						onClick={() => {
+							openDialog({
+								title: 'Advertencia',
+								text: '¿Estas seguro que deseas eliminar la orden de servicio?',
+								onAccept: async () => {
+									await OrderService.deleteById(params.row.id);
+									await refetch();
+									displayToast({
+										message: 'Se ha eliminado correctamente',
+										variant: 'success',
+										autoHideDuration: 1000,
+										anchorOrigin: {
+											horizontal: 'right',
+											vertical: 'top'
+										}
+									});
+								}
+							});
 						}}
 					/>
 				];

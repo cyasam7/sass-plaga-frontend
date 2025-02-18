@@ -60,4 +60,11 @@ export class OrderService {
 		});
 		return data;
 	}
+
+	static async deleteById(id: string): Promise<void> {
+		await AxiosFetcher<DatagridRowOrder[]>({
+			url: `/order/${id}`,
+			method: 'DELETE'
+		});
+	}
 }
