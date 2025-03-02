@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { yupResolver } from '@hookform/resolvers/yup';
-import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { IOrderFollowUpDialogProps } from './IGenerateReportDialog';
 import { IGenerateReportForm, generateReportSchema, TypeReport } from './schema';
 import { OrderService } from '../../../../shared/services/OrderService';
@@ -23,7 +22,7 @@ function GenerateReportDialog(props: IOrderFollowUpDialogProps) {
 
 	async function handleSubmit(data: IGenerateReportForm): Promise<void> {
 		await OrderService.downloadCertificate({
-			days: data.date.format('DD/MM/YYYY'),
+			daysValid: 1,
 			id
 		});
 		displayToast({
@@ -38,7 +37,7 @@ function GenerateReportDialog(props: IOrderFollowUpDialogProps) {
 
 	function handleOnClose(): void {
 		onClose();
-		formHandler.reset({ date: null, observations: '' });
+		formHandler.reset({ date: null });
 	}
 
 	return (
@@ -80,11 +79,6 @@ function GenerateReportDialog(props: IOrderFollowUpDialogProps) {
 					py={2}
 					spacing={2}
 				>
-					<TextFieldForm
-						control={formHandler.control}
-						name="observations"
-						label="Observaciones"
-					/>
 					<Controller
 						control={formHandler.control}
 						name="date"
