@@ -1,6 +1,6 @@
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { useQuery } from 'react-query';
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { Button, Paper, Stack, Typography, IconButton, Drawer, useTheme, useMediaQuery } from '@mui/material';
 import { useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
@@ -9,7 +9,7 @@ import MoveUpIcon from '@mui/icons-material/MoveUp';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import { Delete, FileDownload } from '@mui/icons-material';
+import { Delete, FileDownload, FilterList } from '@mui/icons-material';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { columnsOrders } from './columns';
@@ -23,6 +23,7 @@ import HeaderFilters from './components/HeaderFilters/HeaderFilters';
 import { validateIfOrderIsPending } from './utils';
 import AssignOrderDialog from './components/AssignOrderDialog/AssignOrderDialog';
 import { ETabsPlagues } from './components/HeaderFilters/HeaderFilterProps';
+import { MobileCard } from './components/MobileCard/MobileCard';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -37,7 +38,9 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 function Order() {
-	const [tabFilter, setTabFilter] = useState<ETabsPlagues | undefined>(ETabsPlagues.ALL);
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+	const [tabFilter, setTabFilter] = useState<ETabsPlagues>(ETabsPlagues.ALL);
 	const [statusFilter, setStatusFilter] = useState<EStatusOrder | undefined>();
 	const [calendarFilter, setCalendarFilter] = useState<Dayjs | undefined>(null);
 	const [open, setOpen] = useState<boolean>(false);
@@ -45,9 +48,9 @@ function Order() {
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
 	const [openAssign, setOpenAssign] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
-	const [openDialogReports, setOpenDialogReports] = useState<boolean>(false);
 	const [shouldOpenDialogAssign, setShouldOpenDialogAssign] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
+	const [openFilterDrawer, setOpenFilterDrawer] = useState(false);
 
 	const {
 		data = [],
@@ -198,31 +201,63 @@ function Order() {
 			});
 		}
 
-		return [...data].reverse();
+		if (tabFilter !== ETabsPlagues.ALL) {
+			return [...data].reverse();
+		}
+
+		return data;
 	}
+
+	const renderFilters = () => (
+		<HeaderFilters
+			selectedTab={tabFilter}
+			selectedStatus={statusFilter}
+			selectedDate={calendarFilter}
+			onTabChange={setTabFilter}
+			onStatusChange={setStatusFilter}
+			onDateChange={setCalendarFilter}
+		/>
+	);
 
 	return (
 		<Root
 			header={
-				<div className="p-24 w-full flex justify-between items-center">
-					<Typography variant="h6">Ordenes de servicio</Typography>
-					<div className="flex items-center">
-						<Button
-							color="primary"
-							variant="contained"
-							onClick={() => {
-								setOpen(true);
-								setShouldOpenDialogAssign(true);
-							}}
+				<div className="p-16 sm:p-24 w-full">
+					<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-y-2">
+						<Typography
+							variant="h6"
+							className="text-lg sm:text-xl"
 						>
-							Nuevo
-						</Button>
+							Ordenes de servicio
+						</Typography>
+						<div className="flex gap-2 w-full sm:w-auto">
+							{isMobile && (
+								<IconButton
+									color="primary"
+									onClick={() => setOpenFilterDrawer(true)}
+									className="flex-shrink-0"
+								>
+									<FilterList />
+								</IconButton>
+							)}
+							<Button
+								color="primary"
+								variant="contained"
+								size="small"
+								className="w-full sm:w-auto"
+								onClick={() => {
+									setOpen(true);
+									setShouldOpenDialogAssign(true);
+								}}
+							>
+								Nuevo
+							</Button>
+						</div>
 					</div>
 				</div>
 			}
 			content={
-				<div className="p-24 w-full">
-					{/* TODO: PENDIENTE <DialogReport /> */}
+				<div className="p-16 sm:p-24 w-full">
 					<OrderDialog
 						open={open}
 						id={orderId}
@@ -272,25 +307,132 @@ function Order() {
 							setOpenStatus(false);
 						}}
 					/>
-					<Paper className="p-24 w-full">
-						<Stack sx={{ height: 'calc(100vh - 240px)' }}>
-							<DataGrid
-								slots={{
-									toolbar: HeaderFilters
+					<Paper
+						className="p-8 sm:p-24 w-full"
+						sx={{
+							height: '100%',
+							maxHeight: 'calc(100vh - 200px)',
+							display: 'flex',
+							flexDirection: 'column'
+						}}
+					>
+						{isMobile ? (
+							<Stack
+								spacing={2}
+								sx={{
+									flex: 1,
+									overflowY: 'auto',
+									pb: 2,
+									'&::-webkit-scrollbar': {
+										width: '8px',
+										backgroundColor: 'transparent'
+									},
+									'&::-webkit-scrollbar-thumb': {
+										backgroundColor: (theme) => theme.palette.divider,
+										borderRadius: '4px'
+									},
+									scrollbarWidth: 'thin',
+									scrollbarColor: (theme) => `${theme.palette.divider} transparent`
 								}}
-								slotProps={{
-									toolbar: {
-										onChangeDate: setCalendarFilter,
-										onChangeDay: setTabFilter,
-										onChangeStatus: setStatusFilter
-									}
-								}}
-								loading={isLoading}
-								rows={filterValues(data)}
-								columns={columns}
-							/>
-						</Stack>
+							>
+								{filterValues(data).map((order) => (
+									<MobileCard
+										key={order.id}
+										order={order}
+										onView={(id) => {
+											setOrderId(id);
+											setOpenDetails(true);
+										}}
+										onEdit={(id) => {
+											setOrderId(id);
+											setOpen(true);
+										}}
+										onAssign={(id) => {
+											setOrderId(id);
+											setOpenAssign(true);
+										}}
+										onFollow={(id) => {
+											setOrderId(id);
+											setOpenFollow(true);
+										}}
+										onDownloadCertificate={async (id) => {
+											await OrderService.downloadCertificate({
+												daysValid: 30,
+												id
+											});
+										}}
+										onDelete={async (id) => {
+											await OrderService.deleteById(id);
+											await refetch();
+										}}
+									/>
+								))}
+							</Stack>
+						) : (
+							<Stack sx={{ height: 'calc(100vh - 240px)' }}>
+								<DataGrid
+									slots={{
+										toolbar: isMobile ? undefined : HeaderFilters
+									}}
+									slotProps={{
+										toolbar: {
+											selectedTab: tabFilter,
+											selectedStatus: statusFilter,
+											selectedDate: calendarFilter,
+											onTabChange: setTabFilter,
+											onStatusChange: setStatusFilter,
+											onDateChange: setCalendarFilter
+										}
+									}}
+									loading={isLoading}
+									rows={filterValues(data)}
+									columns={columns}
+									initialState={{
+										pagination: {
+											paginationModel: { pageSize: 10 }
+										}
+									}}
+									pageSizeOptions={[5, 10, 25]}
+									density="compact"
+									getRowHeight={() => 'auto'}
+									sx={{
+										'& .MuiDataGrid-cell': {
+											py: 1,
+											px: 1,
+											wordBreak: 'break-word'
+										},
+										'& .MuiDataGrid-columnHeader': {
+											py: 1,
+											px: 1
+										}
+									}}
+								/>
+							</Stack>
+						)}
 					</Paper>
+
+					<Drawer
+						anchor="right"
+						open={openFilterDrawer}
+						onClose={() => setOpenFilterDrawer(false)}
+						PaperProps={{
+							sx: {
+								width: '80%',
+								maxWidth: '360px',
+								p: 2
+							}
+						}}
+					>
+						<div className="flex flex-col h-full">
+							<div className="flex justify-between items-center mb-4">
+								<Typography variant="h6">Filtros</Typography>
+								<IconButton onClick={() => setOpenFilterDrawer(false)}>
+									<FilterList />
+								</IconButton>
+							</div>
+							{renderFilters()}
+						</div>
+					</Drawer>
 				</div>
 			}
 		/>

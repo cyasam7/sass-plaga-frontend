@@ -1,79 +1,127 @@
-import { Autocomplete, Box, Stack, Tab, TextField } from '@mui/material';
+import { Autocomplete, Stack, TextField, useTheme, useMediaQuery, MenuItem, Tabs, Tab } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import React from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
-import { TabContext, TabList } from '@mui/lab';
 import { EStatusOrder } from 'src/app/shared/entities/OrderEntity';
-import { ETabsPlagues, IHeaderFiltersProps } from './HeaderFilterProps';
+import { ETabsPlagues } from './HeaderFilterProps';
 import { translateOrderStatus } from '../../utils';
 
-function HeaderFilters(props: IHeaderFiltersProps) {
-	const [value, setValue] = React.useState<ETabsPlagues>(ETabsPlagues.ALL);
-	const { onChangeDate, onChangeDay, onChangeStatus } = props;
+const filterOptions = [
+	{ value: ETabsPlagues.ALL, label: 'TODAS' },
+	{ value: ETabsPlagues.TODAY, label: 'HOY' },
+	{ value: ETabsPlagues.TOMORROW, label: 'MAÑANA' },
+	{ value: ETabsPlagues.PENDING, label: 'PENDIENTES' }
+] as const;
 
-	const handleChange = (_: React.SyntheticEvent, newValue: ETabsPlagues) => {
-		onChangeDay?.(newValue);
-		setValue(newValue);
-	};
+interface HeaderFiltersProps {
+	selectedTab: ETabsPlagues;
+	selectedStatus: EStatusOrder | undefined;
+	selectedDate: Dayjs | undefined;
+	onTabChange: (value: ETabsPlagues) => void;
+	onStatusChange: (value: EStatusOrder | undefined) => void;
+	onDateChange: (value: Dayjs | undefined) => void;
+}
 
+function HeaderFilters({
+	selectedTab,
+	selectedStatus,
+	selectedDate,
+	onTabChange,
+	onStatusChange,
+	onDateChange
+}: HeaderFiltersProps) {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 	const statusCatalog = Object.values(EStatusOrder);
 
+	const renderFilterControl = () => {
+		if (isMobile) {
+			return (
+				<TextField
+					select
+					value={String(selectedTab)}
+					label="Filtrar por"
+					size="small"
+					onChange={(e) => onTabChange(e.target.value as unknown as ETabsPlagues)}
+				>
+					{filterOptions.map((option) => (
+						<MenuItem
+							key={option.value}
+							value={String(option.value)}
+						>
+							{option.label}
+						</MenuItem>
+					))}
+				</TextField>
+			);
+		}
+
+		return (
+			<Tabs
+				value={String(selectedTab)}
+				onChange={(_, value) => onTabChange(value as ETabsPlagues)}
+				sx={{
+					minHeight: 40,
+					'& .MuiTab-root': {
+						minHeight: 40,
+						py: 0
+					}
+				}}
+			>
+				{filterOptions.map((option) => (
+					<Tab
+						key={option.value}
+						value={String(option.value)}
+						label={option.label}
+					/>
+				))}
+			</Tabs>
+		);
+	};
+
 	return (
-		<Stack direction="column">
-			<Box sx={{ width: '100%', typography: 'body1' }}>
-				<TabContext value={value}>
-					<Box>
-						<TabList onChange={handleChange}>
-							<Tab
-								label="TODAS"
-								value={ETabsPlagues.ALL}
-								sx={{ width: '150px' }}
-							/>
-							<Tab
-								label="HOY"
-								value={ETabsPlagues.TODAY}
-								sx={{ width: '150px' }}
-							/>
-							<Tab
-								label="MAÑANA"
-								value={ETabsPlagues.TOMORROW}
-								sx={{ width: '150px' }}
-							/>
-							<Tab
-								label="PENDIENTES"
-								value={ETabsPlagues.PENDING}
-								sx={{ width: '150px' }}
-							/>
-						</TabList>
-					</Box>
-				</TabContext>
-			</Box>
+		<Stack
+			direction="column"
+			spacing={3}
+			sx={{
+				width: '100%',
+				p: isMobile ? 2 : 0
+			}}
+		>
+			{renderFilterControl()}
 			<Stack
-				direction="row"
-				pt={2}
+				direction={isMobile ? 'column' : 'row'}
 				spacing={2}
+				sx={{ width: '100%' }}
 			>
 				<Autocomplete
+					value={selectedStatus}
 					options={statusCatalog}
 					getOptionLabel={(i) => translateOrderStatus(i)}
-					sx={{ width: 300 }}
-					onChange={(_, value) => onChangeStatus(value)}
+					sx={{ width: isMobile ? '100%' : 300 }}
+					onChange={(_, value) => onStatusChange(value || undefined)}
 					renderInput={(params) => (
 						<TextField
 							{...params}
 							size="small"
 							label="Estatus"
+							fullWidth
 						/>
 					)}
 				/>
 				<DatePicker
-					onChange={(value: Dayjs) => onChangeDate(value)}
+					value={selectedDate}
+					onChange={(value: Dayjs | null) => onDateChange(value || undefined)}
 					slotProps={{
-						textField: { size: 'small' },
+						textField: {
+							size: 'small',
+							fullWidth: true
+						},
 						field: {
 							clearable: true
 						}
 					}}
+					sx={{ width: isMobile ? '100%' : 'auto' }}
 				/>
 			</Stack>
 		</Stack>

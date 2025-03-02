@@ -15,7 +15,6 @@ function FormOrder(props: IFormOrderProps) {
 	const {
 		dateField = false,
 		priceField = false,
-		observationsField = false,
 		clientNameField = false,
 		clientPhoneField = false,
 		clientAddressField = false
@@ -143,108 +142,76 @@ function FormOrder(props: IFormOrderProps) {
 				>
 					<Typography variant="subtitle2">Fecha y costo</Typography>
 				</Grid>
+
 				<Grid
 					item
 					xs={12}
-					md={8}
+					md={6}
 				>
 					<Controller
 						control={formHandler.control}
-						name="observations"
+						name="date"
 						render={({ field, fieldState }) => (
-							<TextField
-								{...field}
-								size="small"
-								disabled={disabled || observationsField}
-								label="Observaciones"
-								placeholder="Escribir..."
-								multiline
-								variant="outlined"
-								fullWidth
-								type="text"
-								rows={6}
-								maxRows={6}
-								error={Boolean(fieldState.error?.message)}
-								helperText={
-									fieldState.error
-										? fieldState.error.message
-										: 'Escribe algún comentario de la revision.'
-								}
-							/>
+							<>
+								<DateTimePicker
+									label="Fecha *"
+									disabled={disabled || dateField}
+									sx={{ width: '100%' }}
+									value={field.value}
+									minDate={dayjs()}
+									onChange={(newValue) => field.onChange(newValue)}
+									timeSteps={{ minutes: 15 }}
+									ampm={false}
+									views={['year', 'month', 'day', 'hours', 'minutes']}
+									format="DD/MM/YYYY HH:mm"
+									slotProps={{
+										textField: {
+											variant: 'outlined',
+											color: fieldState.error?.message ? 'error' : undefined,
+											size: 'small',
+											error: !!fieldState.error?.message
+										}
+									}}
+								/>
+								{fieldState.error && (
+									<FormHelperText
+										sx={{ paddingLeft: 1.7 }}
+										error={!!fieldState.error.message}
+									>
+										{FIELD_REQUIRED}
+									</FormHelperText>
+								)}
+							</>
 						)}
 					/>
 				</Grid>
 				<Grid
-					container
 					item
 					xs={12}
-					md={4}
-					spacing={1.1}
+					md={6}
 				>
-					<Grid
-						item
-						xs={12}
-					>
-						<Controller
-							control={formHandler.control}
-							name="date"
-							render={({ field, fieldState }) => (
-								<>
-									<DateTimePicker
-										label="Fecha *"
-										disabled={disabled || dateField}
-										sx={{ width: '100%' }}
-										value={field.value}
-										minDate={dayjs()}
-										onChange={(newValue) => field.onChange(newValue)}
-										slotProps={{
-											textField: {
-												variant: 'outlined',
-												color: fieldState.error?.message ? 'error' : undefined,
-												size: 'small',
-												error: !!fieldState.error?.message
-											}
-										}}
-									/>
-									{fieldState.error && (
-										<FormHelperText
-											sx={{ paddingLeft: 1.7 }}
-											error={!!fieldState.error.message}
-										>
-											{FIELD_REQUIRED}
-										</FormHelperText>
-									)}
-								</>
-							)}
-						/>
-					</Grid>
-					<Grid
-						item
-						xs={12}
-					>
-						<Controller
-							control={formHandler.control}
-							name="price"
-							render={({ field, fieldState }) => (
-								<TextField
-									{...field}
-									size="small"
-									disabled={disabled || priceField}
-									label="Costo"
-									fullWidth
-									variant="outlined"
-									InputProps={{
-										startAdornment: <InputAdornment position="start">$</InputAdornment>,
-										// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-										inputComponent: NumericFormatAdapter as any
-									}}
-									required
-									error={Boolean(fieldState.error?.message)}
-									helperText={fieldState.error ? fieldState.error.message : 'Precio del servicio'}
-								/>
-							)}
-						/>
-					</Grid>
+					<Controller
+						control={formHandler.control}
+						name="price"
+						render={({ field, fieldState }) => (
+							<TextField
+								{...field}
+								size="small"
+								disabled={disabled || priceField}
+								label="Costo"
+								fullWidth
+								variant="outlined"
+								InputProps={{
+									startAdornment: <InputAdornment position="start">$</InputAdornment>,
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+									inputComponent: NumericFormatAdapter as any
+								}}
+								required
+								error={Boolean(fieldState.error?.message)}
+								helperText={fieldState.error ? fieldState.error.message : 'Precio del servicio'}
+							/>
+						)}
+					/>
 				</Grid>
 			</Grid>
 		</Grid>

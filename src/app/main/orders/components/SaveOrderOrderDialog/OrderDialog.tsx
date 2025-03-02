@@ -40,8 +40,7 @@ function OrderDialog(props: OrderDialogProps) {
 				clientName: data.client.name,
 				clientPhone: data.client.phone,
 				price: String(data.price),
-				date: dayjs(data.date),
-				observations: data.observations
+				date: dayjs(data.date)
 			});
 		}
 		return () => {

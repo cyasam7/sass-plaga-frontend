@@ -4,6 +4,5 @@ export const defaultValuesOrder = {
 	clientName: '',
 	clientPhone: '',
 	price: '',
-	date: null,
-	observations: ''
+	date: null
 };

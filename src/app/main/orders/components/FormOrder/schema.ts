@@ -7,7 +7,6 @@ import * as yup from 'yup';
 
 export const createOrderSchema = yup.object().shape({
 	price: yup.string().min(1, 'Valor mínimo de 1 peso').required(FIELD_REQUIRED),
-	observations: yup.string(),
 	clientId: yup.string(),
 	clientAddress: yup.string().required(FIELD_REQUIRED),
 	clientName: yup.string().required(FIELD_REQUIRED),

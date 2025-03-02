@@ -7,7 +7,6 @@ export interface IFormOrderProps {
 	disableSpecificField?: {
 		dateField?: boolean;
 		priceField?: boolean;
-		observationsField?: boolean;
 		clientNameField?: boolean;
 		clientPhoneField?: boolean;
 		clientAddressField?: boolean;
@@ -17,7 +16,6 @@ export interface IFormOrderProps {
 export interface IFormCreatePest {
 	date: Dayjs | null;
 	price: string;
-	observations: string;
 	clientName: string;
 	clientPhone: string;
 	clientAddress: string;
