@@ -19,7 +19,7 @@ export async function AxiosFetcher<T>(config: AxiosRequestConfig): Promise<T> {
 					vertical: 'top'
 				},
 				autoHideDuration: 2000,
-				message: err.response.data?.message ?? 'Algo salio mal en la peticion',
+				message: err.response.data?.message ?? 'Algo salio mal',
 				variant: 'error'
 			});
 		}

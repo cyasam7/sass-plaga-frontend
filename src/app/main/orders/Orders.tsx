@@ -196,15 +196,8 @@ function Order() {
 		}
 
 		if (statusFilter) {
-			data = data.filter((i) => {
-				return i.status === statusFilter;
-			});
+			data = data.filter((i) => i.status === statusFilter);
 		}
-
-		if (tabFilter !== ETabsPlagues.ALL) {
-			return [...data].reverse();
-		}
-
 		return data;
 	}
 

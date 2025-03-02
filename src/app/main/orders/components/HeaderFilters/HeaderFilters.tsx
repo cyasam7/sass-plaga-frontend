@@ -39,7 +39,7 @@ function HeaderFilters({
 			return (
 				<TextField
 					select
-					value={String(selectedTab)}
+					value={selectedTab}
 					label="Filtrar por"
 					size="small"
 					onChange={(e) => onTabChange(e.target.value as unknown as ETabsPlagues)}
@@ -47,7 +47,7 @@ function HeaderFilters({
 					{filterOptions.map((option) => (
 						<MenuItem
 							key={option.value}
-							value={String(option.value)}
+							value={option.value}
 						>
 							{option.label}
 						</MenuItem>
@@ -58,7 +58,7 @@ function HeaderFilters({
 
 		return (
 			<Tabs
-				value={String(selectedTab)}
+				value={selectedTab}
 				onChange={(_, value) => onTabChange(value as ETabsPlagues)}
 				sx={{
 					minHeight: 40,
@@ -71,7 +71,7 @@ function HeaderFilters({
 				{filterOptions.map((option) => (
 					<Tab
 						key={option.value}
-						value={String(option.value)}
+						value={option.value}
 						label={option.label}
 					/>
 				))}
