@@ -57,6 +57,7 @@ function OrderDialog(props: OrderDialogProps) {
 			price: data.price,
 			isFollowUp: false
 		};
+
 		const { id: orderIdSaved } = await OrderService.createOrder(formatValues);
 		handleResetForm();
 		displayToast({

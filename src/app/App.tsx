@@ -74,10 +74,7 @@ function App() {
 					direction={langDirection}
 				>
 					<AuthRouteProvider>
-						<LocalizationProvider
-							dateAdapter={AdapterDayjs}
-							adapterLocale="es"
-						>
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<SnackbarProvider
 								maxSnack={5}
 								anchorOrigin={{

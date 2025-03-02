@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 import { FuseRouteConfigType } from '@fuse/utils/FuseUtils';
 
-const WhatsApp = lazy(() => import('./whats-app/WhatsApp'));
 const Reports = lazy(() => import('./reports/Reports'));
+const AccountUser = lazy(() => import('./accountUser/AccountUser'));
 
 /**
  * The Example page config.
@@ -21,12 +21,12 @@ const AppConfigurationsConfig: FuseRouteConfigType = {
 	auth: ['staff', 'admin'],
 	routes: [
 		{
-			path: '/configuration/whats-app',
-			element: <WhatsApp />
-		},
-		{
 			path: '/configuration/reports',
 			element: <Reports />
+		},
+		{
+			path: '/configuration/account',
+			element: <AccountUser />
 		}
 	]
 };

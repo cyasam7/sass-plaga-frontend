@@ -9,7 +9,8 @@ const locale = {
 	CONFIGURATION: 'Configuraciones',
 	WHATS_APP: 'Whats App',
 	MODULES: 'Modulos',
-	USERS: 'Usuarios'
+	USERS: 'Usuarios',
+	ACCOUNT: 'Empresa'
 };
 
 export default locale;

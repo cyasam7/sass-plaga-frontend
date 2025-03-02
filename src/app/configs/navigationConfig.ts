@@ -76,14 +76,21 @@ const navigationConfig: FuseNavItemType[] = [
 		icon: 'heroicons-solid:adjustments',
 		children: [
 			{
+				id: 'configurations-account',
+				title: 'Cuenta',
+				translate: 'ACCOUNT',
+				type: 'item',
+				auth: ['admin', 'staff'],
+				url: '/configuration/account'
+			},
+			/* {
 				id: 'configurations-whatsapp',
-				title: 'WhatsApp',
+				title: 'Account',
 				translate: 'WHATS_APP',
 				type: 'item',
 				auth: ['admin', 'staff'],
 				url: '/configuration/whats-app'
-			},
-			{
+			}, */ {
 				id: 'configurations-reports',
 				title: 'Reportes',
 				translate: 'REPORTS',

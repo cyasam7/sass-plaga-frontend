@@ -67,4 +67,26 @@ export class OrderService {
 			method: 'DELETE'
 		});
 	}
+
+	static async downloadCertificate({ daysValid, id }: { id: string; daysValid: number }): Promise<void> {
+		try {
+			const response = await AxiosFetcher({
+				url: `/order/certificate/${id}`,
+				params: {
+					daysValid
+				},
+				method: 'GET',
+				responseType: 'blob'
+			});
+			const blob = response as Blob;
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `${id}.pdf`;
+			document.body.appendChild(a);
+			a.click();
+		} catch (error) {
+			console.log(error);
+		}
+	}
 }

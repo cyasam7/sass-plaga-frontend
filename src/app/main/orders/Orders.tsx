@@ -9,13 +9,13 @@ import MoveUpIcon from '@mui/icons-material/MoveUp';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import { Delete } from '@mui/icons-material';
+import { Delete, FileDownload } from '@mui/icons-material';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { columnsOrders } from './columns';
 import { OrderService } from '../../shared/services/OrderService';
 import { DatagridRowOrder, EStatusOrder } from '../../shared/entities/OrderEntity';
-import OrderDialog from './components/OrderDialog/OrderDialog';
+import OrderDialog from './components/SaveOrderOrderDialog/OrderDialog';
 import OrderDetailDialog from './components/OrderDetailDialog/OrderDetailDialog';
 import OrderChangeStatusDialog from './components/OrderChangeStatusDialog/OrderChangeStatusDialog';
 import OrderFollowUpDialog from './components/OrderFollowUpDialog/OrderFollowUpDialog';
@@ -45,6 +45,7 @@ function Order() {
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
 	const [openAssign, setOpenAssign] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
+	const [openDialogReports, setOpenDialogReports] = useState<boolean>(false);
 	const [shouldOpenDialogAssign, setShouldOpenDialogAssign] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
 
@@ -92,18 +93,6 @@ function Order() {
 						}}
 						disabled={[EStatusOrder.DONE, EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
 					/>,
-					/* <GridActionsCellItem
-						key={2}
-						label="CAMBIAR ESTATUS"
-						icon={<AutorenewIcon />}
-						showInMenu
-						onClick={() => {
-							setOrderId(params.row.id);
-							setOpenStatus(true);
-						}}
-						disabled={status === EStatusOrder.REALIZED} 
-					/>,
-					*/
 					<GridActionsCellItem
 						key={3}
 						label="CREAR SEGUIMIENTO"
@@ -122,6 +111,19 @@ function Order() {
 						onClick={() => {
 							setOrderId(params.row.id);
 							setOpenDetails(true);
+						}}
+					/>,
+					<GridActionsCellItem
+						key={6}
+						label="DESCARGAR CERTIFICADO DE FUMIGACIÓN"
+						icon={<FileDownload />}
+						showInMenu
+						disabled={![EStatusOrder.DONE, EStatusOrder.FINISHED].includes(params.row.status)}
+						onClick={async () => {
+							await OrderService.downloadCertificate({
+								daysValid: 30,
+								id: params.row.id
+							});
 						}}
 					/>,
 					<GridActionsCellItem
@@ -241,7 +243,10 @@ function Order() {
 					<AssignOrderDialog
 						orderId={orderId}
 						open={openAssign}
-						onClose={() => setOpenAssign(false)}
+						onClose={() => {
+							setOpenAssign(false);
+							setOrderId('');
+						}}
 					/>
 					<OrderFollowUpDialog
 						id={orderId}

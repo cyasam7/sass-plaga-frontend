@@ -193,7 +193,6 @@ function FormOrder(props: IFormOrderProps) {
 									<DateTimePicker
 										label="Fecha *"
 										disabled={disabled || dateField}
-										timezone="America/Mexico_City"
 										sx={{ width: '100%' }}
 										value={field.value}
 										minDate={dayjs()}

@@ -4,11 +4,10 @@ import { styled } from '@mui/material/styles';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Card, CardContent, Grid, Stack } from '@mui/material';
-import { useState } from 'react';
 import { BlobProvider } from '@react-pdf/renderer';
 import { DocumentCanvasProvider } from './hooks/useDocumentCanvas';
 import FormReport from './components/FormReport/FormReport';
-import Certificate from './components/Cert/Cert';
+import Certificate, { CertificateData } from './components/Certificate/Certificate';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -22,25 +21,29 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-sidebarContent': {}
 }));
 
+const mockCertificateData: CertificateData = {
+	companyName: 'Fumigadora Express S.A. de C.V.',
+	clientName: 'Restaurante El Buen Sabor',
+	address: 'Av. Principal #123, Col. Centro, Ciudad de México',
+	date: new Date().toISOString(),
+	certificateNumber: 'CERT-2024-001',
+	validUntil: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString(),
+	logoUrl:
+		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+	sanitaryLicense: 'LSF-2024-789',
+	serviceType: 'Fumigación General',
+	treatedAreas: 'Cocina, Almacén, Área de Comedor',
+	chemicals: 'Biothrine Flow, Demand CS',
+	targetPests: 'Cucarachas, Hormigas, Roedores',
+	applicationMethod: 'Aspersión y Nebulización',
+	dosage: '50ml/L',
+	urlClientSignature:
+		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+	urlTechnicalSignature:
+		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+};
+
 function Reports() {
-	const [companyName, setCompanyName] = useState('Vex Company');
-	const report = {
-		amountPaid: '10000',
-		clientAddress: 'Rcda. Ramírez, Zona Centro, 34000 Durango, Dgo., México',
-		clientName: 'Alexander Serrano',
-		clientPhone: '+526183240572',
-		companyAddress: 'Ramirez ',
-		companyName: 'jajaja',
-		date: '2024-12-15',
-		daysFollowUp: '0',
-		includeCertificate: true,
-		observations: 'dsadsadsa',
-		scheduleFollowUp: true,
-		servicePrice: '10000',
-		residualAmount: '0',
-		services: ['1a5e0c45-09ca-4422-b5f0-4f26b0325ea7'],
-		totalPrice: '10000'
-	};
 	return (
 		<DocumentCanvasProvider>
 			<DndProvider backend={HTML5Backend}>
@@ -69,7 +72,16 @@ function Reports() {
 									item
 									md={12}
 								>
-									<BlobProvider document={<Certificate />}>
+									<BlobProvider
+										document={
+											<Certificate
+												data={mockCertificateData}
+												primaryColor="#1a5f7a"
+												secondaryColor="#2d9cdb"
+												showLogo
+											/>
+										}
+									>
 										{({ blob, url, loading, error }) => {
 											if (loading) {
 												return <div>Loading document...</div>;
