@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 20,
+		marginBottom: 15,
 		borderTopWidth: 8,
 		borderTopColor: '#1a5f7a',
 		paddingTop: 15
@@ -43,8 +43,16 @@ const styles = StyleSheet.create({
 		color: '#1a5f7a'
 	},
 	certificateNumber: {
+		fontSize: 12,
+		color: '#4B5563',
+		marginTop: 8,
+		marginBottom: 4
+	},
+	dateInfo: {
 		fontSize: 10,
-		color: '#4B5563'
+		color: '#4B5563',
+		marginTop: 2,
+		textAlign: 'right'
 	},
 	companyName: {
 		fontSize: 16,
@@ -52,24 +60,39 @@ const styles = StyleSheet.create({
 		color: '#2d9cdb',
 		marginBottom: 15
 	},
-	infoGrid: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
+	infoSection: {
+		backgroundColor: '#f8fafc',
+		padding: 15,
+		borderRadius: 6,
 		marginBottom: 15
 	},
+	infoSectionTitle: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#2d9cdb',
+		marginBottom: 15
+	},
+	infoGrid: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: 20
+	},
 	infoColumn: {
-		width: '48%'
+		flex: 1,
+		minWidth: '45%'
 	},
 	infoRow: {
-		marginBottom: 8
+		marginBottom: 10
 	},
 	label: {
-		fontSize: 8,
-		color: '#4B5563'
+		fontSize: 9,
+		color: '#4B5563',
+		fontWeight: 'bold'
 	},
 	value: {
 		fontSize: 10,
-		marginTop: 2
+		marginTop: 2,
+		color: '#1F2937'
 	},
 	serviceDetails: {
 		backgroundColor: '#f8fafc',
@@ -97,35 +120,48 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 		marginTop: 15
 	},
-	signatures: {
+	signatureSection: {
+		backgroundColor: '#f8fafc',
+		padding: 15,
+		borderRadius: 6,
+		marginTop: 0
+	},
+	signatureTitle: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#2d9cdb',
+		marginBottom: 15
+	},
+	signatureContent: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: 20,
-		paddingTop: 15,
-		borderTopWidth: 1,
-		borderTopColor: '#E5E7EB'
-	},
-	signature: {
-		width: 120,
-		alignItems: 'center'
+		gap: 20
 	},
 	signatureBox: {
-		height: 60,
+		flex: 1,
+		maxWidth: 200,
+		alignItems: 'center'
+	},
+	signatureImage: {
+		height: 80,
 		width: '100%',
 		borderWidth: 1,
 		borderColor: '#d1d5db',
-		borderRadius: 4
+		borderRadius: 4,
+		marginBottom: 8,
+		backgroundColor: '#ffffff'
 	},
-	signatureLine: {
-		width: '100%',
-		borderBottomWidth: 1,
-		borderBottomColor: '#9CA3AF',
-		marginBottom: 4
+	signatureLabel: {
+		fontSize: 9,
+		color: '#4B5563',
+		fontWeight: 'bold',
+		textAlign: 'center'
 	}
 });
 
 export interface CertificateData {
 	companyName: string;
+	companyAddress: string;
 	clientName: string;
 	address: string;
 	date: string;
@@ -139,7 +175,6 @@ export interface CertificateData {
 	targetPests: string;
 	applicationMethod: string;
 	dosage: string;
-	urlClientSignature: string;
 	urlTechnicalSignature: string;
 }
 
@@ -158,50 +193,62 @@ function Certificate({ data, primaryColor, secondaryColor, showLogo = true }: Ce
 				style={styles.page}
 			>
 				<View style={[styles.header, { borderTopColor: primaryColor }]}>
-					{showLogo ? (
+					{showLogo && (
 						<View style={styles.logoContainer}>
 							<Image
 								src={data.logoUrl}
 								style={styles.logo}
 							/>
-							<Text style={styles.licenseNumber}>
-								Licencia Sanitaria: {data.sanitaryLicense || '[Número de Licencia]'}
-							</Text>
-						</View>
-					) : (
-						<View style={styles.logoContainer}>
-							<Text style={styles.licenseNumber}>
-								Licencia Sanitaria: {data.sanitaryLicense || '[Número de Licencia]'}
-							</Text>
 						</View>
 					)}
 					<View style={styles.titleContainer}>
 						<Text style={[styles.title, { color: primaryColor }]}>Certificado de Fumigación</Text>
 						<Text style={styles.certificateNumber}>No. {data.certificateNumber}</Text>
+						<Text style={styles.dateInfo}>
+							Fecha de emisión:{' '}
+							{new Date(data.date).toLocaleDateString('es-ES', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							}) || '[Fecha de emisión]'}
+						</Text>
+						<Text style={styles.dateInfo}>
+							Válido hasta:{' '}
+							{new Date(data.validUntil).toLocaleDateString('es-ES', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							}) || '[Fecha de validez]'}
+						</Text>
 					</View>
 				</View>
 
-				<Text style={[styles.companyName, { color: secondaryColor }]}>{data.companyName}</Text>
-
-				<View style={styles.infoGrid}>
-					<View style={styles.infoColumn}>
-						<View style={styles.infoRow}>
-							<Text style={styles.label}>Cliente:</Text>
-							<Text style={styles.value}>{data.clientName || '[Nombre del Cliente]'}</Text>
+				<View style={styles.infoSection}>
+					<Text style={[styles.infoSectionTitle, { color: secondaryColor }]}>Información General</Text>
+					<View style={styles.infoGrid}>
+						<View style={styles.infoColumn}>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Empresa:</Text>
+								<Text style={styles.value}>{data.companyName}</Text>
+							</View>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Dirección de la empresa:</Text>
+								<Text style={styles.value}>{data.companyAddress || '[Dirección de la empresa]'}</Text>
+							</View>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Licencia Sanitaria:</Text>
+								<Text style={styles.value}>{data.sanitaryLicense || '[Número de Licencia]'}</Text>
+							</View>
 						</View>
-						<View style={styles.infoRow}>
-							<Text style={styles.label}>Dirección:</Text>
-							<Text style={styles.value}>{data.address || '[Dirección]'}</Text>
-						</View>
-					</View>
-					<View style={styles.infoColumn}>
-						<View style={styles.infoRow}>
-							<Text style={styles.label}>Fecha:</Text>
-							<Text style={styles.value}>{new Date(data.date).toLocaleDateString()}</Text>
-						</View>
-						<View style={styles.infoRow}>
-							<Text style={styles.label}>Válido hasta:</Text>
-							<Text style={styles.value}>{new Date(data.validUntil).toLocaleDateString()}</Text>
+						<View style={styles.infoColumn}>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Cliente:</Text>
+								<Text style={styles.value}>{data.clientName || '[Nombre del Cliente]'}</Text>
+							</View>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Dirección del cliente:</Text>
+								<Text style={styles.value}>{data.address || '[Dirección]'}</Text>
+							</View>
 						</View>
 					</View>
 				</View>
@@ -250,22 +297,16 @@ function Certificate({ data, primaryColor, secondaryColor, showLogo = true }: Ce
 					</View>
 				</View>
 
-				<View style={styles.signatures}>
-					<View style={styles.signature}>
-						<Image
-							src={data.urlTechnicalSignature}
-							style={styles.signatureBox}
-						/>
-						<View style={styles.signatureLine} />
-						<Text style={styles.label}>Técnico Responsable</Text>
-					</View>
-					<View style={styles.signature}>
-						<Image
-							src={data.urlClientSignature}
-							style={styles.signatureBox}
-						/>
-						<View style={styles.signatureLine} />
-						<Text style={styles.label}>Cliente</Text>
+				<View style={styles.signatureSection}>
+					<Text style={[styles.signatureTitle, { color: secondaryColor }]}>Firmas de Autorización</Text>
+					<View style={styles.signatureContent}>
+						<View style={styles.signatureBox}>
+							<Image
+								src={data.urlTechnicalSignature}
+								style={styles.signatureImage}
+							/>
+							<Text style={styles.signatureLabel}>Firma del Responsable Sanitario</Text>
+						</View>
 					</View>
 				</View>
 			</Page>
