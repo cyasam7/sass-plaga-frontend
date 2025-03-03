@@ -1,10 +1,8 @@
-import { Divider, FormHelperText, Grid, InputAdornment, TextField, Typography } from '@mui/material';
+import { Divider, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { DateTimePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
 import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter/NumericFormatAdapter';
-import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
 import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';
+import { DateTimePickerField } from 'app/shared-components/DateTimePicker';
 import { IFormOrderProps } from './FormOrderProps';
 import { CatalogService } from '../../../../shared/services/CatalogService';
 import { AutocompleteMaps } from '../AutocompleteMaps/AutocompleteMaps';
@@ -148,41 +146,10 @@ function FormOrder(props: IFormOrderProps) {
 					xs={12}
 					md={6}
 				>
-					<Controller
+					<DateTimePickerField
 						control={formHandler.control}
 						name="date"
-						render={({ field, fieldState }) => (
-							<>
-								<DateTimePicker
-									label="Fecha *"
-									disabled={disabled || dateField}
-									sx={{ width: '100%' }}
-									value={field.value}
-									minDate={dayjs()}
-									onChange={(newValue) => field.onChange(newValue)}
-									timeSteps={{ minutes: 15 }}
-									ampm={false}
-									views={['year', 'month', 'day', 'hours', 'minutes']}
-									format="DD/MM/YYYY HH:mm"
-									slotProps={{
-										textField: {
-											variant: 'outlined',
-											color: fieldState.error?.message ? 'error' : undefined,
-											size: 'small',
-											error: !!fieldState.error?.message
-										}
-									}}
-								/>
-								{fieldState.error && (
-									<FormHelperText
-										sx={{ paddingLeft: 1.7 }}
-										error={!!fieldState.error.message}
-									>
-										{FIELD_REQUIRED}
-									</FormHelperText>
-								)}
-							</>
-						)}
+						disabled={disabled || dateField}
 					/>
 				</Grid>
 				<Grid

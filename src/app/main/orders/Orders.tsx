@@ -279,7 +279,10 @@ function Order() {
 					/>
 					<OrderFollowUpDialog
 						id={orderId}
-						onClose={() => setOpenFollow(false)}
+						onClose={() => {
+							setOrderId('');
+							setOpenFollow(false);
+						}}
 						open={openFollow}
 						onSubmit={async () => {
 							await refetch();

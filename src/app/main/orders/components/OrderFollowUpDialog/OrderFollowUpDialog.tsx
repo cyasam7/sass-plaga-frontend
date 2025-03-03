@@ -1,10 +1,10 @@
-import { Button, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
-import { DateTimePicker } from '@mui/x-date-pickers';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { DateTimePickerField } from 'app/shared-components/DateTimePicker';
+import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { IOrderFollowUpDialogProps } from './IOrderFollowUpDialogProps';
 import { IFollowUpForm, followUppSchema } from './schema';
 import { OrderService } from '../../../../shared/services/OrderService';
@@ -62,6 +62,7 @@ function OrderFollowUpDialog(props: IOrderFollowUpDialogProps) {
 							variant="outlined"
 							color="primary"
 							onClick={handleOnClose}
+							disabled={formHandler.formState.isSubmitting}
 						>
 							Cancelar
 						</Button>
@@ -69,6 +70,7 @@ function OrderFollowUpDialog(props: IOrderFollowUpDialogProps) {
 							variant="contained"
 							color="primary"
 							onClick={formHandler.handleSubmit(handleSubmit)}
+							disabled={formHandler.formState.isSubmitting}
 						>
 							Guardar
 						</Button>
@@ -80,46 +82,20 @@ function OrderFollowUpDialog(props: IOrderFollowUpDialogProps) {
 					py={2}
 					spacing={2}
 				>
-					<Controller
+					<DateTimePickerField
 						control={formHandler.control}
 						name="date"
-						render={({ field, fieldState }) => (
-							<DateTimePicker
-								label="Fecha *"
-								timezone="America/Mexico_City"
-								sx={{ width: '100%' }}
-								value={field.value}
-								disabled={formHandler.formState.isSubmitting}
-								minDate={dayjs()}
-								onChange={(newValue) => field.onChange(newValue)}
-								slotProps={{
-									textField: {
-										variant: 'standard',
-										color: fieldState.error?.message ? 'error' : undefined,
-										helperText: fieldState.error?.message,
-										error: !!fieldState.error
-									}
-								}}
-							/>
-						)}
+						disabled={formHandler.formState.isSubmitting}
 					/>
-					<Controller
+					<TextFieldForm
 						control={formHandler.control}
 						name="observations"
-						render={({ field, fieldState }) => (
-							<TextField
-								{...field}
-								label="Observaciones"
-								disabled={formHandler.formState.isSubmitting}
-								required
-								fullWidth
-								multiline
-								rows={3}
-								variant="standard"
-								error={Boolean(fieldState.error?.message)}
-								helperText={fieldState.error?.message}
-							/>
-						)}
+						label="Observaciones"
+						disabled={formHandler.formState.isSubmitting}
+						required
+						fullWidth
+						multiline
+						rows={5}
 					/>
 				</Stack>
 			</DialogContent>
