@@ -174,7 +174,7 @@ function Order() {
 				const date = dayjs(i.date);
 				const startDay = dayjs().startOf('day').add(1, 'day');
 				const finalDay = dayjs().endOf('day').add(1, 'day');
-				return date.isAfter(startDay) && date.isBefore(finalDay);
+				return (date.isAfter(startDay) || date.isSame(startDay)) && date.isBefore(finalDay);
 			});
 		}
 
@@ -185,19 +185,20 @@ function Order() {
 				return dateOrder.isAfter(today) && validateIfOrderIsPending(i.status);
 			});
 		}
-
 		if (calendarFilter) {
 			data = data.filter((i) => {
 				const date = dayjs(i.date);
 				const startDate = dayjs(calendarFilter).startOf('day');
 				const finalDate = dayjs(calendarFilter).endOf('day');
-				return date.isAfter(startDate) && date.isBefore(finalDate);
+
+				return (date.isAfter(startDate) || date.isSame(startDate)) && date.isBefore(finalDate);
 			});
 		}
 
 		if (statusFilter) {
 			data = data.filter((i) => i.status === statusFilter);
 		}
+
 		return data;
 	}
 
