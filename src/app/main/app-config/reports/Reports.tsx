@@ -22,6 +22,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 const mockCertificateData: CertificateData = {
+	companyAddress: 'Av. Principal #123, Col. Centro, Ciudad de México',
 	companyName: 'Fumigadora Express S.A. de C.V.',
 	clientName: 'Restaurante El Buen Sabor',
 	address: 'Av. Principal #123, Col. Centro, Ciudad de México',
@@ -37,8 +38,6 @@ const mockCertificateData: CertificateData = {
 	targetPests: 'Cucarachas, Hormigas, Roedores',
 	applicationMethod: 'Aspersión y Nebulización',
 	dosage: '50ml/L',
-	urlClientSignature:
-		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
 	urlTechnicalSignature:
 		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
 };
