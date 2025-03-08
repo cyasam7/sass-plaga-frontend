@@ -7,7 +7,7 @@ import { Card, CardContent, Grid, Stack } from '@mui/material';
 import { BlobProvider } from '@react-pdf/renderer';
 import { DocumentCanvasProvider } from './hooks/useDocumentCanvas';
 import FormReport from './components/FormReport/FormReport';
-import Certificate, { CertificateData } from './components/Certificate/Certificate';
+import Certificate, { CertificateData } from './components/Reports/Certificate/Certificate';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {

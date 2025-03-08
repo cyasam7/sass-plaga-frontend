@@ -89,4 +89,23 @@ export class OrderService {
 			console.log(error);
 		}
 	}
+
+	static async downloadServicesOrder(orderId: string): Promise<void> {
+		try {
+			const response = await AxiosFetcher({
+				url: `/order/fumigation-report/${orderId}`,
+				method: 'GET',
+				responseType: 'blob'
+			});
+			const blob = response as Blob;
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `${orderId}.pdf`;
+			document.body.appendChild(a);
+			a.click();
+		} catch (error) {
+			console.log(error);
+		}
+	}
 }

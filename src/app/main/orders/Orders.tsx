@@ -118,7 +118,7 @@ function Order() {
 					/>,
 					<GridActionsCellItem
 						key={6}
-						label="DESCARGAR CERTIFICADO DE FUMIGACIÓN"
+						label="CERTIFICADO DE FUMIGACIÓN"
 						icon={<FileDownload />}
 						showInMenu
 						disabled={![EStatusOrder.DONE, EStatusOrder.FINISHED].includes(params.row.status)}
@@ -127,6 +127,16 @@ function Order() {
 								daysValid: 30,
 								id: params.row.id
 							});
+						}}
+					/>,
+					<GridActionsCellItem
+						key={7}
+						label="ORDEN DE SERVICIO"
+						icon={<FileDownload />}
+						showInMenu
+						disabled={![EStatusOrder.DONE, EStatusOrder.FINISHED].includes(params.row.status)}
+						onClick={async () => {
+							await OrderService.downloadServicesOrder(params.row.id);
 						}}
 					/>,
 					<GridActionsCellItem
