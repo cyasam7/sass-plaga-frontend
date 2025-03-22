@@ -40,3 +40,16 @@ export interface Client {
 }
 
 
+
+export interface Device {
+  id: string;
+  type: string;
+  code: string;
+  areaId: string
+  location: string;
+  status: string;
+  installDate: string;
+  lastCheck?: string;
+  nextCheck?: string;
+  notes?: string;
+}

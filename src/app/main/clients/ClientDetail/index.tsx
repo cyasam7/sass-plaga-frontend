@@ -42,7 +42,7 @@ import {
 } from "@mui/icons-material"
 import { useNavigate } from "react-router"
 import { BranchCard } from "../components/Cards/BranchCard"
-import DetailTabs from "../components/DetailTabs"
+import DetailTabs from "./DetailTabs"
 import { Branch, Client } from "../types"
 import ClientInfo from "./ClientInfo"
 

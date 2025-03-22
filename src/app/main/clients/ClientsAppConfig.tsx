@@ -1,6 +1,8 @@
 import { StyledContainerClients } from './styled-components';
 import { ClientsApp } from './ClientsApp';
 import { ClientDetail } from './ClientDetail';
+import { AreaDetail } from './AreaDetail';
+import { BranchDetail } from './BranchDetail';
 
 
 /**
@@ -30,18 +32,19 @@ const ClientsAppConfig = {
 				<ClientDetail />
 			</StyledContainerClients>,
 		},
-		/* {
-			path: '/clients/:clientId/branches/:branchId',
-			element: <StyledContainerClients>
-				<BranchDetail />
-			</StyledContainerClients>,
+		{
+			path: 'clients/:clientId/branches/:branchId',
+			element:
+				<StyledContainerClients>
+					<BranchDetail />
+				</StyledContainerClients>,
 		},
 		{
 			path: '/clients/:clientId/branches/:branchId/areas/:areaId',
 			element: <StyledContainerClients>
 				<AreaDetail />
 			</StyledContainerClients>,
-		} */
+		}
 	]
 };
 

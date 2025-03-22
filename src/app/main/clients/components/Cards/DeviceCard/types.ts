@@ -1,14 +1,4 @@
-export interface Device {
-  id: string;
-  type: string;
-  code: string;
-  location: string;
-  status: string;
-  installDate: string;
-  lastCheck?: string;
-  nextCheck?: string;
-  notes?: string;
-}
+import { Device } from "../../../types";
 
 export interface DeviceCardProps {
   device: Device;
