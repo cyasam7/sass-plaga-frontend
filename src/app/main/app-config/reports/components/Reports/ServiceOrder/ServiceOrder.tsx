@@ -1,5 +1,4 @@
 import { Document, Font, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
-import { ReactElement } from 'react';
 
 // Register fonts
 Font.register({
@@ -26,273 +25,302 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 10,
+		marginBottom: 15,
 		borderTopWidth: 8,
 		borderTopColor: '#1a5f7a',
-		paddingTop: 10
+		paddingTop: 15
 	},
-	headerLeft: {
-		flexDirection: 'row',
-		gap: 10,
-		alignItems: 'center'
+	logoContainer: {
+		width: 120
 	},
 	logo: {
-		width: 80,
-		height: 40,
+		width: 100,
+		height: 50,
 		objectFit: 'contain'
+	},
+	licenseNumber: {
+		fontSize: 8,
+		color: '#4B5563',
+		marginTop: 4
 	},
 	titleContainer: {
 		alignItems: 'flex-end'
 	},
 	title: {
-		fontSize: 18,
+		fontSize: 20,
 		fontWeight: 'bold',
 		color: '#1a5f7a'
 	},
 	certificateNumber: {
-		fontSize: 10,
+		fontSize: 12,
 		color: '#4B5563',
-		marginTop: 4,
-		marginBottom: 2
+		marginTop: 8,
+		marginBottom: 4
 	},
 	dateInfo: {
-		fontSize: 9,
+		fontSize: 10,
 		color: '#4B5563',
 		marginTop: 2,
 		textAlign: 'right'
 	},
-	section: {
-		backgroundColor: '#f8fafc',
-		padding: 10,
-		borderRadius: 6,
-		marginBottom: 8
-	},
-	sectionTitle: {
-		fontSize: 12,
+	companyName: {
+		fontSize: 16,
 		fontWeight: 'bold',
 		color: '#2d9cdb',
-		marginBottom: 8
+		marginBottom: 15
 	},
-	grid: {
+	infoSection: {
+		backgroundColor: '#f8fafc',
+		padding: 15,
+		borderRadius: 6,
+		marginBottom: 15
+	},
+	infoSectionTitle: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#2d9cdb',
+		marginBottom: 15
+	},
+	infoGrid: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: 12
+		gap: 20
 	},
-	gridItem: {
-		width: '45%',
-		marginBottom: 6
+	infoColumn: {
+		flex: 1,
+		minWidth: '45%'
+	},
+	infoRow: {
+		marginBottom: 10
 	},
 	label: {
-		fontSize: 8,
+		fontSize: 9,
 		color: '#4B5563',
 		fontWeight: 'bold'
 	},
 	value: {
-		fontSize: 9,
-		marginTop: 1,
+		fontSize: 10,
+		marginTop: 2,
 		color: '#1F2937'
 	},
-	list: {
-		marginTop: 6
+	serviceDetails: {
+		backgroundColor: '#f8fafc',
+		padding: 15,
+		borderRadius: 6,
+		marginBottom: 15
 	},
-	listItem: {
-		fontSize: 9,
-		color: '#1F2937',
-		marginBottom: 2
+	sectionTitle: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#2d9cdb',
+		marginBottom: 10
+	},
+	serviceGrid: {
+		flexDirection: 'row',
+		flexWrap: 'wrap'
+	},
+	serviceItem: {
+		width: '50%',
+		marginBottom: 10
+	},
+	productsSection: {
+		backgroundColor: '#ffffff',
+		padding: 12,
+		borderRadius: 4,
+		marginTop: 15
 	},
 	signatureSection: {
+		backgroundColor: '#f8fafc',
+		padding: 15,
+		borderRadius: 6,
+		marginTop: 0
+	},
+	signatureTitle: {
+		fontSize: 14,
+		fontWeight: 'bold',
+		color: '#2d9cdb',
+		marginBottom: 15
+	},
+	signatureContent: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		gap: 20,
-		marginTop: 6
+		gap: 20
 	},
 	signatureBox: {
-		height: 45,
+		flex: 1,
+		maxWidth: 200,
+		alignItems: 'center'
+	},
+	signatureImage: {
+		height: 80,
 		width: '100%',
 		borderWidth: 1,
 		borderColor: '#d1d5db',
 		borderRadius: 4,
-		marginTop: 4,
-		marginBottom: 2,
+		marginBottom: 8,
 		backgroundColor: '#ffffff'
 	},
 	signatureLabel: {
-		fontSize: 7,
+		fontSize: 9,
 		color: '#4B5563',
 		fontWeight: 'bold',
 		textAlign: 'center'
 	}
 });
 
-export function getYesOrNo(value: boolean): string {
-	return value ? 'Si' : 'No';
+export interface CertificateData {
+	companyName: string;
+	companyAddress: string;
+	clientName: string;
+	address: string;
+	date: string;
+	certificateNumber: string;
+	validUntil: string;
+	logoUrl: string;
+	sanitaryLicense: string;
+	serviceType: string;
+	treatedAreas: string;
+	chemicals: string;
+	targetPests: string;
+	applicationMethod: string;
+	dosage: string;
+	urlTechnicalSignature: string;
 }
 
-export interface IServiceOrderReport {
-	report: {
-		companyLogo: string;
-		companyName: string;
-		orderNumber: string;
-		companyAddress: string;
-		date: string;
-		clientName: string;
-		clientAddress: string;
-		clientPhone: string;
-		services: string[];
-		observations: string;
-		includeCertificate: boolean;
-		scheduleFollowUp: boolean;
-		daysFollowUp: number;
-		servicePrice: string;
-		infestationArea: string;
-		infestationLvl: string;
-		plagues: string;
-		signFumigator: string;
-		signClient: string;
-	};
+interface CertificatePDFProps {
+	data: CertificateData;
+	primaryColor: string;
+	secondaryColor: string;
+	showLogo?: boolean;
 }
 
-export function ServiceOrderReport(props: IServiceOrderReport): ReactElement {
-	const { report } = props;
+function Certificate({ data, primaryColor, secondaryColor, showLogo = true }: CertificatePDFProps): JSX.Element {
 	return (
 		<Document>
 			<Page
 				size="A4"
 				style={styles.page}
 			>
-				<View style={styles.header}>
-					<View style={styles.headerLeft}>
-						<Image
-							src={report.companyLogo}
-							style={styles.logo}
-						/>
-					</View>
+				<View style={[styles.header, { borderTopColor: primaryColor }]}>
+					{showLogo && (
+						<View style={styles.logoContainer}>
+							<Image
+								src={data.logoUrl}
+								style={styles.logo}
+							/>
+						</View>
+					)}
 					<View style={styles.titleContainer}>
-						<Text style={styles.title}>Orden de Servicio</Text>
-						<Text style={styles.certificateNumber}>No. {report.orderNumber}</Text>
+						<Text style={[styles.title, { color: primaryColor }]}>Certificado de Fumigación</Text>
+						<Text style={styles.certificateNumber}>No. {data.certificateNumber}</Text>
 						<Text style={styles.dateInfo}>
 							Fecha de emisión:{' '}
-							{new Date(report.date).toLocaleDateString('es-ES', {
+							{new Date(data.date).toLocaleDateString('es-ES', {
 								year: 'numeric',
 								month: 'long',
 								day: 'numeric'
-							})}
+							}) || '[Fecha de emisión]'}
+						</Text>
+						<Text style={styles.dateInfo}>
+							Válido hasta:{' '}
+							{new Date(data.validUntil).toLocaleDateString('es-ES', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							}) || '[Fecha de validez]'}
 						</Text>
 					</View>
 				</View>
 
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Información General</Text>
-					<View style={styles.grid}>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Empresa:</Text>
-							<Text style={styles.value}>{report.companyName}</Text>
+				<View style={styles.infoSection}>
+					<Text style={[styles.infoSectionTitle, { color: secondaryColor }]}>Información General</Text>
+					<View style={styles.infoGrid}>
+						<View style={styles.infoColumn}>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Empresa:</Text>
+								<Text style={styles.value}>{data.companyName}</Text>
+							</View>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Dirección de la empresa:</Text>
+								<Text style={styles.value}>{data.companyAddress || '[Dirección de la empresa]'}</Text>
+							</View>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Licencia Sanitaria:</Text>
+								<Text style={styles.value}>{data.sanitaryLicense || '[Número de Licencia]'}</Text>
+							</View>
 						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Dirección de la empresa:</Text>
-							<Text style={styles.value}>{report.companyAddress}</Text>
-						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Cliente:</Text>
-							<Text style={styles.value}>{report.clientName}</Text>
-						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Dirección del cliente:</Text>
-							<Text style={styles.value}>{report.clientAddress}</Text>
-						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Teléfono:</Text>
-							<Text style={styles.value}>{report.clientPhone}</Text>
-						</View>
-					</View>
-				</View>
-
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Detalles del Servicio</Text>
-					<View style={styles.grid}>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Áreas revisadas:</Text>
-							<Text style={styles.value}>{report.infestationArea}</Text>
-						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Nivel de infestación:</Text>
-							<Text style={styles.value}>{report.infestationLvl}</Text>
-						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Plagas encontradas:</Text>
-							<Text style={styles.value}>{report.plagues}</Text>
-						</View>
-					</View>
-
-					<View style={[styles.section, { backgroundColor: '#ffffff', marginTop: 15 }]}>
-						<Text style={styles.sectionTitle}>Servicios a realizar</Text>
-						<View style={styles.list}>
-							<Text style={styles.listItem}>• {report.services.join(', ')}</Text>
+						<View style={styles.infoColumn}>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Cliente:</Text>
+								<Text style={styles.value}>{data.clientName || '[Nombre del Cliente]'}</Text>
+							</View>
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Dirección del cliente:</Text>
+								<Text style={styles.value}>{data.address || '[Dirección]'}</Text>
+							</View>
 						</View>
 					</View>
 				</View>
 
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Plan de Acción y Observaciones</Text>
-					<Text style={styles.value}>{report.observations}</Text>
-				</View>
+				<View style={styles.serviceDetails}>
+					<Text style={[styles.sectionTitle, { color: secondaryColor }]}>Detalles del Servicio</Text>
 
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Instrucciones y Seguimiento</Text>
-					<View style={styles.grid}>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Incluir certificado:</Text>
-							<Text style={styles.value}>{getYesOrNo(report.includeCertificate)}</Text>
+					<View style={styles.serviceGrid}>
+						<View style={styles.serviceItem}>
+							<Text style={styles.label}>Tipo de Servicio:</Text>
+							<Text style={styles.value}>{data.serviceType || '[Tipo de Servicio]'}</Text>
 						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Programar seguimiento:</Text>
-							<Text style={styles.value}>{getYesOrNo(report.scheduleFollowUp)}</Text>
+
+						<View style={styles.serviceItem}>
+							<Text style={styles.label}>Plagas Objetivo:</Text>
+							<Text style={styles.value}>{data.targetPests || '[Plagas Objetivo]'}</Text>
 						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Días para seguimiento:</Text>
-							<Text style={styles.value}>{`${report.daysFollowUp} días`}</Text>
+
+						<View style={styles.serviceItem}>
+							<Text style={styles.label}>Áreas Tratadas:</Text>
+							<Text style={styles.value}>{data.treatedAreas || '[Áreas Tratadas]'}</Text>
 						</View>
-						<View style={styles.gridItem}>
-							<Text style={styles.label}>Costo del servicio:</Text>
-							<Text style={styles.value}>${report.servicePrice}</Text>
+					</View>
+
+					<View style={styles.productsSection}>
+						<Text style={[styles.sectionTitle, { color: secondaryColor, fontSize: 14 }]}>
+							Productos y Aplicación
+						</Text>
+
+						<View style={styles.serviceGrid}>
+							<View style={styles.serviceItem}>
+								<Text style={styles.label}>Productos Utilizados:</Text>
+								<Text style={styles.value}>{data.chemicals || '[Productos Químicos]'}</Text>
+							</View>
+
+							<View style={styles.serviceItem}>
+								<Text style={styles.label}>Método de Aplicación:</Text>
+								<Text style={styles.value}>{data.applicationMethod || '[Método]'}</Text>
+							</View>
+
+							<View style={styles.serviceItem}>
+								<Text style={styles.label}>Dosis:</Text>
+								<Text style={styles.value}>{data.dosage || '[Dosis]'}</Text>
+							</View>
 						</View>
 					</View>
 				</View>
 
-				<View style={styles.section}>
-					<Text style={styles.sectionTitle}>Firmas de Autorización</Text>
-					<View style={styles.signatureSection}>
-						<View style={{ flex: 1, alignItems: 'center' }}>
+				<View style={styles.signatureSection}>
+					<Text style={[styles.signatureTitle, { color: secondaryColor }]}>Firmas de Autorización</Text>
+					<View style={styles.signatureContent}>
+						<View style={styles.signatureBox}>
 							<Image
-								src={
-									report.signFumigator ||
-									'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-								}
-								style={styles.signatureBox}
+								src={data.urlTechnicalSignature}
+								style={styles.signatureImage}
 							/>
-							<Text style={styles.signatureLabel}>Firma del Técnico</Text>
-						</View>
-						<View style={{ flex: 1, alignItems: 'center' }}>
-							<Image
-								src={
-									report.signClient ||
-									'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-								}
-								style={styles.signatureBox}
-							/>
-							<Text style={styles.signatureLabel}>Firma del Cliente</Text>
+							<Text style={styles.signatureLabel}>Firma del Responsable Sanitario</Text>
 						</View>
 					</View>
-				</View>
-
-				<View style={[styles.section, { marginBottom: 0 }]}>
-					<Text style={styles.sectionTitle}>Aviso de Privacidad</Text>
-					<Text style={styles.value}>
-						La información personal recopilada en este reporte será utilizada únicamente para fines de
-						prestación del servicio y no será compartida con terceros sin su consentimiento.
-					</Text>
 				</View>
 			</Page>
 		</Document>
 	);
 }
+
+export default Certificate;

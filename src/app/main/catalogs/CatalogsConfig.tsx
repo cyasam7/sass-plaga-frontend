@@ -4,6 +4,7 @@ import { FuseRouteConfigType } from '@fuse/utils/FuseUtils';
 import en from './i18n/en';
 import tr from './i18n/tr';
 import ar from './i18n/ar';
+import CatalogosComponent from './CatalogsV2';
 
 i18next.addResourceBundle('en', 'CatalogsPage', en);
 i18next.addResourceBundle('tr', 'CatalogsPage', tr);
@@ -29,7 +30,7 @@ const CatalogsConfig: FuseRouteConfigType = {
 	routes: [
 		{
 			path: 'catalogs',
-			element: <Catalogs />
+			element: <CatalogosComponent />
 		}
 	]
 };
