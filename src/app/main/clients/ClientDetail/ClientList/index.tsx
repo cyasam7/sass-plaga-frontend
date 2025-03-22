@@ -1,30 +1,20 @@
-'use client';
-
 import type React from 'react';
 import { useState } from 'react';
 import {
   Box,
-  Card,
-  CardContent,
-  CardHeader,
-  CardActions,
-  Typography,
   Grid,
-  Avatar,
-  Chip,
-  Button,
   TextField,
   InputAdornment,
   Tabs,
   Tab,
   Menu,
   MenuItem,
-  IconButton,
   Divider
 } from '@mui/material';
-import { Business, Person, Search, MoreVert, Edit, Schedule, History, Delete } from '@mui/icons-material';
+import { Search, Edit, Schedule, Delete } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 import { Client, ClientType } from '../../types';
+import ClientCard from '../../components/Cards/ClientCard';
 // Datos de ejemplo
 const CLIENTS: Client[] = [
   {
@@ -34,13 +24,9 @@ const CLIENTS: Client[] = [
     email: 'contacto@elahorro.com',
     phone: '555-123-4567',
     address: 'Av. Principal #123, Zona Comercial',
-    lastService: '15/02/2024',
-    nextService: '15/05/2024',
-    image: '/placeholder.svg?height=40&width=40',
     businessDetails: {
       contactPerson: 'María Rodríguez',
       position: 'Gerente de Operaciones',
-      employeeCount: 120
     }
   },
   {
@@ -50,13 +36,9 @@ const CLIENTS: Client[] = [
     email: 'reservas@labuenamese.com',
     phone: '555-987-6543',
     address: 'Calle Gourmet #45, Centro',
-    lastService: '01/03/2024',
-    nextService: '01/06/2024',
-    image: '/placeholder.svg?height=40&width=40',
     businessDetails: {
       contactPerson: 'Carlos Méndez',
       position: 'Propietario',
-      employeeCount: 25
     }
   },
   {
@@ -66,9 +48,6 @@ const CLIENTS: Client[] = [
     email: 'juan.perez@email.com',
     phone: '555-111-2222',
     address: 'Calle Residencial #78, Colonia Las Flores',
-    lastService: '10/03/2024',
-    nextService: '10/06/2024',
-    image: '/placeholder.svg?height=40&width=40'
   },
   {
     id: '4',
@@ -77,9 +56,6 @@ const CLIENTS: Client[] = [
     email: 'ana.garcia@email.com',
     phone: '555-333-4444',
     address: 'Av. Los Pinos #56, Residencial El Bosque',
-    lastService: '05/03/2024',
-    nextService: '05/06/2024',
-    image: '/placeholder.svg?height=40&width=40'
   },
   {
     id: '5',
@@ -88,13 +64,9 @@ const CLIENTS: Client[] = [
     email: 'reservaciones@vistahermosa.com',
     phone: '555-777-8888',
     address: 'Blvd. Turístico #100, Zona Hotelera',
-    lastService: '20/02/2024',
-    nextService: '20/05/2024',
-    image: '/placeholder.svg?height=40&width=40',
     businessDetails: {
       contactPerson: 'Roberto Sánchez',
       position: 'Director de Mantenimiento',
-      employeeCount: 85
     }
   },
   {
@@ -104,9 +76,6 @@ const CLIENTS: Client[] = [
     email: 'carmen.martinez@email.com',
     phone: '555-555-6666',
     address: 'Calle Las Palmas #23, Fraccionamiento El Paraíso',
-    lastService: '25/02/2024',
-    nextService: '25/05/2024',
-    image: '/placeholder.svg?height=40&width=40'
   }
 ];
 
@@ -115,8 +84,6 @@ export function ClientList() {
   const [activeTab, setActiveTab] = useState<'all' | ClientType>('all');
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
-
-  const navigate = useNavigate()
 
   // Filtrar clientes según búsqueda y tipo
   const filteredClients = CLIENTS.filter((client) => {
@@ -205,102 +172,7 @@ export function ClientList() {
             lg={4}
             key={client.id}
           >
-            <Card variant="outlined">
-              <CardHeader
-                avatar={
-                  <Avatar src={client.image}>
-                    {client.type === 'business' ? <Business /> : <Person />}
-                  </Avatar>
-                }
-                action={
-                  <IconButton
-                    aria-label="opciones"
-                    onClick={(e) => handleMenuOpen(e, client.id)}
-                  >
-                    <MoreVert />
-                  </IconButton>
-                }
-                title={
-                  <Box
-                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                  >
-                    <Typography
-                      variant="subtitle1"
-                      component="div"
-                      sx={{ fontWeight: 'medium' }}
-                    >
-                      {client.name}
-                    </Typography>
-                    <Chip
-                      label={client.type === 'business' ? 'Empresa' : 'Persona'}
-                      size="small"
-                      color={client.type === 'business' ? 'primary' : 'secondary'}
-                    />
-                  </Box>
-                }
-              />
-              <CardContent>
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}
-                  >
-                    <Business fontSize="small" />
-                    {client.email}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}
-                  >
-                    <Person fontSize="small" />
-                    {client.phone}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                  >
-                    <Schedule fontSize="small" />
-                    {client.address}
-                  </Typography>
-                </Box>
-                {client.businessDetails && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      Contacto: {client.businessDetails.contactPerson}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      Cargo: {client.businessDetails.position}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                    >
-                      Empleados: {client.businessDetails.employeeCount}
-                    </Typography>
-                  </Box>
-                )}
-              </CardContent>
-              <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
-                <Button
-                  size="small"
-                  startIcon={<History />}
-                  onClick={() => navigate(`/clients/${client.id}`)}
-                >
-                  Ver detalles
-                </Button>
-              </CardActions>
-            </Card>
+            <ClientCard client={client} onMenuOpen={() => { }} />
           </Grid>
         ))}
       </Grid>

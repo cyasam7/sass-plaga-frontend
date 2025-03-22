@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, IconButton, Typography } from '@mui/material';
-import { BugReport, CalendarMonth, Edit, MoreVert } from '@mui/icons-material';
+import { BugReport, Edit, MoreVert } from '@mui/icons-material';
 import { DeviceCardProps } from './types';
 
 export function DeviceCard({
@@ -23,7 +23,6 @@ export function DeviceCard({
           </IconButton>
         }
         title={`${getDeviceTypeLabel(device.type)} - ${device.code}`}
-        subheader={device.location}
       />
       <CardContent sx={{ pt: 0 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -48,24 +47,6 @@ export function DeviceCard({
           </Typography>
           <Typography variant="body2">{device.installDate}</Typography>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-          >
-            Última revisión:
-          </Typography>
-          <Typography variant="body2">{device.lastCheck || 'No disponible'}</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-          >
-            Próxima revisión:
-          </Typography>
-          <Typography variant="body2">{device.nextCheck || 'No programada'}</Typography>
-        </Box>
         {device.notes && (
           <Box sx={{ mt: 1 }}>
             <Typography
@@ -78,21 +59,6 @@ export function DeviceCard({
           </Box>
         )}
       </CardContent>
-      <CardActions>
-        <Button
-          size="small"
-          startIcon={<CalendarMonth />}
-        >
-          Historial
-        </Button>
-        <Button
-          size="small"
-          startIcon={<Edit />}
-          onClick={() => onEditDevice(device)}
-        >
-          Editar
-        </Button>
-      </CardActions>
     </Card>
   );
 } 

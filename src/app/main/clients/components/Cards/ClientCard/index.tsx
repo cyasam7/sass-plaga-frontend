@@ -20,21 +20,21 @@ import {
   History,
 } from "@mui/icons-material"
 import { ClientCardProps } from "./types"
+import { useNavigate } from "react-router"
 
 const ClientCard: React.FC<ClientCardProps> = ({
   client,
-  onViewDetails,
   onMenuOpen,
 }) => {
   const isBusiness = client.type === "business"
   const typeLabel = isBusiness ? "Empresa" : "Persona"
   const typeColor = isBusiness ? "primary" : "secondary"
-
+  const navigate = useNavigate()
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
       <CardHeader
         avatar={
-          <Avatar src={client.image}>
+          <Avatar>
             {isBusiness ? <Business /> : <Person />}
           </Avatar>
         }
@@ -102,9 +102,6 @@ const ClientCard: React.FC<ClientCardProps> = ({
               <Typography variant="body2" color="text.secondary">
                 Cargo: {client.businessDetails.position}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Empleados: {client.businessDetails.employeeCount}
-              </Typography>
             </Box>
           </>
         )}
@@ -114,7 +111,7 @@ const ClientCard: React.FC<ClientCardProps> = ({
         <Button
           size="small"
           startIcon={<History />}
-          onClick={() => onViewDetails(client.id)}
+          onClick={() => navigate(`/clients/${client.id}`)}
         >
           Ver detalles
         </Button>

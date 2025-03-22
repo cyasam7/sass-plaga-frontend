@@ -34,9 +34,8 @@ export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
       email: "",
       phone: "",
       address: "",
-      lastService: "",
-      nextService: "",
-      notes: "",
+      contactPerson: "",
+      position: "",
     },
   })
 
@@ -190,87 +189,8 @@ export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
                     )}
                   />
                 </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Controller
-                    name="employeeCount"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Número de empleados"
-                        type="number"
-                        fullWidth
-                        error={!!errors.employeeCount}
-                        helperText={errors.employeeCount?.message}
-                      />
-                    )}
-                  />
-                </Grid>
               </>
             )}
-
-            <Grid item xs={12}>
-              <Divider>
-                <Typography variant="body2" color="text.secondary">
-                  Información de servicios
-                </Typography>
-              </Divider>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Controller
-                name="lastService"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Último servicio"
-                    type="date"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    error={!!errors.lastService}
-                    helperText={errors.lastService?.message}
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Controller
-                name="nextService"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Próximo servicio"
-                    type="date"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    error={!!errors.nextService}
-                    helperText={errors.nextService?.message}
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Controller
-                name="notes"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Notas"
-                    multiline
-                    rows={4}
-                    fullWidth
-                    error={!!errors.notes}
-                    helperText={errors.notes?.message}
-                  />
-                )}
-              />
-            </Grid>
           </Grid>
         </form>
       </DialogContent>

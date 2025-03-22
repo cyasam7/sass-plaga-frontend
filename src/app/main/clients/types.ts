@@ -20,7 +20,6 @@ export type ClientType = "business" | "individual"
 export interface BusinessDetails {
   contactPerson: string
   position: string
-  employeeCount: number
 }
 
 export interface Client {
@@ -30,23 +29,15 @@ export interface Client {
   email: string
   phone: string
   address: string
-  image?: string
-  lastService: string
-  nextService: string
   businessDetails?: BusinessDetails
 }
-
-
 
 export interface Device {
   id: string;
   type: string;
   code: string;
-  areaId: string
-  location: string;
+  areaId: string;
   status: string;
   installDate: string;
-  lastCheck?: string;
-  nextCheck?: string;
   notes?: string;
 }

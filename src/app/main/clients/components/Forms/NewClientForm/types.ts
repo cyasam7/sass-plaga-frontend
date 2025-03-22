@@ -16,13 +16,9 @@ export const formSchema = z.object({
   address: z.string().min(5, {
     message: "Ingrese una dirección válida",
   }),
-  lastService: z.string().optional(),
-  nextService: z.string().optional(),
   // Campos específicos para empresas
   contactPerson: z.string().optional(),
   position: z.string().optional(),
-  employeeCount: z.string().optional(),
-  notes: z.string().optional(),
 })
 
 export type FormValues = z.infer<typeof formSchema>

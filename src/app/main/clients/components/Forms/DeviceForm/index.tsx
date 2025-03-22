@@ -13,7 +13,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material"
-import { Device, DeviceFormProps } from "./types"
+import { DeviceFormProps } from "./types"
+import { Device } from "../../../types"
 
 export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceFormProps) {
   const [formData, setFormData] = useState<Device>({
@@ -21,10 +22,7 @@ export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceF
     areaId: device?.areaId || "",
     type: device?.type || "trap",
     code: device?.code || "",
-    location: device?.location || "",
     installDate: device?.installDate || "",
-    lastCheck: device?.lastCheck || "",
-    nextCheck: device?.nextCheck || "",
     status: device?.status || "active",
     notes: device?.notes || "",
   })
@@ -55,10 +53,6 @@ export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceF
 
     if (!formData.code.trim()) {
       newErrors.code = "El código del dispositivo es obligatorio"
-    }
-
-    if (!formData.location.trim()) {
-      newErrors.location = "La ubicación es obligatoria"
     }
 
     if (!formData.installDate.trim()) {
@@ -107,20 +101,7 @@ export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceF
             />
           </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              name="location"
-              label="Ubicación"
-              value={formData.location}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.location}
-              helperText={errors.location}
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <TextField
               name="installDate"
               label="Fecha de Instalación"
@@ -132,30 +113,6 @@ export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceF
               error={!!errors.installDate}
               helperText={errors.installDate}
               required
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <TextField
-              name="lastCheck"
-              label="Última Revisión"
-              type="date"
-              value={formData.lastCheck}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <TextField
-              name="nextCheck"
-              label="Próxima Revisión"
-              type="date"
-              value={formData.nextCheck}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
