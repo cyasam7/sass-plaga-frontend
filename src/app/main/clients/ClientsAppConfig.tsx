@@ -1,8 +1,6 @@
 import { lazy } from 'react';
-import ClientView from './components/ClientView';
-import ClientForm from './components/ClientForm';
 
-const ClientsApp = lazy(() => import('./ClientsApp'));
+const ClientsAppV2 = lazy(() => import('./ClientsApp'));
 
 /**
  * The ClientsApp configuration.
@@ -21,17 +19,7 @@ const ClientsAppConfig = {
 	routes: [
 		{
 			path: '/clients',
-			element: <ClientsApp />,
-			children: [
-				{
-					path: ':id',
-					element: <ClientView />
-				},
-				{
-					path: ':id/edit',
-					element: <ClientForm />
-				}
-			]
+			element: <ClientsAppV2 />,
 		}
 	]
 };

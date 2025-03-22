@@ -20,6 +20,7 @@ import ProductDialog from './dialogs/ProductDialog';
 interface Product {
     id: string;
     name: string;
+    chemicalName?: string;
     description: string;
     availableDoses?: Array<{
         amount: string;
@@ -120,9 +121,14 @@ export default function Products({ products }: ProductsProps) {
                                             p: 0.5
                                         }}
                                     />
-                                    <Typography variant="h6" component="div">
-                                        {product.name}
-                                    </Typography>
+                                    <Box>
+                                        <Typography variant="h6" component="div">
+                                            {product.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            {product.chemicalName}
+                                        </Typography>
+                                    </Box>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                                     <ScaleIcon

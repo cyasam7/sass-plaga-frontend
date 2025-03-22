@@ -1,63 +1,69 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import { useQuery } from 'react-query';
-import ContactsHeader from './ClientsHeader';
-import ContactsList from './ClientsList';
-import ContactsSidebarContent from './ClientsSidebarContent';
-import { CatalogService } from '../../shared/services/CatalogService';
+import { Box, Typography, Toolbar, Paper, Container, AppBar, Stack } from '@mui/material';
+import { BugReport } from '@mui/icons-material';
+import { ClientDetail } from './componentsv2/client-detail';
+import { ClientFilters } from './componentsv2/client-filters';
+import { ClientList } from './componentsv2/client-list';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
-		backgroundColor: theme.palette.background.paper
-	}
+		backgroundColor: theme.palette.background.paper,
+		borderBottomWidth: 1,
+		borderStyle: 'solid',
+		borderColor: theme.palette.divider
+	},
+	'& .FusePageSimple-content': {},
+	'& .FusePageSimple-sidebarHeader': {},
+	'& .FusePageSimple-sidebarContent': {}
 }));
 
 /**
  * The ContactsApp page.
  */
 function ContactsApp() {
-	const pageLayout = useRef(null);
-	const routeParams = useParams();
-	const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
-	const [searchFilter, setSearchFilter] = useState('');
-	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+	const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
 
-	const { data, isLoading } = useQuery({
-		queryKey: ['ContactsHeader'],
-		queryFn: () => CatalogService.getClientsBy({})
-	});
+	const handleViewClientDetails = (clientId: string) => {
+		setSelectedClientId(clientId)
+	}
 
-	useEffect(() => {
-		setRightSidebarOpen(Boolean(routeParams.id));
-	}, [routeParams]);
+	const handleBackToList = () => {
+		// Limpiar cualquier estado relacionado con menús
+		setSelectedClientId(null)
+	}
 
 	return (
 		<Root
-			header={
-				<ContactsHeader
-					loading={isLoading}
-					searchFilter={searchFilter}
-					setSearchFilter={setSearchFilter}
-					clientsLength={data?.payload.length ?? 0}
-				/>
-			}
 			content={
-				<ContactsList
-					clients={data?.payload ?? []}
-					loading={isLoading}
-					searchFilter={searchFilter}
-				/>
+				<>
+					<Container sx={{ py: 4, maxWidth: "1400px !important" }}>
+						{selectedClientId ? (
+							// Vista de detalle del cliente
+							<ClientDetail clientId={selectedClientId} onBack={handleBackToList} />
+						) : (
+							// Vista de lista de clientes
+							<>
+								<Paper sx={{ p: 3, mb: 4 }}>
+									<Box sx={{ mb: 3 }}>
+										<Typography variant="h4" component="h1" gutterBottom>
+											Clientes
+										</Typography>
+										<Typography variant="body1" color="text.secondary">
+											Administre sus clientes empresariales y personales para servicios de fumigación.
+										</Typography>
+									</Box>
+									<ClientFilters />
+								</Paper>
+
+								<ClientList onViewDetails={handleViewClientDetails} />
+							</>
+						)}
+					</Container>
+				</>
 			}
-			ref={pageLayout}
-			rightSidebarContent={<ContactsSidebarContent />}
-			rightSidebarOpen={rightSidebarOpen}
-			rightSidebarOnClose={() => setRightSidebarOpen(false)}
-			rightSidebarWidth={640}
-			rightSidebarVariant="temporary"
-			scroll={isMobile ? 'normal' : 'content'}
+
 		/>
 	);
 }
