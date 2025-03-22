@@ -52,24 +52,24 @@ const products = [
 ];
 
 const pestTypes = [
-	{ 
-		id: '1', 
-		name: 'Cucaracha Alemana', 
+	{
+		id: '1',
+		name: 'Cucaracha Alemana',
 		description: 'Plaga común en cocinas y áreas húmedas'
 	},
-	{ 
-		id: '2', 
-		name: 'Hormiga Faraón', 
+	{
+		id: '2',
+		name: 'Hormiga Faraón',
 		description: 'Hormiga pequeña que forma colonias grandes'
 	},
-	{ 
-		id: '3', 
-		name: 'Araña de Rincón', 
+	{
+		id: '3',
+		name: 'Araña de Rincón',
 		description: 'Araña venenosa común en rincones oscuros'
 	},
-	{ 
-		id: '4', 
-		name: 'Rata Gris', 
+	{
+		id: '4',
+		name: 'Rata Gris',
 		description: 'Roedor común en áreas urbanas'
 	}
 ];
@@ -83,34 +83,35 @@ export default function CatalogsV2() {
 
 	return (
 		<Root
-			header={
-				<div className="p-24">
-					<Typography variant="h6">Catálogos</Typography>
-				</div>
-			}
 			content={
 				<div className="p-24 w-full">
-					<Paper className="p-24 w-full">
+					<Paper
+						elevation={1}
+						sx={{
+							borderRadius: 2,
+							overflow: 'hidden'
+						}}
+					>
+						<Box sx={{ px: 3, pt: 3, pb: 2 }}>
+							<Typography variant="h4" component="h1" gutterBottom>
+								Catálogos
+							</Typography>
+							<Typography variant="subtitle1" color="text.secondary">
+								Gestiona los catálogos del sistema: tipos de servicio, tipos de aplicación, productos y plagas
+							</Typography>
+						</Box>
+
 						<Box>
-							<Box sx={{ mb: 4 }}>
-								<Typography variant="h4" component="h1" gutterBottom>
-									Catálogos
-								</Typography>
-								<Typography variant="subtitle1" color="text.secondary">
-									Gestiona los catálogos del sistema: tipos de servicio, tipos de aplicación, productos y plagas
-								</Typography>
+							<Box sx={{ px: 3, borderBottom: 1, borderColor: 'divider' }}>
+								<Tabs value={tabValue} onChange={handleTabChange} aria-label="catálogos tabs">
+									<Tab label="Tipos de Servicio" />
+									<Tab label="Tipos de Aplicación" />
+									<Tab label="Productos y Dosis" />
+									<Tab label="Tipos de Plagas" />
+								</Tabs>
 							</Box>
 
-							<Paper sx={{ width: '100%' }}>
-								<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-									<Tabs value={tabValue} onChange={handleTabChange} aria-label="catálogos tabs">
-										<Tab label="Tipos de Servicio" />
-										<Tab label="Tipos de Aplicación" />
-										<Tab label="Productos y Dosis" />
-										<Tab label="Tipos de Plagas" />
-									</Tabs>
-								</Box>
-
+							<Box sx={{ p: 3 }}>
 								<TabPanel value={tabValue} index={0}>
 									<ServiceTypes serviceTypes={serviceTypes} />
 								</TabPanel>
@@ -126,7 +127,7 @@ export default function CatalogsV2() {
 								<TabPanel value={tabValue} index={3}>
 									<PestTypes pestTypes={pestTypes} />
 								</TabPanel>
-							</Paper>
+							</Box>
 						</Box>
 					</Paper>
 				</div>

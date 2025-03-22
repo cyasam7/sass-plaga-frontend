@@ -8,16 +8,13 @@ import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useForm } from 'react-hook-form';
-import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import DescriptionIcon from '@mui/icons-material/Description';
+import PestTypeDialog from './dialogs/PestTypeDialog';
 
 interface PestType {
     id: string;
@@ -39,28 +36,13 @@ export default function PestTypes({ pestTypes }: PestTypesProps) {
     const [isEditing, setIsEditing] = React.useState(false);
     const [selectedPest, setSelectedPest] = React.useState<PestType | null>(null);
 
-    const { control, handleSubmit, reset } = useForm<FormData>({
-        defaultValues: {
-            name: '',
-            description: ''
-        }
-    });
-
     const handleOpenDialog = (pest?: PestType) => {
         if (pest) {
             setIsEditing(true);
             setSelectedPest(pest);
-            reset({
-                name: pest.name,
-                description: pest.description
-            });
         } else {
             setIsEditing(false);
             setSelectedPest(null);
-            reset({
-                name: '',
-                description: ''
-            });
         }
         setOpenDialog(true);
     };
@@ -69,14 +51,9 @@ export default function PestTypes({ pestTypes }: PestTypesProps) {
         setOpenDialog(false);
         setIsEditing(false);
         setSelectedPest(null);
-        reset({
-            name: '',
-            description: ''
-        });
     };
 
-    const onSubmit = (data: FormData) => {
-        // Here you would typically make an API call to save the data
+    const handleSubmit = (data: FormData) => {
         console.log('Form submitted:', data);
         handleCloseDialog();
     };
@@ -86,78 +63,138 @@ export default function PestTypes({ pestTypes }: PestTypesProps) {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
                 <Button
                     variant="contained"
+                    color="primary"
                     startIcon={<AddIcon />}
                     onClick={() => handleOpenDialog()}
+                    sx={{
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        px: 3,
+                        py: 1,
+                        boxShadow: 2,
+                        '&:hover': {
+                            boxShadow: 4,
+                            transform: 'translateY(-1px)',
+                        },
+                        transition: 'all 0.2s ease-in-out'
+                    }}
                 >
-                    Nueva Plaga
+                    Nuevo Tipo de Plaga
                 </Button>
             </Box>
 
             <Grid container spacing={2}>
                 {pestTypes.map((pest) => (
                     <Grid item xs={12} sm={6} md={4} key={pest.id}>
-                        <Card>
-                            <CardHeader title={pest.name} />
-                            <CardContent>
-                                <Typography variant="body2" color="text.secondary">
-                                    {pest.description}
-                                </Typography>
+                        <Card
+                            sx={{
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: 3
+                                }
+                            }}
+                        >
+                            <CardHeader
+                                avatar={
+                                    <BugReportIcon
+                                        color="primary"
+                                        sx={{
+                                            fontSize: 32,
+                                            backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                                            borderRadius: '50%',
+                                            p: 0.5
+                                        }}
+                                    />
+                                }
+                                title={
+                                    <Typography variant="h6" component="div">
+                                        {pest.name}
+                                    </Typography>
+                                }
+                            />
+                            <CardContent sx={{ flexGrow: 1 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                                    <DescriptionIcon
+                                        fontSize="small"
+                                        color="action"
+                                        sx={{
+                                            mt: 0.5,
+                                            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                                            borderRadius: '50%',
+                                            p: 0.5
+                                        }}
+                                    />
+                                    <Typography variant="body2" color="text.secondary">
+                                        {pest.description}
+                                    </Typography>
+                                </Box>
                             </CardContent>
-                            <CardActions sx={{ justifyContent: 'flex-end' }}>
-                                <IconButton 
-                                    aria-label="editar"
-                                    onClick={() => handleOpenDialog(pest)}
-                                >
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton aria-label="eliminar">
-                                    <DeleteIcon />
-                                </IconButton>
+                            <CardActions
+                                sx={{
+                                    justifyContent: 'flex-end',
+                                    borderTop: 1,
+                                    borderColor: 'divider',
+                                    px: 2,
+                                    py: 1,
+                                    gap: 1
+                                }}
+                            >
+                                <Tooltip title="Editar tipo de plaga" arrow>
+                                    <IconButton
+                                        aria-label="editar"
+                                        onClick={() => handleOpenDialog(pest)}
+                                        color="primary"
+                                        size="small"
+                                        sx={{
+                                            backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                                            color: 'primary.main',
+                                            '&:hover': {
+                                                backgroundColor: 'primary.main',
+                                                color: 'primary.contrastText',
+                                                transform: 'scale(1.1)',
+                                            },
+                                            transition: 'all 0.2s ease-in-out'
+                                        }}
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Eliminar tipo de plaga" arrow>
+                                    <IconButton
+                                        aria-label="eliminar"
+                                        color="error"
+                                        size="small"
+                                        sx={{
+                                            backgroundColor: 'rgba(211, 47, 47, 0.08)',
+                                            color: 'error.main',
+                                            '&:hover': {
+                                                backgroundColor: 'error.main',
+                                                color: 'error.contrastText',
+                                                transform: 'scale(1.1)',
+                                            },
+                                            transition: 'all 0.2s ease-in-out'
+                                        }}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </CardActions>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>
-                    {isEditing ? 'Editar Plaga' : 'Nueva Plaga'}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {isEditing 
-                            ? 'Modifica los datos de la plaga.'
-                            : 'Agrega un nuevo tipo de plaga al catálogo.'}
-                    </DialogContentText>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <TextFieldForm<FormData>
-                            control={control}
-                            name="name"
-                            label="Nombre"
-                            fullWidth
-                            autoFocus
-                            margin="dense"
-                            sx={{ mt: 2 }}
-                        />
-                        <TextFieldForm<FormData>
-                            control={control}
-                            name="description"
-                            label="Descripción"
-                            fullWidth
-                            multiline
-                            rows={4}
-                            margin="dense"
-                            sx={{ mt: 2 }}
-                        />
-                        <DialogActions>
-                            <Button onClick={handleCloseDialog}>Cancelar</Button>
-                            <Button type="submit" variant="contained">
-                                {isEditing ? 'Actualizar' : 'Guardar'}
-                            </Button>
-                        </DialogActions>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <PestTypeDialog
+                open={openDialog}
+                isEditing={isEditing}
+                selectedPest={selectedPest}
+                onClose={handleCloseDialog}
+                onSubmit={handleSubmit}
+            />
         </>
     );
 } 

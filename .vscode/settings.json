@@ -11,5 +11,10 @@
 		"source.fixAll.eslint": "explicit"
 	},
 	"cSpell.language": "en,es",
-	"cSpell.words": ["Previzualizar"]
+	"cSpell.words": [
+		"Previzualizar"
+	],
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "vscode.typescript-language-features"
+	}
 }
