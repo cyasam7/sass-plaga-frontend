@@ -16,51 +16,61 @@ import {
 } from "@mui/material"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FormValues, NewClientFormProps, formSchema } from "./types"
+import { FormClientValues, NewClientFormProps, formSchema } from "./types"
+import { useEffect } from "react"
 
-export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
-  // Inicializar el formulario con valores predeterminados
+const resetValues: FormClientValues = {
+  type: "individual",
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  contactPerson: "",
+  position: "",
+}
+
+
+export function NewClientForm({ open, onClose, onSubmit, defaultValues }: NewClientFormProps) {
   const {
     control,
     handleSubmit,
     watch,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<FormClientValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      type: "individual",
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-      contactPerson: "",
-      position: "",
-    },
+    defaultValues: defaultValues || resetValues,
   })
+
+  useEffect(() => {
+    if (open) {
+      reset(defaultValues || resetValues)
+    }
+  }, [defaultValues, open, reset])
 
   const clientType = watch("type")
 
-  // Función para manejar el envío del formulario
-  function onFormSubmit(data: FormValues) {
-    console.log("Datos del formulario:", data)
+  function onFormSubmit(data: FormClientValues) {
     if (onSubmit) {
       onSubmit(data)
     }
-    reset()
+    reset(resetValues)
   }
 
   const handleClose = () => {
-    reset()
+    reset(resetValues)
     onClose()
   }
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md" scroll="paper">
       <DialogTitle>
-        <Typography variant="h6">Agregar nuevo cliente</Typography>
+        <Typography variant="h6">{defaultValues ? "Editar cliente" : "Agregar nuevo cliente"}</Typography>
         <Typography variant="body2" color="text.secondary">
-          Complete los campos para registrar un nuevo cliente en el sistema.
+          {defaultValues
+            ? "Modifique los campos para actualizar la información del cliente."
+            : "Complete los campos para registrar un nuevo cliente en el sistema."
+          }
         </Typography>
       </DialogTitle>
 

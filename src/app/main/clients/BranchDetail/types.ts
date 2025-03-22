@@ -1,4 +1,4 @@
-import { Branch } from "../components/Forms/BranchForm/types"
+import { Branch } from "../types"
 
 export interface BranchDetailProps {
   branchId: string

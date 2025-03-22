@@ -26,7 +26,7 @@ export interface Client {
   id: string
   name: string
   type: ClientType
-  email: string
+  email?: string
   phone: string
   address: string
   businessDetails?: BusinessDetails

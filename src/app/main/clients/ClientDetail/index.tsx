@@ -150,7 +150,6 @@ export function ClientDetail() {
           <DetailTabs
             activeTab={activeTab}
             onTabChange={handleTabChange}
-            type="client"
           />
 
           {activeTab === 0 && (

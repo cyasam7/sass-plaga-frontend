@@ -9,84 +9,31 @@ import {
   Tab,
   Menu,
   MenuItem,
-  Divider
+  Divider,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
 } from '@mui/material';
-import { Search, Edit, Schedule, Delete } from '@mui/icons-material';
-import { useNavigate } from 'react-router';
-import { Client, ClientType } from '../../types';
+import { Search, Edit, Delete, Add } from '@mui/icons-material';
+import { ClientType } from '../../types';
 import { ClientCard } from '../../components/Cards/ClientCard';
-// Datos de ejemplo
-const CLIENTS: Client[] = [
-  {
-    id: '1',
-    name: 'Supermercados El Ahorro',
-    type: 'business',
-    email: 'contacto@elahorro.com',
-    phone: '555-123-4567',
-    address: 'Av. Principal #123, Zona Comercial',
-    businessDetails: {
-      contactPerson: 'María Rodríguez',
-      position: 'Gerente de Operaciones',
-    }
-  },
-  {
-    id: '2',
-    name: 'Restaurante La Buena Mesa',
-    type: 'business',
-    email: 'reservas@labuenamese.com',
-    phone: '555-987-6543',
-    address: 'Calle Gourmet #45, Centro',
-    businessDetails: {
-      contactPerson: 'Carlos Méndez',
-      position: 'Propietario',
-    }
-  },
-  {
-    id: '3',
-    name: 'Juan Pérez',
-    type: 'individual',
-    email: 'juan.perez@email.com',
-    phone: '555-111-2222',
-    address: 'Calle Residencial #78, Colonia Las Flores',
-  },
-  {
-    id: '4',
-    name: 'Ana García',
-    type: 'individual',
-    email: 'ana.garcia@email.com',
-    phone: '555-333-4444',
-    address: 'Av. Los Pinos #56, Residencial El Bosque',
-  },
-  {
-    id: '5',
-    name: 'Hotel Vista Hermosa',
-    type: 'business',
-    email: 'reservaciones@vistahermosa.com',
-    phone: '555-777-8888',
-    address: 'Blvd. Turístico #100, Zona Hotelera',
-    businessDetails: {
-      contactPerson: 'Roberto Sánchez',
-      position: 'Director de Mantenimiento',
-    }
-  },
-  {
-    id: '6',
-    name: 'Carmen Martínez',
-    type: 'individual',
-    email: 'carmen.martinez@email.com',
-    phone: '555-555-6666',
-    address: 'Calle Las Palmas #23, Fraccionamiento El Paraíso',
-  }
-];
+import { ClientListProps } from './types';
+import { NewClientForm } from '../../components/Forms/NewClientForm';
+import { FormClientValues } from '../../components/Forms/NewClientForm/types';
 
-export function ClientList() {
+export function ClientList({ clients, onSaveClient, onDeleteClient }: ClientListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | ClientType>('all');
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [showSaveClientForm, setShowSaveClientForm] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Filtrar clientes según búsqueda y tipo
-  const filteredClients = CLIENTS.filter((client) => {
+  const filteredClients = clients.filter((client) => {
     const matchesSearch =
       client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -96,6 +43,8 @@ export function ClientList() {
     return matchesSearch && client.type === activeTab;
   });
 
+  const selectedClient = selectedClientId ? clients.find(client => client.id === selectedClientId) : null;
+
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, clientId: string) => {
     setMenuAnchorEl(event.currentTarget);
     setSelectedClientId(clientId);
@@ -103,11 +52,39 @@ export function ClientList() {
 
   const handleMenuClose = () => {
     setMenuAnchorEl(null);
-    setSelectedClientId(null);
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: 'all' | ClientType) => {
     setActiveTab(newValue);
+  };
+
+  const handleEdit = () => {
+    handleMenuClose();
+    setShowSaveClientForm(true);
+  };
+
+  const handleDelete = () => {
+    handleMenuClose();
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedClientId && onDeleteClient) {
+      onDeleteClient(selectedClientId);
+    }
+    setShowDeleteDialog(false);
+    setSelectedClientId(null);
+  };
+
+
+  const handleFormSubmit = (data: FormClientValues) => {
+    onSaveClient(data, selectedClientId);
+    handleFormClose();
+  };
+
+  const handleFormClose = () => {
+    setShowSaveClientForm(false);
+    setSelectedClientId(null);
   };
 
   return (
@@ -118,52 +95,61 @@ export function ClientList() {
           flexDirection: { xs: 'column', sm: 'row' },
           gap: 2,
           mb: 3,
-          alignItems: { xs: 'stretch', sm: 'center' }
+          alignItems: { xs: 'stretch', sm: 'center' },
+          justifyContent: 'space-between'
         }}
       >
-        <TextField
-          placeholder="Buscar clientes..."
-          variant="outlined"
-          size="small"
-          fullWidth
-          sx={{ maxWidth: { sm: 300 } }}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search fontSize="small" />
-              </InputAdornment>
-            )
-          }}
-        />
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          sx={{
-            minHeight: '40px',
-            '.MuiTab-root': { minHeight: '40px' }
-          }}
+        <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' }, flex: 1 }}>
+          <TextField
+            placeholder="Buscar clientes..."
+            variant="outlined"
+            size="small"
+            fullWidth
+            sx={{ maxWidth: { sm: 300 } }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search fontSize="small" />
+                </InputAdornment>
+              )
+            }}
+          />
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            sx={{
+              minHeight: '40px',
+              '.MuiTab-root': { minHeight: '40px' }
+            }}
+          >
+            <Tab
+              label="Todos"
+              value="all"
+            />
+            <Tab
+              label="Empresas"
+              value="business"
+            />
+            <Tab
+              label="Personas"
+              value="individual"
+            />
+          </Tabs>
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={() => setShowSaveClientForm(true)}
+          sx={{ height: 40 }}
         >
-          <Tab
-            label="Todos"
-            value="all"
-          />
-          <Tab
-            label="Empresas"
-            value="business"
-          />
-          <Tab
-            label="Personas"
-            value="individual"
-          />
-        </Tabs>
+          Nuevo Cliente
+        </Button>
       </Box>
 
-      <Grid
-        container
-        spacing={3}
-      >
+      <Grid container spacing={3}>
         {filteredClients.map((client) => (
           <Grid
             item
@@ -172,7 +158,7 @@ export function ClientList() {
             lg={4}
             key={client.id}
           >
-            <ClientCard client={client} onMenuOpen={() => { }} />
+            <ClientCard client={client} onMenuOpen={handleMenuOpen} />
           </Grid>
         ))}
       </Grid>
@@ -182,20 +168,55 @@ export function ClientList() {
         open={Boolean(menuAnchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={handleEdit}>
           <Edit fontSize="small" sx={{ mr: 1 }} />
           Editar
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
+        {/* <MenuItem onClick={handleMenuClose}>
           <Schedule fontSize="small" sx={{ mr: 1 }} />
           Programar servicio
-        </MenuItem>
+        </MenuItem> */}
         <Divider />
-        <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
           <Delete fontSize="small" sx={{ mr: 1 }} />
           Eliminar
         </MenuItem>
       </Menu>
+
+      {/* Form unificado para crear/editar cliente */}
+      <NewClientForm
+        open={showSaveClientForm}
+        onClose={handleFormClose}
+        onSubmit={handleFormSubmit}
+        defaultValues={selectedClient ? {
+          type: selectedClient.type,
+          name: selectedClient.name,
+          email: selectedClient.email,
+          phone: selectedClient.phone,
+          address: selectedClient.address,
+          contactPerson: selectedClient.businessDetails?.contactPerson,
+          position: selectedClient.businessDetails?.position,
+        } : undefined}
+      />
+
+      {/* Dialog de confirmación para eliminar */}
+      <Dialog
+        open={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+      >
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <Typography>
+            ¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDeleteDialog(false)}>Cancelar</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 } 

@@ -24,7 +24,7 @@ import TableRow from 'material-ui/Table/TableRow';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TabPanel } from '../../TabPanel';
+import TabPanel from './TabPanel';
 
 interface ProductsAndDosesProps {
 	tabValue: number;

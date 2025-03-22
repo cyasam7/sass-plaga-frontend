@@ -41,27 +41,18 @@ const AREAS: Area[] = [
     branchId: "1",
     name: "Cocina",
     description: "Área de preparación de alimentos",
-    riskLevel: "high",
-    lastInspection: "10/03/2024",
-    nextInspection: "10/04/2024",
   },
   {
     id: "2",
     branchId: "1",
     name: "Almacén",
     description: "Almacenamiento de productos secos",
-    riskLevel: "medium",
-    lastInspection: "05/03/2024",
-    nextInspection: "05/04/2024",
   },
   {
     id: "3",
     branchId: "1",
     name: "Área de Ventas",
     description: "Zona de exhibición y venta",
-    riskLevel: "low",
-    lastInspection: "01/03/2024",
-    nextInspection: "01/05/2024",
   },
 ]
 

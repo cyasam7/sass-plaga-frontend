@@ -1,7 +1,6 @@
 import { lazy } from 'react';
 import { FuseRouteConfigType } from '@fuse/utils/FuseUtils';
 
-const Reports = lazy(() => import('./reports/Reports'));
 const AccountUser = lazy(() => import('./accountUser/AccountUser'));
 
 /**
@@ -20,10 +19,7 @@ const AppConfigurationsConfig: FuseRouteConfigType = {
 	},
 	auth: ['staff', 'admin'],
 	routes: [
-		{
-			path: '/configuration/reports',
-			element: <Reports />
-		},
+
 		{
 			path: '/configuration/account',
 			element: <AccountUser />

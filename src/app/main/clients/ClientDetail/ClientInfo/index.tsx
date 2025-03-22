@@ -61,17 +61,6 @@ export function ClientInfo({ client }: ClientInfoProps) {
                     fontWeight: "bold"
                   }}
                 />
-                {client.type === "business" && client.businessDetails && (
-                  <Chip
-                    label={`${client.businessDetails.employeeCount} empleados`}
-                    size="small"
-                    sx={{
-                      bgcolor: "white",
-                      color: "primary.main",
-                      fontWeight: "bold"
-                    }}
-                  />
-                )}
               </Box>
             </Box>
           </Box>
@@ -178,24 +167,6 @@ export function ClientInfo({ client }: ClientInfoProps) {
                         <ListItemText
                           primary="Cliente Individual"
                           secondary="Tipo de Cliente"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <CalendarMonth fontSize="small" color="secondary" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={client.lastService || "Sin servicio previo"}
-                          secondary="Último Servicio"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <CalendarMonth fontSize="small" color="secondary" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={client.nextService || "Sin servicio programado"}
-                          secondary="Próximo Servicio"
                         />
                       </ListItem>
                     </List>

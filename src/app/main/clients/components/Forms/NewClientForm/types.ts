@@ -21,10 +21,11 @@ export const formSchema = z.object({
   position: z.string().optional(),
 })
 
-export type FormValues = z.infer<typeof formSchema>
+export type FormClientValues = z.infer<typeof formSchema>
 
 export interface NewClientFormProps {
   open: boolean
   onClose: () => void
-  onSubmit?: (data: FormValues) => void
+  onSubmit?: (data: FormClientValues) => void
+  defaultValues?: Partial<FormClientValues>
 } 
