@@ -1,6 +1,8 @@
 import { lazy } from 'react';
+import { StyledContainerClients } from './styled-components';
+import { ClientsApp } from './ClientsApp';
+import { ClientDetail } from './components/ClientSection/ClientDetail';
 
-const ClientsAppV2 = lazy(() => import('./ClientsApp'));
 
 /**
  * The ClientsApp configuration.
@@ -19,8 +21,28 @@ const ClientsAppConfig = {
 	routes: [
 		{
 			path: '/clients',
-			element: <ClientsAppV2 />,
-		}
+			element: <StyledContainerClients>
+				<ClientsApp />
+			</StyledContainerClients>,
+		},
+		{
+			path: '/clients/:clientId',
+			element: <StyledContainerClients>
+				<ClientDetail />
+			</StyledContainerClients>,
+		},
+		/* {
+			path: '/clients/:clientId/branches/:branchId',
+			element: <StyledContainerClients>
+				<BranchDetail />
+			</StyledContainerClients>,
+		},
+		{
+			path: '/clients/:clientId/branches/:branchId/areas/:areaId',
+			element: <StyledContainerClients>
+				<AreaDetail />
+			</StyledContainerClients>,
+		} */
 	]
 };
 

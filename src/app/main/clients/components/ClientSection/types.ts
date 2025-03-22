@@ -19,6 +19,12 @@ export interface Client {
   businessDetails?: BusinessDetails;
 }
 
-export interface ClientListProps {
-  onViewDetails: (clientId: string) => void;
-} 
+export interface Branch {
+  id: string
+  clientId: string
+  name: string
+  address: string
+  contactPerson: string
+  contactPhone: string
+  notes?: string
+}

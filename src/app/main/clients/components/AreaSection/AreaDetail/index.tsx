@@ -29,9 +29,10 @@ import {
   CalendarMonth,
   Warning,
 } from "@mui/icons-material"
-import { DeviceForm } from "../../components/DeviceForm"
-import { DeviceCard } from "../../components/DeviceCard"
+import { DeviceForm } from "../DeviceForm"
+import { DeviceCard } from "../DeviceCard"
 import type { Area, Device, AreaDetailProps } from "./types"
+import { DetailTabs } from "../../DetailTabs"
 
 // Datos de ejemplo para dispositivos
 const DEVICES: Device[] = [
@@ -85,7 +86,7 @@ const DEVICES: Device[] = [
   },
 ]
 
-export function AreaDetail({ areaId, onBack, areas, branchName }: AreaDetailProps) {
+export function AreaDetail() {
   const area = areas.find((a) => a.id === areaId)
 
   const [activeTab, setActiveTab] = useState(0)
@@ -279,25 +280,11 @@ export function AreaDetail({ areaId, onBack, areas, branchName }: AreaDetailProp
         </Grid>
       </Paper>
 
-      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-        <Tabs value={activeTab} onChange={handleTabChange}>
-          <Tab
-            icon={<BugReport />}
-            label="Dispositivos"
-            iconPosition="start"
-          />
-          <Tab
-            icon={<CalendarMonth />}
-            label="Historial"
-            iconPosition="start"
-          />
-          <Tab
-            icon={<Warning />}
-            label="Alertas"
-            iconPosition="start"
-          />
-        </Tabs>
-      </Box>
+      <DetailTabs
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        type="area"
+      />
 
       {activeTab === 0 && (
         <>
@@ -396,4 +383,6 @@ export function AreaDetail({ areaId, onBack, areas, branchName }: AreaDetailProp
       )}
     </Box>
   )
-} 
+}
+
+export default AreaDetail; 

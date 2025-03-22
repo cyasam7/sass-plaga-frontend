@@ -23,8 +23,8 @@ import {
   Divider
 } from '@mui/material';
 import { Business, Person, Search, MoreVert, Edit, Schedule, History, Delete } from '@mui/icons-material';
-import { Client, ClientListProps, ClientType } from './types';
-
+import { useNavigate } from 'react-router';
+import { Client, ClientType } from '../types';
 // Datos de ejemplo
 const CLIENTS: Client[] = [
   {
@@ -110,11 +110,13 @@ const CLIENTS: Client[] = [
   }
 ];
 
-export function ClientList({ onViewDetails }: ClientListProps) {
+export function ClientList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | ClientType>('all');
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+
+  const navigate = useNavigate()
 
   // Filtrar clientes según búsqueda y tipo
   const filteredClients = CLIENTS.filter((client) => {
@@ -293,7 +295,7 @@ export function ClientList({ onViewDetails }: ClientListProps) {
                 <Button
                   size="small"
                   startIcon={<History />}
-                  onClick={() => onViewDetails(client.id)}
+                  onClick={() => navigate(`/clients/${client.id}`)}
                 >
                   Ver detalles
                 </Button>
