@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 import { Business, Person, Search, MoreVert, Edit, Schedule, History, Delete } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
-import { Client, ClientType } from '../types';
+import { Client, ClientType } from '../../types';
 // Datos de ejemplo
 const CLIENTS: Client[] = [
   {

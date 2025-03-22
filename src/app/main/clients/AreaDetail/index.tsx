@@ -29,8 +29,8 @@ import {
   CalendarMonth,
   Warning,
 } from "@mui/icons-material"
-import { DeviceForm } from "../DeviceForm"
-import { DeviceCard } from "../DeviceCard"
+import { DeviceForm } from "../../Forms/DeviceForm"
+import { DeviceCard } from "../../Cards/DeviceCard"
 import type { Area, Device, AreaDetailProps } from "./types"
 import { DetailTabs } from "../../DetailTabs"
 

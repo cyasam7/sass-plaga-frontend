@@ -19,7 +19,7 @@ import {
   Phone,
   CalendarMonth,
 } from "@mui/icons-material"
-import { Client } from "../types"
+import { Client } from "../../types"
 
 interface ClientInfoProps {
   client: Client

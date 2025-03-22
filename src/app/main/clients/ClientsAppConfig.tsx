@@ -1,7 +1,6 @@
-import { lazy } from 'react';
 import { StyledContainerClients } from './styled-components';
 import { ClientsApp } from './ClientsApp';
-import { ClientDetail } from './components/ClientSection/ClientDetail';
+import { ClientDetail } from './ClientDetail';
 
 
 /**

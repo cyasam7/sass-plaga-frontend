@@ -21,7 +21,8 @@ import { Add, FilterList, CalendarMonth } from "@mui/icons-material"
 import { format, parse } from "date-fns"
 import { es } from "date-fns/locale"
 import type { ClientFiltersProps, ClientFiltersState, NewClientData } from "./types"
-import { NewClientForm } from "../NewClientForm"
+import { NewClientForm } from "../../components/Forms/NewClientForm"
+
 
 export function ClientFilters({ onFilterChange }: ClientFiltersProps) {
   const [filters, setFilters] = useState<ClientFiltersState>({

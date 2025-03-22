@@ -2,9 +2,8 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Typography, Paper, Container } from '@mui/material';
-import { ClientList } from './components/ClientSection/ClientList';
-import { ClientFilters } from './components/ClientSection/ClientFilters';
-
+import { ClientFilters } from './ClientDetail/ClientFilters';
+import { ClientList } from './ClientDetail/ClientList';
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
 		backgroundColor: theme.palette.background.paper,
@@ -14,22 +13,10 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 	},
 }));
 
-
-
 /**
  * The ContactsApp page.
  */
 export function ClientsApp() {
-	const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
-
-	const handleViewClientDetails = (clientId: string) => {
-		setSelectedClientId(clientId)
-	}
-
-	const handleBackToList = () => {
-		// Limpiar cualquier estado relacionado con menús
-		setSelectedClientId(null)
-	}
 
 	return (
 		<Root
@@ -51,7 +38,6 @@ export function ClientsApp() {
 					</Container>
 				</>
 			}
-
 		/>
 	);
 }

@@ -8,13 +8,6 @@ import {
   Paper,
   Button,
   Grid,
-  Card,
-  CardContent,
-  CardHeader,
-  CardActions,
-  IconButton,
-  Tabs,
-  Tab,
   List,
   ListItem,
   ListItemText,
@@ -35,15 +28,12 @@ import {
   Add,
   Edit,
   Delete,
-  MoreVert,
   MeetingRoom,
-  Warning,
-  CalendarMonth,
 } from "@mui/icons-material"
-import { AreaForm } from "../../AreaSection/AreaForm"
-import { AreaDetail } from "../../AreaSection/AreaDetail"
-import type { Area, Branch } from "./types"
+import { AreaForm } from "../../Forms/AreaForm"
+import type { Area } from "./types"
 import { DetailTabs } from "../../DetailTabs"
+import { AreaCard } from "../../Cards/AreaCard"
 
 // Datos de ejemplo para áreas
 const AREAS: Area[] = [
@@ -282,56 +272,7 @@ export function BranchDetail({ branchId, onBack }: { branchId: string; onBack: (
           <Grid container spacing={2}>
             {areas.map((area) => (
               <Grid item xs={12} sm={6} md={4} key={area.id}>
-                <Card>
-                  <CardHeader
-                    title={area.name}
-                    action={
-                      <IconButton
-                        size="small"
-                        onClick={(event) => handleMenuClick(event, area.id)}
-                      >
-                        <MoreVert />
-                      </IconButton>
-                    }
-                  />
-                  <CardContent>
-                    <List dense>
-                      <ListItem>
-                        <ListItemIcon>
-                          <MeetingRoom fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary={area.description} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <Warning fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={area.riskLevel.toUpperCase()}
-                          secondary="Nivel de Riesgo"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <CalendarMonth fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={area.nextInspection || "Sin inspección programada"}
-                          secondary="Próxima Inspección"
-                        />
-                      </ListItem>
-                    </List>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      startIcon={<MeetingRoom />}
-                      onClick={() => handleAreaClick(area.id)}
-                    >
-                      Ver Detalles
-                    </Button>
-                  </CardActions>
-                </Card>
+                <AreaCard area={area} onMenuClick={handleMenuClick} onAreaClick={handleAreaClick} />
               </Grid>
             ))}
           </Grid>

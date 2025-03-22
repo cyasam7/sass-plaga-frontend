@@ -40,13 +40,12 @@ import {
   CalendarMonth,
   Warning,
 } from "@mui/icons-material"
-import { BranchForm } from "../../BranchSection/BranchForm"
-import { BranchDetail } from "../../BranchSection/BranchDetail"
-import { DetailTabs } from "../../DetailTabs"
 import { useNavigate } from "react-router"
-import { ClientInfo } from "../ClientInfo"
+import { BranchCard } from "../components/Cards/BranchCard"
+import DetailTabs from "../components/DetailTabs"
 import { Branch, Client } from "../types"
-import { BranchCard } from "../BranchCard"
+import ClientInfo from "./ClientInfo"
+
 // Datos de ejemplo
 const CLIENT: Client = {
   id: "1",
@@ -112,26 +111,6 @@ export function ClientDetail() {
     setShowBranchForm(true)
   }
 
-  const handleEditBranch = (branch: Branch) => {
-    setCurrentBranch(branch)
-    setIsEditing(true)
-    setShowBranchForm(true)
-    handleMenuClose()
-  }
-
-  const handleDeleteBranch = (branchId: string) => {
-    setBranchToDelete(branchId)
-    setDeleteConfirmOpen(true)
-    handleMenuClose()
-  }
-
-  const confirmDeleteBranch = () => {
-    if (branchToDelete) {
-      setBranches(branches.filter((branch) => branch.id !== branchToDelete))
-      setDeleteConfirmOpen(false)
-      setBranchToDelete(null)
-    }
-  }
 
   const handleSaveBranch = (branch: Branch) => {
     if (isEditing && currentBranch) {
@@ -154,16 +133,7 @@ export function ClientDetail() {
     setSelectedBranchId(branchId)
   }
 
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null)
-    setSelectedBranchId(null)
-  }
 
-  const handleBranchClick = (branchId: string) => {
-    // Cerrar el menú si está abierto
-    setMenuAnchorEl(null)
-    setSelectedBranchId(branchId)
-  }
 
   return (
     <Box>
@@ -208,72 +178,11 @@ export function ClientDetail() {
               <Grid container spacing={2}>
                 {branches.map((branch) => (
                   <Grid item xs={12} sm={6} md={4} key={branch.id}>
-                    <BranchCard branch={branch} onMenuClick={handleMenuClick} onBranchClick={handleBranchClick} />
+                    <BranchCard branch={branch} onMenuClick={handleMenuClick} />
                   </Grid>
                 ))}
               </Grid>
 
-              <Menu
-                anchorEl={menuAnchorEl}
-                open={Boolean(menuAnchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={() => handleEditBranch(branches.find((b) => b.id === selectedBranchId)!)}>
-                  <Edit sx={{ mr: 1, color: 'primary.main' }} /> Editar
-                </MenuItem>
-                <MenuItem onClick={() => handleDeleteBranch(selectedBranchId!)}>
-                  <Delete sx={{ mr: 1, color: 'error.main' }} /> Eliminar
-                </MenuItem>
-              </Menu>
-
-              <Dialog
-                open={showBranchForm}
-                onClose={() => setShowBranchForm(false)}
-                maxWidth="sm"
-                fullWidth
-              >
-                <DialogTitle>
-                  {isEditing ? "Editar Sucursal" : "Nueva Sucursal"}
-                </DialogTitle>
-                <DialogContent>
-                  <BranchForm
-                    branch={currentBranch}
-                    onSave={handleSaveBranch}
-                    onClose={() => {
-                      setShowBranchForm(false)
-                    }}
-                    open={showBranchForm}
-                    isEditing={isEditing}
-                  />
-                </DialogContent>
-              </Dialog>
-
-              <Dialog
-                open={deleteConfirmOpen}
-                onClose={() => setDeleteConfirmOpen(false)}
-              >
-                <DialogTitle>Confirmar Eliminación</DialogTitle>
-                <DialogContent>
-                  <Typography>
-                    ¿Está seguro que desea eliminar esta sucursal?
-                  </Typography>
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={() => setDeleteConfirmOpen(false)}
-                    color="inherit"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={confirmDeleteBranch}
-                    color="error"
-                    variant="contained"
-                  >
-                    Eliminar
-                  </Button>
-                </DialogActions>
-              </Dialog>
             </>
           )}
 
