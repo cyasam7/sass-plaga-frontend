@@ -1,7 +1,4 @@
-"use client"
-
 import type React from "react"
-
 import { useState } from "react"
 import {
   Dialog,
@@ -16,27 +13,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material"
-
-interface Device {
-  id: string
-  areaId: string
-  type: "trap" | "bait" | "monitor" | "other"
-  code: string
-  location: string
-  installDate: string
-  lastCheck?: string
-  nextCheck?: string
-  status: "active" | "inactive" | "maintenance"
-  notes?: string
-}
-
-interface DeviceFormProps {
-  open: boolean
-  onClose: () => void
-  onSave: (device: Device) => void
-  device: Device | null
-  isEditing: boolean
-}
+import { Device, DeviceFormProps } from "./types"
 
 export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceFormProps) {
   const [formData, setFormData] = useState<Device>({
@@ -215,5 +192,4 @@ export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceF
       </DialogActions>
     </Dialog>
   )
-}
-
+} 

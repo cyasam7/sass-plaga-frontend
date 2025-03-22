@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import {
   Box,
@@ -21,15 +20,18 @@ import {
 import { Add, FilterList, CalendarMonth } from "@mui/icons-material"
 import { format, parse } from "date-fns"
 import { es } from "date-fns/locale"
-import { NewClientForm } from "./new-client-form"
+import { NewClientForm } from "../../components/NewClientForm"
+import type { ClientFiltersProps, ClientFiltersState, NewClientData } from "./types"
 
-export function ClientFilters() {
-  const [date, setDate] = useState<string>("")
+export function ClientFilters({ onFilterChange }: ClientFiltersProps) {
+  const [filters, setFilters] = useState<ClientFiltersState>({
+    date: "",
+    sortBy: "",
+    serviceStatus: "",
+  })
   const [showNewClientForm, setShowNewClientForm] = useState(false)
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null)
   const [calendarAnchorEl, setCalendarAnchorEl] = useState<null | HTMLElement>(null)
-  const [sortBy, setSortBy] = useState("")
-  const [serviceStatus, setServiceStatus] = useState("")
 
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
     setFilterAnchorEl(event.currentTarget)
@@ -48,7 +50,9 @@ export function ClientFilters() {
   }
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value)
+    const newFilters = { ...filters, date: event.target.value }
+    setFilters(newFilters)
+    onFilterChange?.(newFilters)
     // Cerrar el popover después de seleccionar la fecha
     if (calendarAnchorEl) {
       handleCalendarClose()
@@ -56,16 +60,20 @@ export function ClientFilters() {
   }
 
   const handleSortChange = (event: SelectChangeEvent) => {
-    setSortBy(event.target.value)
+    const newFilters = { ...filters, sortBy: event.target.value }
+    setFilters(newFilters)
+    onFilterChange?.(newFilters)
   }
 
   const handleStatusChange = (event: SelectChangeEvent) => {
-    setServiceStatus(event.target.value)
+    const newFilters = { ...filters, serviceStatus: event.target.value }
+    setFilters(newFilters)
+    onFilterChange?.(newFilters)
   }
 
   // Formatear la fecha para mostrar en el botón
-  const formattedDate = date
-    ? format(parse(date, "yyyy-MM-dd", new Date()), "PPP", { locale: es })
+  const formattedDate = filters.date
+    ? format(parse(filters.date, "yyyy-MM-dd", new Date()), "PPP", { locale: es })
     : "Fecha de servicio"
 
   return (
@@ -125,7 +133,7 @@ export function ClientFilters() {
         </Typography>
         <FormControl fullWidth size="small" sx={{ mb: 2 }}>
           <InputLabel>Seleccionar estado</InputLabel>
-          <Select value={serviceStatus} label="Seleccionar estado" onChange={handleStatusChange}>
+          <Select value={filters.serviceStatus} label="Seleccionar estado" onChange={handleStatusChange}>
             <MenuItem value="all">Todos</MenuItem>
             <MenuItem value="pending">Pendiente</MenuItem>
             <MenuItem value="completed">Completado</MenuItem>
@@ -138,7 +146,7 @@ export function ClientFilters() {
         </Typography>
         <FormControl fullWidth size="small">
           <InputLabel>Seleccionar orden</InputLabel>
-          <Select value={sortBy} label="Seleccionar orden" onChange={handleSortChange}>
+          <Select value={filters.sortBy} label="Seleccionar orden" onChange={handleSortChange}>
             <MenuItem value="name-asc">Nombre (A-Z)</MenuItem>
             <MenuItem value="name-desc">Nombre (Z-A)</MenuItem>
             <MenuItem value="date-asc">Fecha de servicio (Más antiguo)</MenuItem>
@@ -161,7 +169,7 @@ export function ClientFilters() {
           <TextField
             label="Seleccionar fecha"
             type="date"
-            value={date}
+            value={filters.date}
             onChange={handleDateChange}
             InputLabelProps={{
               shrink: true,
@@ -174,7 +182,7 @@ export function ClientFilters() {
       <NewClientForm
         open={showNewClientForm}
         onClose={() => setShowNewClientForm(false)}
-        onSubmit={(data) => {
+        onSubmit={(data: NewClientData) => {
           console.log("Nuevo cliente:", data)
           // Aquí se implementaría la lógica para guardar el cliente
           setShowNewClientForm(false)
@@ -182,5 +190,4 @@ export function ClientFilters() {
       />
     </Box>
   )
-}
-
+} 

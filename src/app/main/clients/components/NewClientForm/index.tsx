@@ -1,4 +1,3 @@
-"use client"
 import {
   Dialog,
   DialogTitle,
@@ -17,41 +16,7 @@ import {
 } from "@mui/material"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-
-// Modificar el esquema para aceptar strings de fecha
-const formSchema = z.object({
-  type: z.enum(["business", "individual"], {
-    required_error: "Seleccione el tipo de cliente",
-  }),
-  name: z.string().min(2, {
-    message: "El nombre debe tener al menos 2 caracteres",
-  }),
-  email: z.string().email({
-    message: "Ingrese un correo electrónico válido",
-  }),
-  phone: z.string().min(8, {
-    message: "Ingrese un número de teléfono válido",
-  }),
-  address: z.string().min(5, {
-    message: "Ingrese una dirección válida",
-  }),
-  lastService: z.string().optional(),
-  nextService: z.string().optional(),
-  // Campos específicos para empresas
-  contactPerson: z.string().optional(),
-  position: z.string().optional(),
-  employeeCount: z.string().optional(),
-  notes: z.string().optional(),
-})
-
-type FormValues = z.infer<typeof formSchema>
-
-interface NewClientFormProps {
-  open: boolean
-  onClose: () => void
-  onSubmit?: (data: FormValues) => void
-}
+import { FormValues, NewClientFormProps, formSchema } from "./types"
 
 export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
   // Inicializar el formulario con valores predeterminados
@@ -248,7 +213,7 @@ export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
             <Grid item xs={12}>
               <Divider>
                 <Typography variant="body2" color="text.secondary">
-                  Información de servicio
+                  Información de servicios
                 </Typography>
               </Divider>
             </Grid>
@@ -296,10 +261,10 @@ export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Notas adicionales"
-                    fullWidth
+                    label="Notas"
                     multiline
                     rows={4}
+                    fullWidth
                     error={!!errors.notes}
                     helperText={errors.notes?.message}
                   />
@@ -311,14 +276,16 @@ export function NewClientForm({ open, onClose, onSubmit }: NewClientFormProps) {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleClose} color="inherit">
-          Cancelar
-        </Button>
-        <Button type="submit" form="new-client-form" variant="contained">
-          Guardar cliente
+        <Button onClick={handleClose}>Cancelar</Button>
+        <Button
+          type="submit"
+          form="new-client-form"
+          variant="contained"
+          color="primary"
+        >
+          Guardar
         </Button>
       </DialogActions>
     </Dialog>
   )
-}
-
+} 

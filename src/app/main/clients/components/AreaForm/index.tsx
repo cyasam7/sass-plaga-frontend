@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import {
   Dialog,
@@ -16,24 +15,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material"
-
-interface Area {
-  id: string
-  branchId: string
-  name: string
-  description?: string
-  riskLevel: "high" | "medium" | "low"
-  lastInspection?: string
-  nextInspection?: string
-}
-
-interface AreaFormProps {
-  open: boolean
-  onClose: () => void
-  onSave: (area: Area) => void
-  area: Area | null
-  isEditing: boolean
-}
+import { Area, AreaFormProps } from "./types"
 
 export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormProps) {
   const [formData, setFormData] = useState<Area>({
@@ -161,5 +143,4 @@ export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormPro
       </DialogActions>
     </Dialog>
   )
-}
-
+} 

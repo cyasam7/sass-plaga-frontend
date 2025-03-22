@@ -1,27 +1,7 @@
-"use client"
-
 import type React from "react"
-
 import { useState } from "react"
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid } from "@mui/material"
-
-interface Branch {
-  id: string
-  clientId: string
-  name: string
-  address: string
-  contactPerson: string
-  contactPhone: string
-  notes?: string
-}
-
-interface BranchFormProps {
-  open: boolean
-  onClose: () => void
-  onSave: (branch: Branch) => void
-  branch: Branch | null
-  isEditing: boolean
-}
+import { Branch, BranchFormProps } from "./types"
 
 export function BranchForm({ open, onClose, onSave, branch, isEditing }: BranchFormProps) {
   const [formData, setFormData] = useState<Branch>({
@@ -160,5 +140,4 @@ export function BranchForm({ open, onClose, onSave, branch, isEditing }: BranchF
       </DialogActions>
     </Dialog>
   )
-}
-
+} 

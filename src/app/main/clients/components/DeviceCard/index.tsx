@@ -1,14 +1,6 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, IconButton, Typography } from '@mui/material';
 import { BugReport, CalendarMonth, Edit, MoreVert } from '@mui/icons-material';
-
-interface DeviceCardProps {
-  device: any;
-  onMenuClick: (event: React.MouseEvent<HTMLElement>, deviceId: string) => void;
-  onEditDevice: (device: any) => void;
-  getDeviceTypeLabel: (type: string) => string;
-  getStatusLabel: (status: string) => string;
-  getStatusColor: (status: string) => string;
-}
+import { DeviceCardProps } from './types';
 
 export function DeviceCard({
   device,
@@ -103,4 +95,4 @@ export function DeviceCard({
       </CardActions>
     </Card>
   );
-}
+} 

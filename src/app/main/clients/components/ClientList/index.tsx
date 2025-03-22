@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-
 import { useState } from 'react';
 import {
   Box,
@@ -24,27 +23,7 @@ import {
   Divider
 } from '@mui/material';
 import { Business, Person, Search, MoreVert, Edit, Schedule, History, Delete } from '@mui/icons-material';
-
-// Tipos de cliente
-type ClientType = 'business' | 'individual';
-
-// Interfaz para clientes
-interface Client {
-  id: string;
-  name: string;
-  type: ClientType;
-  email: string;
-  phone: string;
-  address: string;
-  lastService?: string;
-  nextService?: string;
-  image?: string;
-  businessDetails?: {
-    contactPerson: string;
-    position: string;
-    employeeCount: number;
-  };
-}
+import { Client, ClientListProps, ClientType } from './types';
 
 // Datos de ejemplo
 const CLIENTS: Client[] = [
@@ -130,10 +109,6 @@ const CLIENTS: Client[] = [
     image: '/placeholder.svg?height=40&width=40'
   }
 ];
-
-interface ClientListProps {
-  onViewDetails: (clientId: string) => void;
-}
 
 export function ClientList({ onViewDetails }: ClientListProps) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -248,83 +223,76 @@ export function ClientList({ onViewDetails }: ClientListProps) {
                     sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                   >
                     <Typography
-                      variant="h6"
+                      variant="subtitle1"
                       component="div"
-                      noWrap
+                      sx={{ fontWeight: 'medium' }}
                     >
                       {client.name}
                     </Typography>
+                    <Chip
+                      label={client.type === 'business' ? 'Empresa' : 'Persona'}
+                      size="small"
+                      color={client.type === 'business' ? 'primary' : 'secondary'}
+                    />
                   </Box>
                 }
-                subheader={client.email}
               />
-              <CardContent sx={{ pt: 0 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Chip
-                    label={client.type === 'business' ? 'Empresa' : 'Persona'}
-                    color={client.type === 'business' ? 'primary' : 'secondary'}
-                    size="small"
-                    sx={{ mb: 1 }}
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+              <CardContent>
+                <Box sx={{ mb: 2 }}>
                   <Typography
                     variant="body2"
                     color="text.secondary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}
                   >
-                    Teléfono:
+                    <Business fontSize="small" />
+                    {client.email}
                   </Typography>
-                  <Typography variant="body2">{client.phone}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography
                     variant="body2"
                     color="text.secondary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}
                   >
-                    Último servicio:
+                    <Person fontSize="small" />
+                    {client.phone}
                   </Typography>
-                  <Typography variant="body2">{client.lastService}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography
                     variant="body2"
                     color="text.secondary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    Próximo servicio:
+                    <Schedule fontSize="small" />
+                    {client.address}
                   </Typography>
-                  <Typography variant="body2">{client.nextService}</Typography>
                 </Box>
-
-                {client.type === 'business' && client.businessDetails && (
-                  <>
-                    <Divider sx={{ my: 1 }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                      >
-                        Contacto:
-                      </Typography>
-                      <Typography variant="body2">
-                        {client.businessDetails.contactPerson}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                      >
-                        Cargo:
-                      </Typography>
-                      <Typography variant="body2">{client.businessDetails.position}</Typography>
-                    </Box>
-                  </>
+                {client.businessDetails && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 1 }}
+                    >
+                      Contacto: {client.businessDetails.contactPerson}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 1 }}
+                    >
+                      Cargo: {client.businessDetails.position}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      Empleados: {client.businessDetails.employeeCount}
+                    </Typography>
+                  </Box>
                 )}
               </CardContent>
-              <CardActions sx={{ justifyContent: 'space-between' }}>
+              <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
                 <Button
                   size="small"
-                  variant="outlined"
+                  startIcon={<History />}
                   onClick={() => onViewDetails(client.id)}
                 >
                   Ver detalles
@@ -335,52 +303,25 @@ export function ClientList({ onViewDetails }: ClientListProps) {
         ))}
       </Grid>
 
-      {filteredClients.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 5 }}>
-          <Typography color="text.secondary">
-            No se encontraron clientes con los criterios de búsqueda.
-          </Typography>
-        </Box>
-      )}
-
       <Menu
         anchorEl={menuAnchorEl}
         open={Boolean(menuAnchorEl)}
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleMenuClose}>
-          <Edit
-            fontSize="small"
-            sx={{ mr: 1 }}
-          />{' '}
+          <Edit fontSize="small" sx={{ mr: 1 }} />
           Editar
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
-          <Schedule
-            fontSize="small"
-            sx={{ mr: 1 }}
-          />{' '}
+          <Schedule fontSize="small" sx={{ mr: 1 }} />
           Programar servicio
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <History
-            fontSize="small"
-            sx={{ mr: 1 }}
-          />{' '}
-          Ver historial
-        </MenuItem>
         <Divider />
-        <MenuItem
-          onClick={handleMenuClose}
-          sx={{ color: 'error.main' }}
-        >
-          <Delete
-            fontSize="small"
-            sx={{ mr: 1 }}
-          />{' '}
+        <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>
+          <Delete fontSize="small" sx={{ mr: 1 }} />
           Eliminar
         </MenuItem>
       </Menu>
     </Box>
   );
-}
+} 

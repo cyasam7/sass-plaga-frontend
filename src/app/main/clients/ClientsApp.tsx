@@ -1,11 +1,10 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Typography, Toolbar, Paper, Container, AppBar, Stack } from '@mui/material';
-import { BugReport } from '@mui/icons-material';
-import { ClientDetail } from './componentsv2/client-detail';
-import { ClientFilters } from './componentsv2/client-filters';
-import { ClientList } from './componentsv2/client-list';
+import { Box, Typography, Paper, Container } from '@mui/material';
+import { ClientDetail } from './components/ClientDetail';
+import { ClientFilters } from './components/ClientFilters';
+import { ClientList } from './components/ClientList';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -14,9 +13,6 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 		borderStyle: 'solid',
 		borderColor: theme.palette.divider
 	},
-	'& .FusePageSimple-content': {},
-	'& .FusePageSimple-sidebarHeader': {},
-	'& .FusePageSimple-sidebarContent': {}
 }));
 
 /**
