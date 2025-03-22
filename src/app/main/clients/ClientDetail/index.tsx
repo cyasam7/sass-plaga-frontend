@@ -3,40 +3,21 @@ import { useState } from "react"
 import {
   Box,
   Typography,
-  Paper,
   Button,
   Grid,
   Card,
   CardContent,
-  CardHeader,
-  CardActions,
-  Chip,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  MenuItem,
   Menu,
-  Container,
 } from "@mui/material"
 import {
   ArrowBack,
-  Business,
-  Person,
-  LocationOn,
-  Phone,
-  Email,
   Add,
   Edit,
   Delete,
-  MoreVert,
-  Store,
-  Apartment,
   CalendarMonth,
   Warning,
 } from "@mui/icons-material"
@@ -45,6 +26,7 @@ import { BranchCard } from "../components/Cards/BranchCard"
 import DetailTabs from "./DetailTabs"
 import { Branch, Client } from "../types"
 import ClientInfo from "./ClientInfo"
+import { BranchForm } from "../components/Forms/BranchForm"
 
 // Datos de ejemplo
 const CLIENT: Client = {
@@ -54,13 +36,9 @@ const CLIENT: Client = {
   email: "contacto@elahorro.com",
   phone: "555-123-4567",
   address: "Av. Principal #123, Zona Comercial",
-  lastService: "15/02/2024",
-  nextService: "15/05/2024",
-  image: "/placeholder.svg?height=40&width=40",
   businessDetails: {
     contactPerson: "María Rodríguez",
     position: "Gerente de Operaciones",
-    employeeCount: 120,
   },
 }
 
@@ -84,22 +62,15 @@ const BRANCHES: Branch[] = [
 ]
 
 export function ClientDetail() {
-  // En una aplicación real, aquí se cargarían los datos del cliente según el ID
-  // Por ahora, usamos el cliente de ejemplo
-  const client = CLIENT
-
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState(0)
   const [branches, setBranches] = useState<Branch[]>(BRANCHES)
   const [showBranchForm, setShowBranchForm] = useState(false)
   const [currentBranch, setCurrentBranch] = useState<Branch | null>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [selectedBranchId, setSelectedBranchId] = useState<string | null>(null)
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [branchToDelete, setBranchToDelete] = useState<string | null>(null)
-
-
-  const navigate = useNavigate()
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)
@@ -111,6 +82,26 @@ export function ClientDetail() {
     setShowBranchForm(true)
   }
 
+  const handleEditBranch = (branch: Branch) => {
+    setCurrentBranch(branch)
+    setIsEditing(true)
+    setShowBranchForm(true)
+    handleMenuClose()
+  }
+
+  const handleDeleteBranch = (branchId: string) => {
+    setBranchToDelete(branchId)
+    setDeleteConfirmOpen(true)
+    handleMenuClose()
+  }
+
+  const handleConfirmDelete = () => {
+    if (branchToDelete) {
+      setBranches(branches.filter((branch) => branch.id !== branchToDelete))
+      setBranchToDelete(null)
+    }
+    setDeleteConfirmOpen(false)
+  }
 
   const handleSaveBranch = (branch: Branch) => {
     if (isEditing && currentBranch) {
@@ -130,10 +121,16 @@ export function ClientDetail() {
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>, branchId: string) => {
     setMenuAnchorEl(event.currentTarget)
-    setSelectedBranchId(branchId)
+    const branch = branches.find((b) => b.id === branchId)
+    if (branch) {
+      setCurrentBranch(branch)
+    }
   }
 
-
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null)
+    setCurrentBranch(null)
+  }
 
   return (
     <Box>
@@ -182,7 +179,6 @@ export function ClientDetail() {
                   </Grid>
                 ))}
               </Grid>
-
             </>
           )}
 
@@ -211,6 +207,68 @@ export function ClientDetail() {
           )}
         </CardContent>
       </Card>
+
+      {/* Menú de opciones para cada sucursal */}
+      <Menu
+        anchorEl={menuAnchorEl}
+        open={Boolean(menuAnchorEl)}
+        onClose={handleMenuClose}
+      >
+        <Button
+          onClick={() => currentBranch && handleEditBranch(currentBranch)}
+          startIcon={<Edit />}
+          fullWidth
+          sx={{ justifyContent: "flex-start", px: 2, py: 1 }}
+        >
+          Editar
+        </Button>
+        <Button
+          onClick={() => currentBranch && handleDeleteBranch(currentBranch.id)}
+          startIcon={<Delete />}
+          color="error"
+          fullWidth
+          sx={{ justifyContent: "flex-start", px: 2, py: 1 }}
+        >
+          Eliminar
+        </Button>
+      </Menu>
+
+      {/* Formulario de sucursal */}
+      <BranchForm
+        open={showBranchForm}
+        onClose={() => setShowBranchForm(false)}
+        onSave={handleSaveBranch}
+        branch={currentBranch}
+        isEditing={isEditing}
+      />
+
+      {/* Diálogo de confirmación de eliminación */}
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+      >
+        <DialogTitle>Confirmar Eliminación</DialogTitle>
+        <DialogContent>
+          <Typography>
+            ¿Está seguro que desea eliminar esta sucursal? Esta acción no se puede deshacer.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setDeleteConfirmOpen(false)}
+            color="inherit"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            variant="contained"
+          >
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }

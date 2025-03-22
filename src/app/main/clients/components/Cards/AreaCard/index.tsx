@@ -2,11 +2,7 @@ import { Card, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemTe
 import { MeetingRoom, MoreVert } from "@mui/icons-material"
 import { Area } from "../../../types"
 import { useNavigate } from "react-router"
-
-interface AreaCardProps {
-  area: Area
-  onMenuClick: (event: React.MouseEvent<HTMLElement>, areaId: string) => void
-}
+import { AreaCardProps } from "./types"
 
 export function AreaCard({ area, onMenuClick }: AreaCardProps) {
   const navigate = useNavigate()

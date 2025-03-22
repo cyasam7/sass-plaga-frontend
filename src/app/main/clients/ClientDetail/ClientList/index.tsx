@@ -14,7 +14,7 @@ import {
 import { Search, Edit, Schedule, Delete } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 import { Client, ClientType } from '../../types';
-import ClientCard from '../../components/Cards/ClientCard';
+import { ClientCard } from '../../components/Cards/ClientCard';
 // Datos de ejemplo
 const CLIENTS: Client[] = [
   {

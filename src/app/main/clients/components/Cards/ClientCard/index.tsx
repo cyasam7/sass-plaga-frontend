@@ -22,7 +22,7 @@ import {
 import { ClientCardProps } from "./types"
 import { useNavigate } from "react-router"
 
-const ClientCard: React.FC<ClientCardProps> = ({
+export const ClientCard: React.FC<ClientCardProps> = ({
   client,
   onMenuOpen,
 }) => {
@@ -119,5 +119,3 @@ const ClientCard: React.FC<ClientCardProps> = ({
     </Card>
   )
 }
-
-export default ClientCard 
