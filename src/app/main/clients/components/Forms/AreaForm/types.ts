@@ -4,6 +4,8 @@ export interface AreaFormProps {
   open: boolean
   onClose: () => void
   onSave: (area: Area) => void
-  area: Area | null
-  isEditing: boolean
-} 
+  area?: Area
+  isEditing?: boolean
+}
+
+export type { Area } 

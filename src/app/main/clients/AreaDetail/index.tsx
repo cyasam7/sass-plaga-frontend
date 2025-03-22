@@ -73,10 +73,7 @@ export function AreaDetail() {
   const area: Area = {
     id: "1",
     name: "Área 1",
-    riskLevel: "high",
     description: "Descripción de la área 1",
-    lastInspection: "10/03/2024",
-    nextInspection: "10/04/2024",
     branchId: "1",
   }
 
@@ -196,19 +193,6 @@ export function AreaDetail() {
     }
   }
 
-  const getRiskLevelColor = (level: string) => {
-    switch (level) {
-      case "high":
-        return "error"
-      case "medium":
-        return "warning"
-      case "low":
-        return "success"
-      default:
-        return "default"
-    }
-  }
-
   return (
     <Box>
       <Box sx={{ mb: 4, display: "flex", alignItems: "center" }}>
@@ -220,40 +204,19 @@ export function AreaDetail() {
         </Typography>
       </Box>
 
-      <Paper sx={{ p: 3, mb: 4 }}>
+      <Paper sx={{ p: 3, mb: 4, background: "linear-gradient(to bottom, rgba(25, 118, 210, 0.05), transparent)" }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 2 }}>
               <Typography variant="h5" sx={{ fontWeight: "bold", color: "primary.main" }}>
                 {area.name}
               </Typography>
-              <Chip
-                label={area.riskLevel.toUpperCase()}
-                color={getRiskLevelColor(area.riskLevel)}
-                size="small"
-              />
             </Box>
             {area.description && (
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 {area.description}
               </Typography>
             )}
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Última Inspección
-            </Typography>
-            <Typography variant="body1">
-              {area.lastInspection || "No registrada"}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Próxima Inspección
-            </Typography>
-            <Typography variant="body1">
-              {area.nextInspection || "No programada"}
-            </Typography>
           </Grid>
         </Grid>
       </Paper>

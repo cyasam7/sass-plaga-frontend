@@ -13,9 +13,6 @@ export interface Area {
   branchId: string
   name: string
   description?: string
-  riskLevel: "high" | "medium" | "low"
-  lastInspection?: string
-  nextInspection?: string
 }
 
 export type ClientType = "business" | "individual"

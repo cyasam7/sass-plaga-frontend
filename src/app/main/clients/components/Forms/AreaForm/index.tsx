@@ -10,12 +10,9 @@ import {
   Button,
   TextField,
   Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material"
-import { Area, AreaFormProps } from "./types"
+import { Area, } from "../../../types"
+import { AreaFormProps } from "./types"
 
 export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormProps) {
   const [formData, setFormData] = useState<Area>({
@@ -23,9 +20,6 @@ export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormPro
     branchId: area?.branchId || "",
     name: area?.name || "",
     description: area?.description || "",
-    riskLevel: area?.riskLevel || "medium",
-    lastInspection: area?.lastInspection || "",
-    nextInspection: area?.nextInspection || "",
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -42,11 +36,6 @@ export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormPro
         return newErrors
       })
     }
-  }
-
-  const handleSelectChange = (e: any) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const validateForm = () => {
@@ -94,42 +83,7 @@ export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormPro
               onChange={handleChange}
               fullWidth
               multiline
-              rows={2}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
-              <InputLabel>Nivel de Riesgo</InputLabel>
-              <Select name="riskLevel" value={formData.riskLevel} label="Nivel de Riesgo" onChange={handleSelectChange}>
-                <MenuItem value="low">Bajo</MenuItem>
-                <MenuItem value="medium">Medio</MenuItem>
-                <MenuItem value="high">Alto</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <TextField
-              name="lastInspection"
-              label="Última Inspección"
-              type="date"
-              value={formData.lastInspection}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <TextField
-              name="nextInspection"
-              label="Próxima Inspección"
-              type="date"
-              value={formData.nextInspection}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
+              rows={3}
             />
           </Grid>
         </Grid>
