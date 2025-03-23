@@ -11,8 +11,8 @@ import {
   TextField,
   Grid,
 } from "@mui/material"
-import { Area, } from "../../../types"
 import { AreaFormProps } from "./types"
+import { Area } from "../../types"
 
 export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormProps) {
   const [formData, setFormData] = useState<Area>({

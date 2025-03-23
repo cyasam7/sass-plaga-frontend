@@ -1,4 +1,4 @@
-import { Area } from "../../../types"
+import { Area } from "../../types"
 
 export interface AreaFormProps {
   open: boolean
@@ -7,5 +7,3 @@ export interface AreaFormProps {
   area?: Area
   isEditing?: boolean
 }
-
-export type { Area } 

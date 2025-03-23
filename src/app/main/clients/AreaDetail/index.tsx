@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import {
@@ -23,8 +21,8 @@ import {
   BugReport,
 } from "@mui/icons-material"
 import { Area, Device } from "../types"
-import { DeviceCard } from "../components/Cards/DeviceCard"
-import { DeviceForm } from "../components/Forms/DeviceForm"
+import { DeviceCard } from "../Cards/DeviceCard"
+import { DeviceForm } from "../Forms/DeviceForm"
 import { useNavigate } from "react-router"
 
 // Datos de ejemplo para dispositivos

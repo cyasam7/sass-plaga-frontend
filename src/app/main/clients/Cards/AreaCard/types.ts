@@ -1,4 +1,4 @@
-import { Area } from "../../../types"
+import { Area } from "../../types"
 
 export interface AreaCardProps {
   area: Area

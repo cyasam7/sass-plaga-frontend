@@ -1,5 +1,5 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, IconButton, Typography } from '@mui/material';
-import { BugReport, Edit, MoreVert } from '@mui/icons-material';
+import { Box, Card, CardContent, CardHeader, Chip, IconButton, Typography } from '@mui/material';
+import { BugReport, MoreVert } from '@mui/icons-material';
 import { DeviceCardProps } from './types';
 
 export function DeviceCard({

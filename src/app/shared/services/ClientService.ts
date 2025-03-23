@@ -1,20 +1,51 @@
-import axios from 'axios';
-import { ClientEntity } from '../entities/ClientsEntities';
+import { Client, ClientType } from "src/app/main/clients/types";
+import { AxiosFetcher } from "../fetcher";
+import { FormClientValues } from "src/app/main/clients/components/Forms/NewClientForm/types";
 
-export interface ISaveClient {
-	id: string | null;
-	name: string;
-	address: string;
-	phone: string;
-}
 
 export class ClientService {
-	static async getById(id: string): Promise<ClientEntity> {
-		const { data } = await axios.get<ClientEntity>(`/clients/${id}`);
-		return data;
-	}
 
-	static async save(data: ISaveClient): Promise<void> {
-		await axios.post(`/clients`, data);
-	}
+  static async getByQuery(query?: { type?: ClientType }): Promise<Client[]> {
+    const data = await AxiosFetcher<Client[]>({
+      url: "/clients",
+      method: "GET",
+      params: query ?? {}
+    })
+
+    return data
+  }
+
+
+  static async save(formValues: FormClientValues, id?: string): Promise<void> {
+    let newData = { ...formValues } as any
+    if (formValues.contactPerson && formValues.position) {
+      newData.businessDetails = {
+        contactPerson: formValues.contactPerson,
+        position: formValues.position,
+      }
+    }
+
+    await AxiosFetcher<Client[]>({
+      url: "/clients",
+      method: "POST",
+      data: {
+        ...newData,
+        ...(id ? { id } : {}),
+      }
+    })
+  }
+
+  static async byId(id: string): Promise<Client> {
+    return await AxiosFetcher<Client>({
+      url: `/clients/${id}`,
+      method: "GET",
+    })
+  }
+
+  static async remove(id: string): Promise<void> {
+    await AxiosFetcher<Client[]>({
+      url: "/clients/" + id,
+      method: "DELETE",
+    })
+  }
 }

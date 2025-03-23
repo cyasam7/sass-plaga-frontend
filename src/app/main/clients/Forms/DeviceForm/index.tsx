@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@mui/material"
 import { DeviceFormProps } from "./types"
-import { Device } from "../../../types"
+import { Device } from "../../types"
 
 export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceFormProps) {
   const [formData, setFormData] = useState<Device>({

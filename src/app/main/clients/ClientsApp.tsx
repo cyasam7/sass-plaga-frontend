@@ -2,9 +2,9 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import { Container } from '@mui/material';
 import { ClientList } from './ClientDetail/ClientList';
-import { ClientService } from 'src/app/shared/services/ClientServices';
+import { ClientService } from 'src/app/shared/services/ClientService';
 import { useQuery } from 'react-query';
-import { FormClientValues } from './components/Forms/NewClientForm/types';
+import { FormClientValues } from './Forms/NewClientForm/types';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {

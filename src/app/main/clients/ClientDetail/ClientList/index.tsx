@@ -19,10 +19,11 @@ import {
 } from '@mui/material';
 import { Search, Edit, Delete, Add } from '@mui/icons-material';
 import { ClientType } from '../../types';
-import { ClientCard } from '../../components/Cards/ClientCard';
 import { ClientListProps } from './types';
-import { NewClientForm } from '../../components/Forms/NewClientForm';
-import { FormClientValues } from '../../components/Forms/NewClientForm/types';
+import { NewClientForm } from '../../Forms/NewClientForm';
+import { FormClientValues } from '../../Forms/NewClientForm/types';
+import { ClientCard } from '../../Cards/ClientCard';
+
 
 export function ClientList({ clients, onSaveClient, onDeleteClient }: ClientListProps) {
   const [searchTerm, setSearchTerm] = useState('');

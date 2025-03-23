@@ -30,8 +30,8 @@ import {
   MeetingRoom,
 } from "@mui/icons-material"
 import { Area } from "../types"
-import { AreaCard } from "../components/Cards/AreaCard"
-import { AreaForm } from "../components/Forms/AreaForm"
+import { AreaCard } from "../Cards/AreaCard"
+import { AreaForm } from "../Forms/AreaForm"
 import { useNavigate } from "react-router"
 
 // Datos de ejemplo para áreas

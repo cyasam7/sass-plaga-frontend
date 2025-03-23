@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, IconButton, Button, CardActions, Box } from "@mui/material"
 import { MeetingRoom, MoreVert } from "@mui/icons-material"
-import { Area } from "../../../types"
 import { useNavigate } from "react-router"
 import { AreaCardProps } from "./types"
 

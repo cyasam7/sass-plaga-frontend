@@ -2,7 +2,7 @@ import type React from "react"
 import { useState } from "react"
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid } from "@mui/material"
 import { BranchFormProps } from "./types"
-import { Branch } from "../../../types"
+import { Branch } from "../../types"
 
 export function BranchForm({ open, onClose, onSave, branch, isEditing }: BranchFormProps) {
   const [formData, setFormData] = useState<Branch>({

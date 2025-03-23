@@ -1,4 +1,4 @@
-import { Device } from "../../../types"
+import { Device } from "../../types"
 
 
 export interface DeviceFormProps {

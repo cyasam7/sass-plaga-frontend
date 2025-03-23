@@ -1,4 +1,4 @@
-import { Client } from "../../../types"
+import { Client } from "../../types"
 
 export interface ClientCardProps {
   client: Client

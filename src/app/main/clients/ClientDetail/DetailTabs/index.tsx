@@ -4,8 +4,6 @@ import {
   Store,
   CalendarMonth,
   Warning,
-  MeetingRoom,
-  BugReport,
 } from "@mui/icons-material"
 
 export interface DetailTabsProps {

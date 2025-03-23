@@ -1,5 +1,4 @@
-import { Branch } from "../../../types"
-
+import { Branch } from "../../types"
 
 export interface BranchFormProps {
   open: boolean
