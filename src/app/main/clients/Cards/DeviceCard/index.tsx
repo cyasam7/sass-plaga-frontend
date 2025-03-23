@@ -1,14 +1,12 @@
 import { Box, Card, CardContent, CardHeader, Chip, IconButton, Typography } from '@mui/material';
 import { BugReport, MoreVert } from '@mui/icons-material';
 import { DeviceCardProps } from './types';
+import { getDeviceTypeLabel, getStatusColor, getStatusLabel } from './utils';
 
 export function DeviceCard({
   device,
   onMenuClick,
-  onEditDevice,
-  getDeviceTypeLabel,
-  getStatusLabel,
-  getStatusColor
+
 }: DeviceCardProps) {
   return (
     <Card variant="outlined">

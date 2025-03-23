@@ -3,34 +3,18 @@ import { useState } from "react"
 import {
   Box,
   Typography,
-  Paper,
   Button,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   Menu,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Divider,
 } from "@mui/material"
 import {
   ArrowBack,
-  Store,
-  LocationOn,
-  Phone,
-  Person,
   Add,
   Edit,
   Delete,
   MeetingRoom,
 } from "@mui/icons-material"
 import { Area } from "../types"
-import { AreaCard } from "../Cards/AreaCard"
 import { AreaForm } from "../Forms/AreaForm"
 import { useNavigate, useParams } from "react-router"
 import { useQuery } from "react-query"
@@ -40,31 +24,10 @@ import ListCard from "./ListCards/ListCard"
 import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
 import { AreaService } from "src/app/shared/services/AreaService"
 
-// Datos de ejemplo para áreas
-const AREAS: Area[] = [
-  {
-    id: "1",
-    branchId: "1",
-    name: "Cocina",
-    description: "Área de preparación de alimentos",
-  },
-  {
-    id: "2",
-    branchId: "1",
-    name: "Almacén",
-    description: "Almacenamiento de productos secos",
-  },
-  {
-    id: "3",
-    branchId: "1",
-    name: "Área de Ventas",
-    description: "Zona de exhibición y venta",
-  },
-]
-
 export function BranchDetail() {
   const navigate = useNavigate()
-  const { branchId } = useParams()
+  const { branchId, clientId } = useParams()
+
   const { data: branch, isLoading: isLoadingBranch } = useQuery({
     queryKey: ['branch', branchId],
     queryFn: () => BranchService.byId(branchId)
