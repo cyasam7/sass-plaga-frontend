@@ -178,17 +178,6 @@ export function ClientFilters({ onFilterChange }: ClientFiltersProps) {
           />
         </Paper>
       </Popover>
-
-      {/* Formulario de nuevo cliente */}
-      <NewClientForm
-        open={showNewClientForm}
-        onClose={() => setShowNewClientForm(false)}
-        onSubmit={(data: NewClientData) => {
-          console.log("Nuevo cliente:", data)
-          // Aquí se implementaría la lógica para guardar el cliente
-          setShowNewClientForm(false)
-        }}
-      />
     </Box>
   )
 } 

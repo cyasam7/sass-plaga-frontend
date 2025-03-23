@@ -1,6 +1,6 @@
 import { Client, ClientType } from "src/app/main/clients/types";
 import { AxiosFetcher } from "../fetcher";
-import { FormClientValues } from "src/app/main/clients/components/Forms/NewClientForm/types";
+import { FormClientValues } from "src/app/main/clients/Forms/NewClientForm/types";
 
 
 export class ClientService {

@@ -3,7 +3,6 @@ import { Box, Tabs, Tab } from "@mui/material"
 import {
   Store,
   CalendarMonth,
-  Warning,
 } from "@mui/icons-material"
 
 export interface DetailTabsProps {
@@ -22,11 +21,6 @@ export function DetailTabs({ activeTab, onTabChange }: DetailTabsProps) {
       icon: <CalendarMonth />,
       label: "Historial",
       color: "success.main",
-    },
-    {
-      icon: <Warning />,
-      label: "Alertas",
-      color: "warning.main",
     },
   ]
   return (

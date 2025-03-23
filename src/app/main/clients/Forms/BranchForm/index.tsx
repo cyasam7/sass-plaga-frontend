@@ -1,141 +1,146 @@
 import type React from "react"
-import { useState } from "react"
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid } from "@mui/material"
-import { BranchFormProps } from "./types"
-import { Branch } from "../../types"
+import { useEffect } from "react"
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Typography } from "@mui/material"
+import { BranchFormProps, FormBranchValues, formSchema } from "./types"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import TextFieldForm from "src/app/shared-components/Form/TextFieldForm/TextFieldForm"
+
+const resetValues: FormBranchValues = {
+  name: "",
+  address: "",
+  contactPerson: "",
+  contactPhone: "",
+  notes: "",
+}
 
 export function BranchForm({ open, onClose, onSave, branch, isEditing }: BranchFormProps) {
-  const [formData, setFormData] = useState<Branch>({
-    id: branch?.id || "",
-    clientId: branch?.clientId || "",
-    name: branch?.name || "",
-    address: branch?.address || "",
-    contactPerson: branch?.contactPerson || "",
-    contactPhone: branch?.contactPhone || "",
-    notes: branch?.notes || "",
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<FormBranchValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: branch ? {
+      name: branch.name,
+      address: branch.address,
+      contactPerson: branch.contactPerson,
+      contactPhone: branch.contactPhone,
+      notes: branch.notes || "",
+    } : resetValues,
   })
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-
-    // Limpiar error cuando el usuario escribe
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+  useEffect(() => {
+    if (open) {
+      reset(
+        branch
+          ? {
+            name: branch.name,
+            address: branch.address,
+            contactPerson: branch.contactPerson,
+            contactPhone: branch.contactPhone,
+            notes: branch.notes || "",
+          }
+          : resetValues
+      )
     }
+    return () => {
+      reset(resetValues)
+    }
+  }, [branch, open, reset])
+
+  function onFormSubmit(data: FormBranchValues) {
+    const branchData = {
+      id: branch?.id || "",
+      clientId: branch?.clientId || "",
+      name: data.name,
+      address: data.address,
+      contactPerson: data.contactPerson,
+      contactPhone: data.contactPhone,
+      notes: data.notes || "",
+    }
+    onSave(branchData)
+    reset(resetValues)
   }
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = "El nombre de la sucursal es obligatorio"
-    }
-
-    if (!formData.address.trim()) {
-      newErrors.address = "La dirección es obligatoria"
-    }
-
-    if (!formData.contactPerson.trim()) {
-      newErrors.contactPerson = "La persona de contacto es obligatoria"
-    }
-
-    if (!formData.contactPhone.trim()) {
-      newErrors.contactPhone = "El teléfono de contacto es obligatorio"
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onSave(formData)
-      onClose()
-    }
+  const handleClose = () => {
+    reset(resetValues)
+    onClose()
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>{isEditing ? "Editar Sucursal" : "Agregar Nueva Sucursal"}</DialogTitle>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+      <DialogTitle>
+        <Typography variant="h6">{isEditing ? "Editar Sucursal" : "Agregar Nueva Sucursal"}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {isEditing
+            ? "Modifique los campos para actualizar la información de la sucursal."
+            : "Complete los campos para registrar una nueva sucursal en el sistema."
+          }
+        </Typography>
+      </DialogTitle>
 
       <DialogContent dividers>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              name="name"
-              label="Nombre de la Sucursal"
-              value={formData.name}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.name}
-              helperText={errors.name}
-              required
-            />
-          </Grid>
+        <form id="branch-form" onSubmit={handleSubmit(onFormSubmit)}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextFieldForm<FormBranchValues>
+                name="name"
+                control={control}
+                label="Nombre de la Sucursal"
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              name="address"
-              label="Dirección"
-              value={formData.address}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.address}
-              helperText={errors.address}
-              required
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <TextFieldForm<FormBranchValues>
+                name="address"
+                control={control}
+                label="Dirección"
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              name="contactPerson"
-              label="Persona de Contacto"
-              value={formData.contactPerson}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.contactPerson}
-              helperText={errors.contactPerson}
-              required
-            />
-          </Grid>
+            <Grid item xs={12} md={6}>
+              <TextFieldForm<FormBranchValues>
+                name="contactPerson"
+                control={control}
+                label="Persona de Contacto"
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              name="contactPhone"
-              label="Teléfono de Contacto"
-              value={formData.contactPhone}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.contactPhone}
-              helperText={errors.contactPhone}
-              required
-            />
-          </Grid>
+            <Grid item xs={12} md={6}>
+              <TextFieldForm<FormBranchValues>
+                name="contactPhone"
+                control={control}
+                label="Teléfono de Contacto"
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              name="notes"
-              label="Notas"
-              value={formData.notes}
-              onChange={handleChange}
-              fullWidth
-              multiline
-              rows={3}
-            />
+            <Grid item xs={12}>
+              <TextFieldForm<FormBranchValues>
+                name="notes"
+                control={control}
+                label="Notas"
+                fullWidth
+                multiline
+                rows={3}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </form>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Cancelar</Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={handleClose}>Cancelar</Button>
+        <Button
+          type="submit"
+          form="branch-form"
+          variant="contained"
+          color="primary"
+        >
           {isEditing ? "Actualizar" : "Guardar"}
         </Button>
       </DialogActions>

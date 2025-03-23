@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   Chip,
   Paper,
+  Skeleton,
 } from "@mui/material"
 import {
   Business,
@@ -22,10 +23,94 @@ import {
 import { Client } from "../../types"
 
 interface ClientInfoProps {
-  client: Client
+  client: Client | null
+  loading: boolean
 }
 
-export function ClientInfo({ client }: ClientInfoProps) {
+function ClientInfoSkeleton() {
+  return (
+    <Paper sx={{ p: 3, mb: 4 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
+            mb: 3,
+            p: 2,
+            bgcolor: "grey.100",
+            borderRadius: 1,
+          }}>
+            <Box sx={{ mr: 2 }}>
+              <Skeleton variant="circular" width={48} height={48} />
+            </Box>
+            <Box sx={{ flex: 1 }}>
+              <Skeleton variant="text" width="60%" height={40} />
+              <Box sx={{ mt: 1 }}>
+                <Skeleton variant="text" width={100} height={24} />
+              </Box>
+            </Box>
+          </Box>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Card variant="outlined" sx={{ height: "100%" }}>
+                <CardContent>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                    <Skeleton variant="circular" width={24} height={24} />
+                    <Skeleton variant="text" width="60%" height={24} />
+                  </Box>
+                  <List dense>
+                    {[1, 2, 3].map((item) => (
+                      <ListItem key={item}>
+                        <ListItemIcon>
+                          <Skeleton variant="circular" width={24} height={24} />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={<Skeleton variant="text" width="80%" />}
+                          secondary={<Skeleton variant="text" width="60%" />}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Card variant="outlined" sx={{ height: "100%" }}>
+                <CardContent>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                    <Skeleton variant="circular" width={24} height={24} />
+                    <Skeleton variant="text" width="60%" height={24} />
+                  </Box>
+                  <List dense>
+                    {[1, 2].map((item) => (
+                      <ListItem key={item}>
+                        <ListItemIcon>
+                          <Skeleton variant="circular" width={24} height={24} />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={<Skeleton variant="text" width="80%" />}
+                          secondary={<Skeleton variant="text" width="60%" />}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
+  )
+}
+
+export function ClientInfo({ client, loading }: ClientInfoProps) {
+  if (loading || !client) {
+    return <ClientInfoSkeleton />
+  }
+
   return (
     <Paper sx={{ p: 3, mb: 4 }}>
       <Grid container spacing={3}>

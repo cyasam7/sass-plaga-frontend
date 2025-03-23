@@ -6,8 +6,7 @@ import { BranchCardProps } from "./types"
 export function BranchCard({ branch, onMenuClick }: BranchCardProps) {
   const navigate = useNavigate()
 
-  return <>
-
+  return (
     <Card sx={{
       height: "100%",
       display: "flex",
@@ -108,6 +107,6 @@ export function BranchCard({ branch, onMenuClick }: BranchCardProps) {
         </Button>
       </CardActions>
     </Card>
-  </>
+  )
 }
 
