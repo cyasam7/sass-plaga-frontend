@@ -1,12 +1,13 @@
 import { Area } from 'src/app/main/clients/types';
 import { AxiosFetcher } from '../fetcher';
+import { FormAreaType } from 'src/app/main/clients/Forms/AreaForm/types';
 
 export class AreaService {
   static async getByCompany(id: string): Promise<Area[]> {
     return AxiosFetcher<Area[]>({ url: `/area?companyId=${id}` });
   }
 
-  static async save(data: any, id?: string): Promise<void> {
+  static async save(data: FormAreaType): Promise<void> {
     await AxiosFetcher({
       url: `/area`,
       method: 'POST',

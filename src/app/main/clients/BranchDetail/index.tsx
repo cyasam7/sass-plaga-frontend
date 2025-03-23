@@ -24,6 +24,7 @@ import ListCard from "./ListCards/ListCard"
 import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
 import { AreaService } from "src/app/shared/services/AreaService"
 import PageHeader from "../PageHeader"
+import { FormAreaType } from "../Forms/AreaForm/types"
 
 export function BranchDetail() {
   const navigate = useNavigate()
@@ -70,12 +71,8 @@ export function BranchDetail() {
     })
   }
 
-  const handleSaveArea = async (area: Area) => {
-    const newArea = {
-      ...area,
-      branchId: branch.id,
-    }
-    await AreaService.save(newArea, currentArea?.id)
+  const handleSaveArea = async (area: FormAreaType) => {
+    await AreaService.save(area)
     await refetchAreas()
     setShowAreaForm(false);
     handleMenuClose();
@@ -134,6 +131,8 @@ export function BranchDetail() {
         onClose={handleOnCloseAreaForm}
         open={showAreaForm}
         isEditing={isEditing}
+        branchId={branchId}
+        clientId={clientId}
       />
       <Menu
         anchorEl={menuAnchorEl}

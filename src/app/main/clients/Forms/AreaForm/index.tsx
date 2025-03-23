@@ -10,12 +10,12 @@ import {
   Button,
   Grid,
 } from "@mui/material"
-import { AreaFormProps } from "./types"
+import { AreaFormProps, FormAreaType } from "./types"
 import { Area } from "../../types"
 import TextFieldForm from "app/shared-components/Form/TextFieldForm/TextFieldForm"
 import { useEffect } from "react"
 
-const defaultValues: Area = {
+const defaultValues: FormAreaType = {
   id: "",
   branchId: "",
   clientId: "",
@@ -23,23 +23,28 @@ const defaultValues: Area = {
   description: "",
 }
 
-export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormProps) {
+export function AreaForm({ open, onClose, onSave, area, isEditing, branchId, clientId }: AreaFormProps) {
   const {
     control,
     handleSubmit,
     reset
-  } = useForm<Area>({
+  } = useForm<FormAreaType>({
     defaultValues: area ? area : defaultValues
   })
-
   useEffect(() => {
-    reset(area ? area : defaultValues)
+    reset(area ? {
+      id: area.id,
+      branchId,
+      clientId,
+      name: area.name,
+      description: area.description,
+    } : { ...defaultValues, branchId, clientId })
     return () => {
       reset(defaultValues)
     }
-  }, [area])
+  }, [area, branchId, clientId, reset])
 
-  const onSubmit = (data: Area) => {
+  const onSubmit = (data: FormAreaType) => {
     onSave(data)
     onClose()
     reset()

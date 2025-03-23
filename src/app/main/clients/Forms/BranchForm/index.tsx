@@ -41,7 +41,7 @@ export function BranchForm({ open, onClose, onSave, branch, isEditing, clientId 
             notes: branch.notes || "",
             clientId: clientId,
           }
-          : defaultValues
+          : { ...defaultValues, clientId }
       )
     }
     return () => {
