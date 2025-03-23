@@ -17,13 +17,46 @@ import {
   DialogActions,
   Typography,
 } from '@mui/material';
-import { Search, Edit, Delete, Add } from '@mui/icons-material';
+import { Search, Edit, Delete, Add, People } from '@mui/icons-material';
 import { ClientType } from '../../types';
 import { ClientListProps } from './types';
 import { NewClientForm } from '../../Forms/NewClientForm';
 import { FormClientValues } from '../../Forms/NewClientForm/types';
 import { ClientCard } from '../../Cards/ClientCard';
 
+const EmptyClientList = ({ onAddClick }: { onAddClick: () => void }) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 4,
+        textAlign: 'center',
+        bgcolor: 'background.paper',
+        borderRadius: 1,
+        minHeight: 400,
+      }}
+    >
+      <People sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+      <Typography variant="h6" color="text.secondary" gutterBottom>
+        No hay clientes
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+        Comienza agregando tu primer cliente
+      </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<Add />}
+        onClick={onAddClick}
+      >
+        Agregar Cliente
+      </Button>
+    </Box>
+  )
+}
 
 export function ClientList({ clients, onSaveClient, onDeleteClient }: ClientListProps) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,7 +110,6 @@ export function ClientList({ clients, onSaveClient, onDeleteClient }: ClientList
     setSelectedClientId(null);
   };
 
-
   const handleFormSubmit = (data: FormClientValues) => {
     onSaveClient(data, selectedClientId);
     handleFormClose();
@@ -88,81 +120,105 @@ export function ClientList({ clients, onSaveClient, onDeleteClient }: ClientList
     setSelectedClientId(null);
   };
 
+  const showEmptyState = clients.length === 0;
+  const showNoResults = clients.length > 0 && filteredClients.length === 0;
+
   return (
     <Box sx={{ mt: 4 }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          gap: 2,
-          mb: 3,
-          alignItems: { xs: 'stretch', sm: 'center' },
-          justifyContent: 'space-between'
-        }}
-      >
-        <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' }, flex: 1 }}>
-          <TextField
-            placeholder="Buscar clientes..."
-            variant="outlined"
-            size="small"
-            fullWidth
-            sx={{ maxWidth: { sm: 300 } }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search fontSize="small" />
-                </InputAdornment>
-              )
-            }}
-          />
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            sx={{
-              minHeight: '40px',
-              '.MuiTab-root': { minHeight: '40px' }
-            }}
-          >
-            <Tab
-              label="Todos"
-              value="all"
-            />
-            <Tab
-              label="Empresas"
-              value="business"
-            />
-            <Tab
-              label="Personas"
-              value="individual"
-            />
-          </Tabs>
-        </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Add />}
-          onClick={() => setShowSaveClientForm(true)}
-          sx={{ height: 40 }}
+      {!showEmptyState && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
+            mb: 3,
+            alignItems: { xs: 'stretch', sm: 'center' },
+            justifyContent: 'space-between'
+          }}
         >
-          Nuevo Cliente
-        </Button>
-      </Box>
-
-      <Grid container spacing={3}>
-        {filteredClients.map((client) => (
-          <Grid
-            item
-            xs={12}
-            md={6}
-            lg={4}
-            key={client.id}
+          <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' }, flex: 1 }}>
+            <TextField
+              placeholder="Buscar clientes..."
+              variant="outlined"
+              size="small"
+              fullWidth
+              sx={{ maxWidth: { sm: 300 } }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search fontSize="small" />
+                  </InputAdornment>
+                )
+              }}
+            />
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              sx={{
+                minHeight: '40px',
+                '.MuiTab-root': { minHeight: '40px' }
+              }}
+            >
+              <Tab
+                label="Todos"
+                value="all"
+              />
+              <Tab
+                label="Empresas"
+                value="business"
+              />
+              <Tab
+                label="Personas"
+                value="individual"
+              />
+            </Tabs>
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Add />}
+            onClick={() => setShowSaveClientForm(true)}
+            sx={{ height: 40 }}
           >
-            <ClientCard client={client} onMenuOpen={handleMenuOpen} />
-          </Grid>
-        ))}
-      </Grid>
+            Nuevo Cliente
+          </Button>
+        </Box>
+      )}
+
+      {showEmptyState ? (
+        <EmptyClientList onAddClick={() => setShowSaveClientForm(true)} />
+      ) : showNoResults ? (
+        <Box
+          sx={{
+            textAlign: 'center',
+            py: 8,
+            px: 3,
+          }}
+        >
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            No se encontraron resultados
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Intenta con otros términos de búsqueda o filtros
+          </Typography>
+        </Box>
+      ) : (
+        <Grid container spacing={3}>
+          {filteredClients.map((client) => (
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={4}
+              key={client.id}
+            >
+              <ClientCard client={client} onMenuOpen={handleMenuOpen} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       <Menu
         anchorEl={menuAnchorEl}

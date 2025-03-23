@@ -1,10 +1,11 @@
-import { Card, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, IconButton, Button, CardActions, Box } from "@mui/material"
-import { MeetingRoom, MoreVert } from "@mui/icons-material"
+import { Card, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, IconButton, Button, CardActions, Typography, Box, Chip, Stack } from "@mui/material"
+import { MeetingRoom, MoreVert, Apps, ArrowForward, Description } from "@mui/icons-material"
 import { useNavigate } from "react-router"
 import { AreaCardProps } from "./types"
 
 export function AreaCard({ area, onMenuClick }: AreaCardProps) {
   const navigate = useNavigate()
+  console.log(area);
 
   return (
     <Card
@@ -13,34 +14,71 @@ export function AreaCard({ area, onMenuClick }: AreaCardProps) {
         display: "flex",
         flexDirection: "column",
         position: "relative",
+        background: "linear-gradient(to bottom, rgba(25, 118, 210, 0.05), transparent)",
         "&:hover": {
           boxShadow: 6,
           background: "linear-gradient(to bottom, rgba(25, 118, 210, 0.08), transparent)",
         },
-        background: "linear-gradient(to bottom, rgba(25, 118, 210, 0.05), transparent)",
+        "&:before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "4px",
+          bgcolor: "primary.main",
+        }
       }}
     >
       <CardHeader
-        title={area.name}
+        avatar={
+          <Box sx={{ color: "primary.main" }}>
+            <MeetingRoom sx={{ fontSize: 40 }} />
+          </Box>
+        }
         action={
-          <IconButton
-            size="small"
-            onClick={(event) => onMenuClick(event, area.id)}
-          >
-            <MoreVert />
-          </IconButton>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Chip
+              icon={<Apps sx={{ fontSize: 16 }} />}
+              label="Área"
+              size="small"
+              color="primary"
+              variant="outlined"
+              sx={{
+                height: 24,
+                '& .MuiChip-label': {
+                  px: 1
+                }
+              }}
+            />
+            <IconButton
+              size="small"
+              onClick={(event) => onMenuClick(event, area.id)}
+              color="primary"
+            >
+              <MoreVert />
+            </IconButton>
+          </Stack>
+        }
+        title={
+          <Typography variant="h6" component="div">
+            {area.name}
+          </Typography>
         }
       />
       <CardContent sx={{ flexGrow: 1, pb: 1 }}>
         <List dense>
           <ListItem>
             <ListItemIcon>
-              <MeetingRoom fontSize="small" color="primary" />
+              <Description fontSize="small" color="primary" />
             </ListItemIcon>
             <ListItemText
               primary={area.description || "Sin descripción"}
               primaryTypographyProps={{
-                sx: { fontWeight: area.description ? "normal" : "light", fontStyle: area.description ? "normal" : "italic" }
+                sx: {
+                  fontWeight: "normal",
+                  fontStyle: area.description ? "normal" : "italic"
+                }
               }}
             />
           </ListItem>
@@ -49,10 +87,10 @@ export function AreaCard({ area, onMenuClick }: AreaCardProps) {
       <CardActions sx={{ p: 2, pt: 0 }}>
         <Button
           size="small"
-          startIcon={<MeetingRoom />}
-          onClick={() => navigate(`/clients/${area.branchId}/branches/${area.id}/areas/${area.id}`)}
+          endIcon={<ArrowForward />}
+          onClick={() => navigate(`/clients/${area.clientId}/branches/${area.branchId}/areas/${area.id}`)}
           color="primary"
-          variant="outlined"
+          variant="contained"
           fullWidth
         >
           Ver Detalles

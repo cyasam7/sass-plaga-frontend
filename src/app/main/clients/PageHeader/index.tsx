@@ -38,7 +38,7 @@ const PageHeader = ({ title, onBack, children, breadcrumbs }: PageHeaderProps) =
       }}>
         <Box>
           <Typography
-            variant="h4"
+            variant="h5"
             component="h1"
             sx={{
               fontWeight: 600,

@@ -1,73 +1,55 @@
 import type React from "react"
-import { useState } from "react"
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  TextField,
   Grid,
-  FormControl,
-  InputLabel,
-  Select,
   MenuItem,
 } from "@mui/material"
-import { DeviceFormProps } from "./types"
-import { Device } from "../../types"
+import { DeviceFormData, DeviceFormProps, deviceSchema } from "./types"
+import { Device, StatusDevice, TypeDevice } from "../../types"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import TextFieldForm from "app/shared-components/Form/TextFieldForm/TextFieldForm"
+import { useEffect } from "react"
 
-export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceFormProps) {
-  const [formData, setFormData] = useState<Device>({
-    id: device?.id || "",
-    areaId: device?.areaId || "",
-    type: device?.type || "trap",
-    code: device?.code || "",
-    installDate: device?.installDate || "",
-    status: device?.status || "active",
-    notes: device?.notes || "",
+
+const defaultValues: DeviceFormData = {
+  id: "",
+  clientId: "",
+  branchId: "",
+  areaId: "",
+  type: TypeDevice.CRAWLING,
+  stationNumber: "",
+  status: StatusDevice.ENABLED
+}
+
+export function DeviceForm({ open, onClose, onSave, device, isEditing, clientId, branchId, areaId }: DeviceFormProps) {
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<DeviceFormData>({
+    defaultValues,
+    resolver: zodResolver(deviceSchema),
   })
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-
-    // Limpiar error cuando el usuario escribe
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+  useEffect(() => {
+    if (device) {
+      reset({ ...device, clientId, branchId, areaId })
+    } else {
+      reset({ ...defaultValues, clientId, branchId, areaId })
     }
-  }
-
-  const handleSelectChange = (e: any) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.code.trim()) {
-      newErrors.code = "El código del dispositivo es obligatorio"
+    return () => {
+      reset(defaultValues)
     }
+  }, [device])
 
-    if (!formData.installDate.trim()) {
-      newErrors.installDate = "La fecha de instalación es obligatoria"
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onSave(formData)
-      onClose()
-    }
+  const onSubmit = (data: DeviceFormData) => {
+    onSave(data)
+    onClose()
   }
 
   return (
@@ -75,75 +57,55 @@ export function DeviceForm({ open, onClose, onSave, device, isEditing }: DeviceF
       <DialogTitle>{isEditing ? "Editar Dispositivo" : "Agregar Nuevo Dispositivo"}</DialogTitle>
 
       <DialogContent dividers>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-              <InputLabel>Tipo de Dispositivo</InputLabel>
-              <Select name="type" value={formData.type} label="Tipo de Dispositivo" onChange={handleSelectChange}>
-                <MenuItem value="trap">Trampa</MenuItem>
-                <MenuItem value="bait">Cebo</MenuItem>
-                <MenuItem value="monitor">Monitor</MenuItem>
-                <MenuItem value="other">Otro</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <TextFieldForm<DeviceFormData>
+                name="type"
+                control={control}
+                label="Tipo de Dispositivo"
+                fullWidth
+                select
+                required
+              >
+                <MenuItem value={TypeDevice.CRAWLING}>Rastreros</MenuItem>
+                <MenuItem value={TypeDevice.FLYERS}>Voladores</MenuItem>
+                <MenuItem value={TypeDevice.RODENTS}>Roedores</MenuItem>
+              </TextFieldForm>
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              name="code"
-              label="Código"
-              value={formData.code}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.code}
-              helperText={errors.code}
-              required
-            />
-          </Grid>
+            <Grid item xs={12} md={6}>
+              <TextFieldForm<DeviceFormData>
+                name="stationNumber"
+                control={control}
+                label="Número de Estación"
+                fullWidth
+                type="number"
+                required
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              name="installDate"
-              label="Fecha de Instalación"
-              type="date"
-              value={formData.installDate}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              error={!!errors.installDate}
-              helperText={errors.installDate}
-              required
-            />
+            <Grid item xs={12} md={6}>
+              <TextFieldForm<DeviceFormData>
+                name="status"
+                control={control}
+                label="Estado"
+                fullWidth
+                select
+                required
+              >
+                <MenuItem value={StatusDevice.ENABLED}>Activo</MenuItem>
+                <MenuItem value={StatusDevice.DISABLED}>Inactivo</MenuItem>
+                <MenuItem value={StatusDevice.MAINTENANCE}>En mantenimiento</MenuItem>
+              </TextFieldForm>
+            </Grid>
           </Grid>
-
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-              <InputLabel>Estado</InputLabel>
-              <Select name="status" value={formData.status} label="Estado" onChange={handleSelectChange}>
-                <MenuItem value="active">Activo</MenuItem>
-                <MenuItem value="inactive">Inactivo</MenuItem>
-                <MenuItem value="maintenance">En mantenimiento</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              name="notes"
-              label="Notas"
-              value={formData.notes}
-              onChange={handleChange}
-              fullWidth
-              multiline
-              rows={3}
-            />
-          </Grid>
-        </Grid>
+        </form>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>
-        <Button onClick={handleSubmit} variant="contained">
+        <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary">
           {isEditing ? "Actualizar" : "Guardar"}
         </Button>
       </DialogActions>

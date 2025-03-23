@@ -1,7 +1,8 @@
 import React from 'react'
-import { Box, Grid, Paper, Skeleton } from '@mui/material'
+import { Box, Grid, Paper, Skeleton, Typography } from '@mui/material'
 import { DeviceListProps } from './types'
 import { DeviceCard } from '../../Cards/DeviceCard'
+import { Devices } from '@mui/icons-material'
 
 const DeviceListSkeleton = () => {
   return (
@@ -22,6 +23,31 @@ const DeviceListSkeleton = () => {
   )
 }
 
+const EmptyDeviceList = () => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 4,
+        textAlign: 'center',
+        bgcolor: 'background.paper',
+        borderRadius: 1,
+      }}
+    >
+      <Devices sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+      <Typography variant="h6" color="text.secondary" gutterBottom>
+        No hay dispositivos
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        No se han agregado dispositivos a esta área
+      </Typography>
+    </Box>
+  )
+}
+
 const DeviceList = ({
   devices,
   onMenuClick,
@@ -30,6 +56,10 @@ const DeviceList = ({
 
   if (isLoading) {
     return <DeviceListSkeleton />
+  }
+
+  if (!devices?.length) {
+    return <EmptyDeviceList />
   }
 
   return (

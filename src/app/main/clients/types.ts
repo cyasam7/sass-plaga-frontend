@@ -37,14 +37,25 @@ export interface Client {
   businessDetails?: BusinessDetails;
 }
 
+export enum TypeDevice {
+  RODENTS = 'RODENTS',
+  CRAWLING = 'CRAWLING',
+  FLYERS = 'FLYERS'
+}
+
+export enum StatusDevice {
+  ENABLED = 'ACTIVE',
+  DISABLED = 'DISABLED',
+  MAINTENANCE = 'MAINTENANCE'
+}
+
 export interface Device {
   id: string;
-  type: string;
   code: string;
+  stationNumber: number | string;
+  status: StatusDevice;
+  type: TypeDevice;
   areaId: string;
   clientId: string;
   branchId: string;
-  status: string;
-  installDate: string;
-  notes?: string;
 }

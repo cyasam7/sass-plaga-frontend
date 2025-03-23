@@ -14,6 +14,8 @@ import { AreaFormProps, FormAreaType } from "./types"
 import { Area } from "../../types"
 import TextFieldForm from "app/shared-components/Form/TextFieldForm/TextFieldForm"
 import { useEffect } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { formSchema } from "./types"
 
 const defaultValues: FormAreaType = {
   id: "",
@@ -29,6 +31,7 @@ export function AreaForm({ open, onClose, onSave, area, isEditing, branchId, cli
     handleSubmit,
     reset
   } = useForm<FormAreaType>({
+    resolver: zodResolver(formSchema),
     defaultValues: area ? area : defaultValues
   })
   useEffect(() => {
@@ -79,6 +82,7 @@ export function AreaForm({ open, onClose, onSave, area, isEditing, branchId, cli
                 label="Descripción"
                 fullWidth
                 multiline
+                required
                 rows={3}
               />
             </Grid>
@@ -87,7 +91,7 @@ export function AreaForm({ open, onClose, onSave, area, isEditing, branchId, cli
 
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" color="primary">
             {isEditing ? "Actualizar" : "Guardar"}
           </Button>
         </DialogActions>

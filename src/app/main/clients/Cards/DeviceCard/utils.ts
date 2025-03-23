@@ -1,36 +1,38 @@
-export const getDeviceTypeLabel = (type: string) => {
+import { StatusDevice, TypeDevice } from '../../types';
+
+export const getDeviceTypeLabel = (type: TypeDevice) => {
   switch (type) {
-    case 'trap':
-      return 'Trampa';
-    case 'bait':
-      return 'Cebo';
-    case 'monitor':
-      return 'Monitor';
+    case TypeDevice.RODENTS:
+      return 'Roedores';
+    case TypeDevice.CRAWLING:
+      return 'Rastreros';
+    case TypeDevice.FLYERS:
+      return 'Voladores';
     default:
-      return 'Otro';
+      return 'Desconocido';
   }
 };
 
-export const getStatusColor = (status: string) => {
+export const getStatusColor = (status: StatusDevice) => {
   switch (status) {
-    case 'active':
+    case StatusDevice.ENABLED:
       return 'success';
-    case 'inactive':
+    case StatusDevice.DISABLED:
       return 'error';
-    case 'maintenance':
+    case StatusDevice.MAINTENANCE:
       return 'warning';
     default:
       return 'default';
   }
 };
 
-export const getStatusLabel = (status: string) => {
+export const getStatusLabel = (status: StatusDevice) => {
   switch (status) {
-    case 'active':
+    case StatusDevice.ENABLED:
       return 'Activo';
-    case 'inactive':
+    case StatusDevice.DISABLED:
       return 'Inactivo';
-    case 'maintenance':
+    case StatusDevice.MAINTENANCE:
       return 'En mantenimiento';
     default:
       return status;

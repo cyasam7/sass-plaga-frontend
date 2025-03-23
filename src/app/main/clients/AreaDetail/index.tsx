@@ -3,15 +3,9 @@ import { useState } from "react"
 import {
   Box,
   Typography,
-  Paper,
   Button,
-  Grid,
   Menu,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material"
 import {
   ArrowBack,
@@ -20,30 +14,32 @@ import {
   Delete,
   BugReport,
 } from "@mui/icons-material"
-import { Area, Device } from "../types"
-import { DeviceCard } from "../Cards/DeviceCard"
+import { Device } from "../types"
 import { DeviceForm } from "../Forms/DeviceForm"
 import { useNavigate, useParams } from "react-router"
 import { AreaService } from "src/app/shared/services/AreaService"
 import { useQuery } from "react-query"
-import AreaHeader from './AreaHeader'
+import AreaInfo from './AreaInfo'
 import DeviceList from './DeviceList'
 import PageHeader from '../PageHeader'
 import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
-
-// Datos de ejemplo para dispositivos
-
+import { DeviceService } from "src/app/shared/services/DevicesService"
+import { DeviceFormData } from "../Forms/DeviceForm/types"
 
 export function AreaDetail() {
   const navigate = useNavigate()
-  const { areaId, branchId } = useParams()
+  const { areaId, branchId, clientId } = useParams()
 
   const { data: area, isLoading: isLoadingArea } = useQuery({
     queryKey: ["area", areaId],
     queryFn: () => AreaService.getById(areaId)
   })
 
-  const devices = []
+  const { data: devices = [], isLoading: isLoadingDevices, refetch: refetchDevices } = useQuery({
+    queryKey: ["devices", areaId],
+    queryFn: () => DeviceService.getByQuery({ areaId, clientId, branchId })
+  })
+
 
   const [showDeviceForm, setShowDeviceForm] = useState(false)
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null)
@@ -69,21 +65,18 @@ export function AreaDetail() {
     openDialog({
       title: "Eliminar Dispositivo",
       text: "¿Estás seguro de querer eliminar este dispositivo?",
-      onAccept: () => {
-
+      onAccept: async () => {
+        await DeviceService.remove(deviceId)
+        await refetchDevices()
         handleMenuClose()
       }
     })
   }
 
 
-  const handleSaveDevice = (device: Device) => {
-    const newDevice = {
-      ...device,
-      id: `${devices.length + 1}`, // En una aplicación real, esto vendría del backend
-      areaId: area.id,
-    }
-    console.log(newDevice);
+  const handleSaveDevice = async (device: DeviceFormData) => {
+    await DeviceService.save(device)
+    await refetchDevices()
     setShowDeviceForm(false)
   }
 
@@ -98,7 +91,7 @@ export function AreaDetail() {
   }
 
   return (
-    <Box>
+    <Box paddingTop={2}>
       <PageHeader
         title="Detalle del Área"
         onBack={() => navigate(-1)}
@@ -109,10 +102,7 @@ export function AreaDetail() {
           { label: "Detalle del Área", onClick: () => navigate(`/clients/${branchId}/branches/${branchId}/areas/${areaId}`) }
         ]}
       />
-
-      <AreaHeader area={area} isLoading={isLoadingArea} />
-
-
+      <AreaInfo area={area} isLoading={isLoadingArea} />
       <Box sx={{ mb: 3 }}>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
           <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -120,20 +110,19 @@ export function AreaDetail() {
           </Typography>
           <Button
             variant="contained"
+            color="primary"
             startIcon={<Add />}
             onClick={handleAddDevice}
           >
             Agregar Dispositivo
           </Button>
         </Box>
-
         <DeviceList
           devices={devices}
           onMenuClick={handleMenuClick}
           isLoading={isLoadingArea}
         />
       </Box>
-
       <Menu
         anchorEl={menuAnchorEl}
         open={Boolean(menuAnchorEl)}
@@ -146,10 +135,11 @@ export function AreaDetail() {
           <Delete sx={{ mr: 1 }} /> Eliminar
         </MenuItem>
       </Menu>
-
-
       <DeviceForm
-        device={currentDevice}
+        clientId={clientId}
+        branchId={branchId}
+        areaId={areaId}
+        device={currentDevice as DeviceFormData}
         onSave={handleSaveDevice}
         onClose={() => {
           setShowDeviceForm(false)

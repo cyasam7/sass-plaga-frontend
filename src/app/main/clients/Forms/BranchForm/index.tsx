@@ -26,8 +26,6 @@ export function BranchForm({ open, onClose, onSave, branch, isEditing, clientId 
     defaultValues,
   })
 
-
-
   useEffect(() => {
     if (open) {
       reset(
