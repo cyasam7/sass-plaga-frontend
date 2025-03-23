@@ -1,5 +1,5 @@
-import { Card, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, IconButton, Button, CardActions, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Typography, Box, Chip } from "@mui/material"
-import { MoreVert, Phone, Apartment, LocationOn, Person, Store, Business } from "@mui/icons-material"
+import { Card, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, IconButton, Button, CardActions, Typography, Box, Chip, Stack } from "@mui/material"
+import { MoreVert, Phone, Apartment, LocationOn, Person, Store, Business, ArrowForward } from "@mui/icons-material"
 import { useNavigate } from "react-router"
 import { BranchCardProps } from "./types"
 
@@ -29,81 +29,94 @@ export function BranchCard({ branch, onMenuClick }: BranchCardProps) {
     }}>
       <CardHeader
         avatar={
-          <Store sx={{ color: "primary.main", fontSize: 40 }} />
+          <Box sx={{ color: "primary.main" }}>
+            <Store sx={{ fontSize: 40 }} />
+          </Box>
         }
-        title={
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography variant="h6" component="div">
-              {branch.name}
-            </Typography>
+        action={
+          <Stack direction="row" spacing={1} alignItems="center">
             <Chip
               icon={<Business sx={{ fontSize: 16 }} />}
               label="Sucursal"
               size="small"
               color="primary"
               variant="outlined"
-              sx={{ height: 24 }}
+              sx={{
+                height: 24,
+                '& .MuiChip-label': {
+                  px: 1
+                }
+              }}
             />
-          </Box>
+            <IconButton
+              size="small"
+              onClick={(event) => onMenuClick(event, branch.id)}
+              color="primary"
+            >
+              <MoreVert />
+            </IconButton>
+          </Stack>
         }
-        action={
-          <IconButton
-            size="small"
-            onClick={(event) => onMenuClick(event, branch.id)}
-            color="primary"
-          >
-            <MoreVert />
-          </IconButton>
+        title={
+          <Typography variant="h6" component="div">
+            {branch.name}
+          </Typography>
         }
       />
       <CardContent sx={{ flexGrow: 1, pb: 1 }}>
         <List dense>
-          <ListItem>
-            <ListItemIcon>
-              <LocationOn fontSize="small" color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary={branch.address || "Sin dirección"}
-              primaryTypographyProps={{
-                sx: { fontWeight: branch.address ? "normal" : "light", fontStyle: branch.address ? "normal" : "italic" }
-              }}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Person fontSize="small" color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary={branch.contactPerson || "Sin contacto"}
-              secondary="Contacto"
-              primaryTypographyProps={{
-                sx: { fontWeight: branch.contactPerson ? "normal" : "light", fontStyle: branch.contactPerson ? "normal" : "italic" }
-              }}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Phone fontSize="small" color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary={branch.contactPhone || "Sin teléfono"}
-              primaryTypographyProps={{
-                sx: { fontWeight: branch.contactPhone ? "normal" : "light", fontStyle: branch.contactPhone ? "normal" : "italic" }
-              }}
-            />
-          </ListItem>
+          {branch.address && (
+            <ListItem>
+              <ListItemIcon>
+                <LocationOn fontSize="small" color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary={branch.address}
+                primaryTypographyProps={{
+                  sx: { fontWeight: "normal" }
+                }}
+              />
+            </ListItem>
+          )}
+          {branch.contactPerson && (
+            <ListItem>
+              <ListItemIcon>
+                <Person fontSize="small" color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary={branch.contactPerson}
+                secondary="Contacto"
+                primaryTypographyProps={{
+                  sx: { fontWeight: "normal" }
+                }}
+              />
+            </ListItem>
+          )}
+          {branch.contactPhone && (
+            <ListItem>
+              <ListItemIcon>
+                <Phone fontSize="small" color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary={branch.contactPhone}
+                primaryTypographyProps={{
+                  sx: { fontWeight: "normal" }
+                }}
+              />
+            </ListItem>
+          )}
         </List>
       </CardContent>
       <CardActions sx={{ p: 2, pt: 0 }}>
         <Button
           size="small"
-          startIcon={<Apartment />}
+          endIcon={<ArrowForward />}
           onClick={() => navigate(`/clients/${branch.clientId}/branches/${branch.id}`)}
           color="primary"
           variant="contained"
           fullWidth
         >
-          Ver Detalles
+          Ver Áreas
         </Button>
       </CardActions>
     </Card>

@@ -14,6 +14,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Stack,
 } from "@mui/material"
 import {
   Business,
@@ -24,6 +25,7 @@ import {
   LocationOn,
   ContactMail,
   Work,
+  ArrowForward,
 } from "@mui/icons-material"
 import { ClientCardProps } from "./types"
 import { useNavigate } from "react-router"
@@ -62,99 +64,108 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           </Box>
         }
         action={
-          <IconButton
-            size="small"
-            onClick={(e) => onMenuOpen(e, client.id)}
-            color={isBusiness ? "primary" : "secondary"}
-          >
-            <MoreVert />
-          </IconButton>
-        }
-        title={
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-            <Typography variant="h6" component="div">
-              {client.name}
-            </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
             <Chip
               icon={isBusiness ? <Business sx={{ fontSize: 16 }} /> : <Person sx={{ fontSize: 16 }} />}
               label={isBusiness ? "Empresa" : "Persona"}
               size="small"
               color={isBusiness ? "primary" : "secondary"}
               variant="outlined"
-              sx={{ height: 24, alignSelf: "flex-start" }}
+              sx={{
+                height: 24,
+                '& .MuiChip-label': {
+                  px: 1
+                }
+              }}
             />
-          </Box>
+            <IconButton
+              size="small"
+              onClick={(e) => onMenuOpen(e, client.id)}
+              color={isBusiness ? "primary" : "secondary"}
+            >
+              <MoreVert />
+            </IconButton>
+          </Stack>
+        }
+        title={
+          <Typography variant="h6" component="div">
+            {client.name}
+          </Typography>
         }
       />
       <CardContent sx={{ flexGrow: 1, pb: 1 }}>
         <List dense>
-          <ListItem>
-            <ListItemIcon>
-              <Email fontSize="small" color={isBusiness ? "primary" : "secondary"} />
-            </ListItemIcon>
-            <ListItemText
-              primary={client.email || "Sin correo"}
-              primaryTypographyProps={{
-                sx: { fontWeight: client.email ? "normal" : "light", fontStyle: client.email ? "normal" : "italic" }
-              }}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Phone fontSize="small" color={isBusiness ? "primary" : "secondary"} />
-            </ListItemIcon>
-            <ListItemText
-              primary={client.phone || "Sin teléfono"}
-              primaryTypographyProps={{
-                sx: { fontWeight: client.phone ? "normal" : "light", fontStyle: client.phone ? "normal" : "italic" }
-              }}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <LocationOn fontSize="small" color={isBusiness ? "primary" : "secondary"} />
-            </ListItemIcon>
-            <ListItemText
-              primary={client.address || "Sin dirección"}
-              primaryTypographyProps={{
-                sx: { fontWeight: client.address ? "normal" : "light", fontStyle: client.address ? "normal" : "italic" }
-              }}
-            />
-          </ListItem>
+          {client.email && (
+            <ListItem>
+              <ListItemIcon>
+                <Email fontSize="small" color={isBusiness ? "primary" : "secondary"} />
+              </ListItemIcon>
+              <ListItemText
+                primary={client.email}
+                primaryTypographyProps={{
+                  sx: { fontWeight: "normal" }
+                }}
+              />
+            </ListItem>
+          )}
+          {client.phone && (
+            <ListItem>
+              <ListItemIcon>
+                <Phone fontSize="small" color={isBusiness ? "primary" : "secondary"} />
+              </ListItemIcon>
+              <ListItemText
+                primary={client.phone}
+                primaryTypographyProps={{
+                  sx: { fontWeight: "normal" }
+                }}
+              />
+            </ListItem>
+          )}
+          {client.address && (
+            <ListItem>
+              <ListItemIcon>
+                <LocationOn fontSize="small" color={isBusiness ? "primary" : "secondary"} />
+              </ListItemIcon>
+              <ListItemText
+                primary={client.address}
+                primaryTypographyProps={{
+                  sx: { fontWeight: "normal" }
+                }}
+              />
+            </ListItem>
+          )}
 
           {client.businessDetails && (
             <>
               <Divider sx={{ my: 1 }} />
-              <ListItem>
-                <ListItemIcon>
-                  <ContactMail fontSize="small" color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={client.businessDetails.contactPerson || "Sin contacto"}
-                  secondary="Persona de contacto"
-                  primaryTypographyProps={{
-                    sx: {
-                      fontWeight: client.businessDetails.contactPerson ? "normal" : "light",
-                      fontStyle: client.businessDetails.contactPerson ? "normal" : "italic"
-                    }
-                  }}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Work fontSize="small" color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={client.businessDetails.position || "Sin cargo"}
-                  secondary="Cargo"
-                  primaryTypographyProps={{
-                    sx: {
-                      fontWeight: client.businessDetails.position ? "normal" : "light",
-                      fontStyle: client.businessDetails.position ? "normal" : "italic"
-                    }
-                  }}
-                />
-              </ListItem>
+              {client.businessDetails.contactPerson && (
+                <ListItem>
+                  <ListItemIcon>
+                    <ContactMail fontSize="small" color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={client.businessDetails.contactPerson}
+                    secondary="Persona de contacto"
+                    primaryTypographyProps={{
+                      sx: { fontWeight: "normal" }
+                    }}
+                  />
+                </ListItem>
+              )}
+              {client.businessDetails.position && (
+                <ListItem>
+                  <ListItemIcon>
+                    <Work fontSize="small" color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={client.businessDetails.position}
+                    secondary="Cargo"
+                    primaryTypographyProps={{
+                      sx: { fontWeight: "normal" }
+                    }}
+                  />
+                </ListItem>
+              )}
             </>
           )}
         </List>
@@ -162,13 +173,13 @@ export const ClientCard: React.FC<ClientCardProps> = ({
       <CardActions sx={{ p: 2, pt: 0 }}>
         <Button
           size="small"
-          startIcon={isBusiness ? <Business /> : <Person />}
+          endIcon={<ArrowForward />}
           onClick={() => navigate(`/clients/${client.id}`)}
           color={isBusiness ? "primary" : "secondary"}
           variant="contained"
           fullWidth
         >
-          Ver Detalles
+          {isBusiness ? "Ver Sucursales" : "Ver Detalles"}
         </Button>
       </CardActions>
     </Card>

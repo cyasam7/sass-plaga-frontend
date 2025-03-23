@@ -23,6 +23,7 @@ import { BranchInfo } from "./BranchInfo/BranchInfo"
 import ListCard from "./ListCards/ListCard"
 import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
 import { AreaService } from "src/app/shared/services/AreaService"
+import PageHeader from "../PageHeader"
 
 export function BranchDetail() {
   const navigate = useNavigate()
@@ -96,18 +97,17 @@ export function BranchDetail() {
   }
 
   return (
-    <Box>
-      <Box sx={{ mb: 4, display: "flex", alignItems: "center" }}>
-        <Button startIcon={<ArrowBack />} onClick={() => navigate(-1)} sx={{ mr: 2 }}>
-          Volver
-        </Button>
-        <Typography variant="h5" component="h1">
-          Detalle de Sucursal
-        </Typography>
-      </Box>
-
+    <Box paddingTop={2}>
+      <PageHeader
+        title="Detalle de Sucursal"
+        onBack={() => navigate(-1)}
+        breadcrumbs={[
+          { label: "Clientes", onClick: () => navigate("/clients") },
+          { label: "Sucursal", onClick: () => navigate(`/clients/${clientId}/branches/${branchId}`) },
+          { label: "Detalle de Sucursal", onClick: () => navigate(`/clients/${clientId}/branches/${branchId}`) }
+        ]}
+      />
       <BranchInfo branch={branch} isLoading={isLoadingBranch} />
-
       <ListCard
         areas={areas}
         isLoading={isLoadingAreas}
@@ -119,6 +119,7 @@ export function BranchDetail() {
             </Typography>
             <Button
               variant="contained"
+              color="primary"
               startIcon={<Add />}
               onClick={handleAddArea}
             >
@@ -146,7 +147,6 @@ export function BranchDetail() {
           <Delete sx={{ mr: 1 }} /> Eliminar
         </MenuItem>
       </Menu>
-
     </Box>
   )
 }

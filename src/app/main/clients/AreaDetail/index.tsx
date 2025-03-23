@@ -28,6 +28,7 @@ import { AreaService } from "src/app/shared/services/AreaService"
 import { useQuery } from "react-query"
 import AreaHeader from './AreaHeader'
 import DeviceList from './DeviceList'
+import PageHeader from '../PageHeader'
 import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
 
 // Datos de ejemplo para dispositivos
@@ -49,7 +50,7 @@ export function AreaDetail() {
   const [isEditing, setIsEditing] = useState(false)
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null)
-  
+
 
   const handleAddDevice = () => {
     setCurrentDevice(null)
@@ -98,14 +99,16 @@ export function AreaDetail() {
 
   return (
     <Box>
-      <Box sx={{ mb: 4, display: "flex", alignItems: "center" }}>
-        <Button startIcon={<ArrowBack />} onClick={() => navigate(-1)} sx={{ mr: 2 }}>
-          Volver
-        </Button>
-        <Typography variant="h5" component="h1">
-          Detalle del Área
-        </Typography>
-      </Box>
+      <PageHeader
+        title="Detalle del Área"
+        onBack={() => navigate(-1)}
+        breadcrumbs={[
+          { label: "Clientes", onClick: () => navigate("/clients") },
+          { label: "Sucursal", onClick: () => navigate(`/clients/${branchId}/branches/${branchId}`) },
+          { label: "Áreas", onClick: () => navigate(`/clients/${branchId}/branches/${branchId}/areas`) },
+          { label: "Detalle del Área", onClick: () => navigate(`/clients/${branchId}/branches/${branchId}/areas/${areaId}`) }
+        ]}
+      />
 
       <AreaHeader area={area} isLoading={isLoadingArea} />
 

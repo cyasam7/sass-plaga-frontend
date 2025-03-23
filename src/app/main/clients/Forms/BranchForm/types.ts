@@ -1,28 +1,31 @@
-import { Branch } from "../../types"
-import { z } from "zod"
+import { Branch } from '../../types';
+import { z } from 'zod';
 
 export const formSchema = z.object({
+  id: z.string().optional(),
+  clientId: z.string(),
   name: z.string().min(2, {
-    message: "El nombre debe tener al menos 2 caracteres",
+    message: 'El nombre debe tener al menos 2 caracteres'
   }),
   address: z.string().min(5, {
-    message: "La dirección debe tener al menos 5 caracteres",
+    message: 'La dirección debe tener al menos 5 caracteres'
   }),
   contactPerson: z.string().min(2, {
-    message: "La persona de contacto debe tener al menos 2 caracteres",
+    message: 'La persona de contacto debe tener al menos 2 caracteres'
   }),
   contactPhone: z.string().min(8, {
-    message: "El teléfono debe tener al menos 8 caracteres",
+    message: 'El teléfono debe tener al menos 8 caracteres'
   }),
-  notes: z.string().optional(),
-})
+  notes: z.string().optional()
+});
 
-export type FormBranchValues = z.infer<typeof formSchema>
+export type FormBranchValues = z.infer<typeof formSchema>;
 
 export interface BranchFormProps {
-  open: boolean
-  onClose: () => void
-  onSave: (branch: Branch) => void
-  branch: Branch | null
-  isEditing: boolean
-} 
+  open: boolean;
+  onClose: () => void;
+  onSave: (branch: Branch) => void;
+  branch: Branch | null;
+  isEditing: boolean;
+  clientId: string;
+}

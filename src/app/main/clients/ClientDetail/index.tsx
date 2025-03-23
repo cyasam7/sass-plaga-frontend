@@ -2,14 +2,12 @@ import type React from "react"
 import { useState } from "react"
 import {
   Box,
-  Typography,
   Button,
   Card,
   CardContent,
   Menu,
 } from "@mui/material"
 import {
-  ArrowBack,
   Add,
   Edit,
   Delete,
@@ -25,6 +23,8 @@ import { BranchService } from "src/app/shared/services/BranchService"
 import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
 import { HistoryTab } from "./Tabs/History"
 import { BranchesTab } from "./Tabs/Branches"
+import PageHeader from "../PageHeader"
+import { FormBranchValues } from "../Forms/BranchForm/types"
 
 
 export function ClientDetail() {
@@ -80,13 +80,8 @@ export function ClientDetail() {
     })
   }
 
-  async function handleSaveBranch(branch: Branch) {
-    const newBranch = {
-      ...branch,
-      id: currentBranch?.id ?? "",
-      clientId: clientId,
-    }
-    await BranchService.save(newBranch)
+  async function handleSaveBranch(branch: FormBranchValues) {
+    await BranchService.save(branch)
     await refetchBranches()
     setShowBranchForm(false)
     handleMenuClose()
@@ -106,18 +101,12 @@ export function ClientDetail() {
   }
 
   return (
-    <Box>
-      <Box sx={{ mb: 4, display: "flex", alignItems: "center" }}>
-        <Button startIcon={<ArrowBack />} onClick={() => navigate(-1)} sx={{ mr: 2 }}>
-          Volver
-        </Button>
-        <Typography variant="h5" component="h1">
-          Detalle del Cliente
-        </Typography>
-      </Box>
-
+    <Box paddingTop={2}>
+      <PageHeader
+        title="Detalle del Cliente"
+        onBack={() => navigate(-1)}
+      />
       <ClientInfo client={client} loading={isLoading} />
-
       <Card sx={{ mb: 4 }}>
         <CardContent>
           <DetailTabs
@@ -151,8 +140,6 @@ export function ClientDetail() {
           {activeTab === 1 && (<HistoryTab />)}
         </CardContent>
       </Card>
-
-      {/* Menú de opciones para cada sucursal */}
       <Menu
         anchorEl={menuAnchorEl}
         open={Boolean(menuAnchorEl)}
@@ -176,9 +163,8 @@ export function ClientDetail() {
           Eliminar
         </Button>
       </Menu>
-
-      {/* Formulario de sucursal */}
       <BranchForm
+        clientId={clientId}
         open={showBranchForm}
         onClose={() => setShowBranchForm(false)}
         onSave={handleSaveBranch}

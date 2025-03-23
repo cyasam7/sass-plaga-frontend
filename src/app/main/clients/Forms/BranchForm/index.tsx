@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import TextFieldForm from "src/app/shared-components/Form/TextFieldForm/TextFieldForm"
 
-const resetValues: FormBranchValues = {
+const defaultValues: FormBranchValues = {
+  id: "",
+  clientId: "",
   name: "",
   address: "",
   contactPerson: "",
@@ -14,45 +16,43 @@ const resetValues: FormBranchValues = {
   notes: "",
 }
 
-export function BranchForm({ open, onClose, onSave, branch, isEditing }: BranchFormProps) {
+export function BranchForm({ open, onClose, onSave, branch, isEditing, clientId }: BranchFormProps) {
   const {
     control,
     handleSubmit,
     reset,
   } = useForm<FormBranchValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: branch ? {
-      name: branch.name,
-      address: branch.address,
-      contactPerson: branch.contactPerson,
-      contactPhone: branch.contactPhone,
-      notes: branch.notes || "",
-    } : resetValues,
+    defaultValues,
   })
+
+
 
   useEffect(() => {
     if (open) {
       reset(
         branch
           ? {
+            id: branch.id,
             name: branch.name,
             address: branch.address,
             contactPerson: branch.contactPerson,
             contactPhone: branch.contactPhone,
             notes: branch.notes || "",
+            clientId: clientId,
           }
-          : resetValues
+          : defaultValues
       )
     }
     return () => {
-      reset(resetValues)
+      reset(defaultValues)
     }
-  }, [branch, open, reset])
+  }, [branch, open, reset, clientId])
 
   function onFormSubmit(data: FormBranchValues) {
     const branchData = {
-      id: branch?.id || "",
-      clientId: branch?.clientId || "",
+      id: data?.id || "",
+      clientId: clientId,
       name: data.name,
       address: data.address,
       contactPerson: data.contactPerson,
@@ -60,11 +60,11 @@ export function BranchForm({ open, onClose, onSave, branch, isEditing }: BranchF
       notes: data.notes || "",
     }
     onSave(branchData)
-    reset(resetValues)
+    reset(defaultValues)
   }
 
   const handleClose = () => {
-    reset(resetValues)
+    reset(defaultValues)
     onClose()
   }
 

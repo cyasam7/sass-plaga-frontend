@@ -2,8 +2,6 @@ import {
   Box,
   Typography,
   Grid,
-  Card,
-  CardContent,
   List,
   ListItem,
   ListItemText,
@@ -11,6 +9,8 @@ import {
   Chip,
   Paper,
   Skeleton,
+  Card,
+  CardContent,
 } from "@mui/material"
 import {
   Business,
@@ -18,7 +18,6 @@ import {
   LocationOn,
   Email,
   Phone,
-  CalendarMonth,
 } from "@mui/icons-material"
 import { Client } from "../../types"
 
@@ -29,80 +28,98 @@ interface ClientInfoProps {
 
 function ClientInfoSkeleton() {
   return (
-    <Paper sx={{ p: 3, mb: 4 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            mb: 3,
-            p: 2,
-            bgcolor: "grey.100",
-            borderRadius: 1,
-          }}>
-            <Box sx={{ mr: 2 }}>
-              <Skeleton variant="circular" width={48} height={48} />
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <Skeleton variant="text" width="60%" height={40} />
-              <Box sx={{ mt: 1 }}>
-                <Skeleton variant="text" width={100} height={24} />
-              </Box>
+    <Box>
+      <Paper
+        sx={{
+          p: 2,
+          mb: 2,
+          bgcolor: '#2B6858',
+          borderRadius: '4px 4px 0 0',
+          color: 'white'
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Business sx={{ fontSize: 32 }} />
+          <Box>
+            <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+              <Skeleton variant="rectangular" width={80} height={24} sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
             </Box>
           </Box>
+        </Box>
+      </Paper>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ height: "100%" }}>
-                <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                    <Skeleton variant="circular" width={24} height={24} />
-                    <Skeleton variant="text" width="60%" height={24} />
-                  </Box>
-                  <List dense>
-                    {[1, 2, 3].map((item) => (
-                      <ListItem key={item}>
-                        <ListItemIcon>
-                          <Skeleton variant="circular" width={24} height={24} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={<Skeleton variant="text" width="80%" />}
-                          secondary={<Skeleton variant="text" width="60%" />}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ height: "100%" }}>
-                <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                    <Skeleton variant="circular" width={24} height={24} />
-                    <Skeleton variant="text" width="60%" height={24} />
-                  </Box>
-                  <List dense>
-                    {[1, 2].map((item) => (
-                      <ListItem key={item}>
-                        <ListItemIcon>
-                          <Skeleton variant="circular" width={24} height={24} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={<Skeleton variant="text" width="80%" />}
-                          secondary={<Skeleton variant="text" width="60%" />}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography
+                variant="h6"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  mb: 3,
+                  color: '#2B6858',
+                  fontWeight: 500,
+                  fontSize: '1.25rem'
+                }}
+              >
+                <LocationOn fontSize="small" />
+                Información de Contacto
+              </Typography>
+              <List>
+                {[1, 2, 3].map((_, index) => (
+                  <ListItem key={index} sx={{ px: 0, py: 2 }}>
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      <Skeleton variant="circular" width={24} height={24} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={<Skeleton variant="text" width="80%" />}
+                      secondary={<Skeleton variant="text" width="40%" sx={{ opacity: 0.7 }} />}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography
+                variant="h6"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  mb: 3,
+                  color: '#2B6858',
+                  fontWeight: 500,
+                  fontSize: '1.25rem'
+                }}
+              >
+                <Business fontSize="small" />
+                Detalles de la Empresa
+              </Typography>
+              <List>
+                {[1, 2].map((_, index) => (
+                  <ListItem key={index} sx={{ px: 0, py: 2 }}>
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      <Skeleton variant="circular" width={24} height={24} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={<Skeleton variant="text" width="80%" />}
+                      secondary={<Skeleton variant="text" width="40%" sx={{ opacity: 0.7 }} />}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
-    </Paper>
+    </Box>
   )
 }
 
@@ -112,157 +129,188 @@ export function ClientInfo({ client, loading }: ClientInfoProps) {
   }
 
   return (
-    <Paper sx={{ p: 3, mb: 4 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            mb: 3,
-            p: 2,
-            bgcolor: client.type === "business" ? "primary.light" : "secondary.light",
-            borderRadius: 1,
-            color: client.type === "business" ? "primary.contrastText" : "secondary.contrastText"
-          }}>
-            <Box sx={{ mr: 2 }}>
-              {client.type === "business" ? (
-                <Business sx={{ fontSize: 48, color: "white" }} />
-              ) : (
-                <Person sx={{ fontSize: 48, color: "white" }} />
-              )}
-            </Box>
-            <Box>
-              <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                {client.name}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 0.5 }}>
-                <Chip
-                  label={client.type === "business" ? "Empresa" : "Persona"}
-                  color={client.type === "business" ? "primary" : "secondary"}
-                  size="small"
-                  sx={{
-                    bgcolor: "white",
-                    color: client.type === "business" ? "primary.main" : "secondary.main",
-                    fontWeight: "bold"
-                  }}
-                />
-              </Box>
+    <Box paddingBottom={2}>
+      <Paper
+        sx={{
+          p: 2,
+          mb: 2,
+          bgcolor: '#2B6858',
+          borderRadius: '4px 4px 0 0',
+          color: 'white'
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          {client.type === "business" ? (
+            <Business sx={{ fontSize: 32 }} />
+          ) : (
+            <Person sx={{ fontSize: 32 }} />
+          )}
+          <Box>
+            <Typography variant="h5" sx={{ fontWeight: 500 }}>
+              {client.name}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+              <Chip
+                label={client.type === "business" ? "Empresa" : "Persona"}
+                size="small"
+                sx={{
+                  bgcolor: 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                  height: 24,
+                  '& .MuiChip-label': {
+                    px: 1,
+                  }
+                }}
+              />
             </Box>
           </Box>
+        </Box>
+      </Paper>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ height: "100%" }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    color: client.type === "business" ? "primary.main" : "secondary.main"
-                  }}>
-                    <LocationOn /> Información de Contacto
-                  </Typography>
-                  <List dense>
-                    <ListItem>
-                      <ListItemIcon>
-                        <Email fontSize="small" color={client.type === "business" ? "primary" : "secondary"} />
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography
+                variant="h6"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  mb: 3,
+                  color: '#2B6858',
+                  fontWeight: 500,
+                }}
+              >
+                <LocationOn fontSize="small" />
+                Información de Contacto
+              </Typography>
+              <List>
+                <ListItem sx={{ px: 0, py: 2 }}>
+                  <ListItemIcon sx={{ minWidth: 40, color: '#2B6858' }}>
+                    <Email sx={{ fontSize: 24 }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={client.email}
+                    secondary="Correo electrónico"
+                    primaryTypographyProps={{
+                      sx: { fontWeight: "normal", }
+                    }}
+                    secondaryTypographyProps={{
+                      sx: { opacity: 0.7, }
+                    }}
+                  />
+                </ListItem>
+                <ListItem sx={{ px: 0, py: 2 }}>
+                  <ListItemIcon sx={{ minWidth: 40, color: '#2B6858' }}>
+                    <Phone sx={{ fontSize: 24 }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={client.phone}
+                    secondary="Teléfono"
+                    primaryTypographyProps={{
+                      sx: { fontWeight: "normal", }
+                    }}
+                    secondaryTypographyProps={{
+                      sx: { opacity: 0.7, }
+                    }}
+                  />
+                </ListItem>
+                <ListItem sx={{ px: 0, py: 2 }}>
+                  <ListItemIcon sx={{ minWidth: 40, color: '#2B6858' }}>
+                    <LocationOn sx={{ fontSize: 24 }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={client.address}
+                    secondary="Dirección"
+                    primaryTypographyProps={{
+                      sx: { fontWeight: "normal", }
+                    }}
+                    secondaryTypographyProps={{
+                      sx: { opacity: 0.7, }
+                    }}
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography
+                variant="h6"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  mb: 3,
+                  color: '#2B6858',
+                  fontWeight: 500,
+                }}
+              >
+                <Business fontSize="small" />
+                Detalles de la Empresa
+              </Typography>
+              <List>
+                {client.type === "business" && client.businessDetails && (
+                  <>
+                    <ListItem sx={{ px: 0, py: 2 }}>
+                      <ListItemIcon sx={{ minWidth: 40, color: '#2B6858' }}>
+                        <Person sx={{ fontSize: 24 }} />
                       </ListItemIcon>
                       <ListItemText
-                        primary={client.email}
-                        secondary="Correo electrónico"
+                        primary={client.businessDetails.contactPerson}
+                        secondary="Contacto Principal"
+                        primaryTypographyProps={{
+                          sx: { fontWeight: "normal", }
+                        }}
+                        secondaryTypographyProps={{
+                          sx: { opacity: 0.7, }
+                        }}
                       />
                     </ListItem>
-                    <ListItem>
-                      <ListItemIcon>
-                        <Phone fontSize="small" color={client.type === "business" ? "primary" : "secondary"} />
+                    <ListItem sx={{ px: 0, py: 2 }}>
+                      <ListItemIcon sx={{ minWidth: 40, color: '#2B6858' }}>
+                        <Business sx={{ fontSize: 24 }} />
                       </ListItemIcon>
                       <ListItemText
-                        primary={client.phone}
-                        secondary="Teléfono"
+                        primary={client.businessDetails.position}
+                        secondary="Cargo"
+                        primaryTypographyProps={{
+                          sx: { fontWeight: "normal", }
+                        }}
+                        secondaryTypographyProps={{
+                          sx: { opacity: 0.7, }
+                        }}
                       />
                     </ListItem>
-                    <ListItem>
-                      <ListItemIcon>
-                        <LocationOn fontSize="small" color={client.type === "business" ? "primary" : "secondary"} />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={client.address}
-                        secondary="Dirección"
-                      />
-                    </ListItem>
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {client.type === "business" && client.businessDetails && (
-              <Grid item xs={12} md={6}>
-                <Card variant="outlined" sx={{ height: "100%" }}>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      color: "primary.main"
-                    }}>
-                      <Business /> Detalles de la Empresa
-                    </Typography>
-                    <List dense>
-                      <ListItem>
-                        <ListItemIcon>
-                          <Person fontSize="small" color="primary" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={client.businessDetails.contactPerson}
-                          secondary="Contacto Principal"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <Business fontSize="small" color="primary" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={client.businessDetails.position}
-                          secondary="Cargo"
-                        />
-                      </ListItem>
-                    </List>
-                  </CardContent>
-                </Card>
-              </Grid>
-            )}
-
-            {client.type === "individual" && (
-              <Grid item xs={12} md={6}>
-                <Card variant="outlined" sx={{ height: "100%" }}>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      color: "secondary.main"
-                    }}>
-                      <Person /> Información Personal
-                    </Typography>
-                    <List dense>
-                      <ListItem>
-                        <ListItemIcon>
-                          <Person fontSize="small" color="secondary" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Cliente Individual"
-                          secondary="Tipo de Cliente"
-                        />
-                      </ListItem>
-                    </List>
-                  </CardContent>
-                </Card>
-              </Grid>
-            )}
-          </Grid>
+                  </>
+                )}
+                {client.type === "individual" && (
+                  <ListItem sx={{ px: 0, py: 2 }}>
+                    <ListItemIcon sx={{ minWidth: 40, color: '#2B6858' }}>
+                      <Person sx={{ fontSize: 24 }} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Cliente Individual"
+                      secondary="Tipo de Cliente"
+                      primaryTypographyProps={{
+                        sx: { fontWeight: "normal", }
+                      }}
+                      secondaryTypographyProps={{
+                        sx: { opacity: 0.7, }
+                      }}
+                    />
+                  </ListItem>
+                )}
+              </List>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
-    </Paper>
+    </Box>
   )
 }
 

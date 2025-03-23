@@ -18,6 +18,7 @@ import { useEffect } from "react"
 const defaultValues: Area = {
   id: "",
   branchId: "",
+  clientId: "",
   name: "",
   description: "",
 }
