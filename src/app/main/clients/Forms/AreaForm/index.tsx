@@ -1,100 +1,91 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useForm } from "react-hook-form"
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  TextField,
   Grid,
 } from "@mui/material"
 import { AreaFormProps } from "./types"
 import { Area } from "../../types"
+import TextFieldForm from "app/shared-components/Form/TextFieldForm/TextFieldForm"
+import { useEffect } from "react"
+
+const defaultValues: Area = {
+  id: "",
+  branchId: "",
+  name: "",
+  description: "",
+}
 
 export function AreaForm({ open, onClose, onSave, area, isEditing }: AreaFormProps) {
-  const [formData, setFormData] = useState<Area>({
-    id: area?.id || "",
-    branchId: area?.branchId || "",
-    name: area?.name || "",
-    description: area?.description || "",
+  const {
+    control,
+    handleSubmit,
+    reset
+  } = useForm<Area>({
+    defaultValues: area ? area : defaultValues
   })
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-
-    // Limpiar error cuando el usuario escribe
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+  useEffect(() => {
+    reset(area ? area : defaultValues)
+    return () => {
+      reset(defaultValues)
     }
+  }, [area])
+
+  const onSubmit = (data: Area) => {
+    onSave(data)
+    onClose()
+    reset()
   }
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = "El nombre del área es obligatorio"
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onSave(formData)
-      onClose()
-    }
+  const handleClose = () => {
+    reset(defaultValues)
+    onClose()
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
       <DialogTitle>{isEditing ? "Editar Área" : "Agregar Nueva Área"}</DialogTitle>
 
-      <DialogContent dividers>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              name="name"
-              label="Nombre del Área"
-              value={formData.name}
-              onChange={handleChange}
-              fullWidth
-              error={!!errors.name}
-              helperText={errors.name}
-              required
-            />
-          </Grid>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent dividers>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextFieldForm
+                name="name"
+                control={control}
+                label="Nombre del Área"
+                fullWidth
+                required
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              name="description"
-              label="Descripción"
-              value={formData.description}
-              onChange={handleChange}
-              fullWidth
-              multiline
-              rows={3}
-            />
+            <Grid item xs={12}>
+              <TextFieldForm
+                name="description"
+                control={control}
+                label="Descripción"
+                fullWidth
+                multiline
+                rows={3}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
+        </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose}>Cancelar</Button>
-        <Button onClick={handleSubmit} variant="contained">
-          {isEditing ? "Actualizar" : "Guardar"}
-        </Button>
-      </DialogActions>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button type="submit" variant="contained">
+            {isEditing ? "Actualizar" : "Guardar"}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   )
 } 

@@ -32,7 +32,13 @@ import {
 import { Area } from "../types"
 import { AreaCard } from "../Cards/AreaCard"
 import { AreaForm } from "../Forms/AreaForm"
-import { useNavigate } from "react-router"
+import { useNavigate, useParams } from "react-router"
+import { useQuery } from "react-query"
+import { BranchService } from "src/app/shared/services/BranchService"
+import { BranchInfo } from "./BranchInfo/BranchInfo"
+import ListCard from "./ListCards/ListCard"
+import { openDialog } from "app/shared-components/GlobalDialog/openDialog"
+import { AreaService } from "src/app/shared/services/AreaService"
 
 // Datos de ejemplo para áreas
 const AREAS: Area[] = [
@@ -58,39 +64,22 @@ const AREAS: Area[] = [
 
 export function BranchDetail() {
   const navigate = useNavigate()
-  const branch = {
-    id: "1",
-    clientId: "1",
-    name: "Sucursal Principal",
-    address: "Av. Principal 123",
-    contactPerson: "Juan Pérez",
-    contactPhone: "555-0123",
-    notes: "Sucursal principal con área de ventas y almacén",
-  }
+  const { branchId } = useParams()
+  const { data: branch, isLoading: isLoadingBranch } = useQuery({
+    queryKey: ['branch', branchId],
+    queryFn: () => BranchService.byId(branchId)
+  })
 
-  const [areas, setAreas] = useState<Area[]>(AREAS)
+  const { data: areas = [], isLoading: isLoadingAreas, refetch: refetchAreas } = useQuery({
+    queryKey: ['areas', branchId],
+    queryFn: () => AreaService.getByBranch(branchId)
+  })
+
   const [showAreaForm, setShowAreaForm] = useState(false)
   const [currentArea, setCurrentArea] = useState<Area | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null)
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
-  const [areaToDelete, setAreaToDelete] = useState<string | null>(null)
-
-  const handleOnBack = () => {
-    navigate(-1)
-  }
-
-  if (!branch) {
-    return (
-      <Box sx={{ textAlign: "center", py: 5 }}>
-        <Typography>Sucursal no encontrada</Typography>
-        <Button onClick={handleOnBack} sx={{ mt: 2 }}>
-          Volver
-        </Button>
-      </Box>
-    )
-  }
 
   const handleAddArea = () => {
     setCurrentArea(null)
@@ -102,37 +91,35 @@ export function BranchDetail() {
     setCurrentArea(area)
     setIsEditing(true)
     setShowAreaForm(true)
-    handleMenuClose()
+
   }
 
   const handleDeleteArea = (areaId: string) => {
-    setAreaToDelete(areaId)
-    setDeleteConfirmOpen(true)
-    handleMenuClose()
-  }
-
-  const confirmDeleteArea = () => {
-    if (areaToDelete) {
-      setAreas(areas.filter((area) => area.id !== areaToDelete))
-      setDeleteConfirmOpen(false)
-      setAreaToDelete(null)
-    }
-  }
-
-  const handleSaveArea = (area: Area) => {
-    if (isEditing && currentArea) {
-      // Actualizar área existente
-      setAreas(areas.map((a) => (a.id === area.id ? area : a)))
-    } else {
-      // Agregar nueva área
-      const newArea = {
-        ...area,
-        id: `${areas.length + 1}`, // En una aplicación real, esto vendría del backend
-        branchId: branch.id,
+    openDialog({
+      title: "Eliminar Área",
+      text: "¿Estás seguro de querer eliminar esta área?",
+      onAccept: async () => {
+        await AreaService.remove(areaId)
+        await refetchAreas()
+        handleMenuClose()
       }
-      setAreas([...areas, newArea])
+    })
+  }
+
+  const handleSaveArea = async (area: Area) => {
+    const newArea = {
+      ...area,
+      branchId: branch.id,
     }
+    await AreaService.save(newArea, currentArea?.id)
+    await refetchAreas()
+    setShowAreaForm(false);
+    handleMenuClose();
+  }
+
+  const handleOnCloseAreaForm = async () => {
     setShowAreaForm(false)
+    handleMenuClose();
   }
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>, areaId: string) => {
@@ -148,7 +135,7 @@ export function BranchDetail() {
   return (
     <Box>
       <Box sx={{ mb: 4, display: "flex", alignItems: "center" }}>
-        <Button startIcon={<ArrowBack />} onClick={handleOnBack} sx={{ mr: 2 }}>
+        <Button startIcon={<ArrowBack />} onClick={() => navigate(-1)} sx={{ mr: 2 }}>
           Volver
         </Button>
         <Typography variant="h5" component="h1">
@@ -156,77 +143,34 @@ export function BranchDetail() {
         </Typography>
       </Box>
 
-      <Paper sx={{ p: 3, mb: 4 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Box sx={{ mr: 2 }}>
-                <Store sx={{ fontSize: 48, color: "primary.main" }} />
-              </Box>
-              <Box>
-                <Typography variant="h5" sx={{ fontWeight: "bold", color: "primary.main" }}>{branch.name}</Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                  {branch.notes}
-                </Typography>
-              </Box>
-            </Box>
+      <BranchInfo branch={branch} isLoading={isLoadingBranch} />
 
-            <List dense>
-              <ListItem>
-                <ListItemIcon>
-                  <LocationOn fontSize="small" color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={branch.address}
-                  secondary="Dirección"
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Person fontSize="small" color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={branch.contactPerson}
-                  secondary="Contacto"
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Phone fontSize="small" color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={branch.contactPhone}
-                  secondary="Teléfono"
-                />
-              </ListItem>
-            </List>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      <Box sx={{ mb: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
-          <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <MeetingRoom color="primary" /> Áreas de la Sucursal
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={handleAddArea}
-          >
-            Agregar Área
-          </Button>
-        </Box>
-
-        <Grid container spacing={2}>
-          {areas.map((area) => (
-            <Grid item xs={12} sm={6} md={4} key={area.id}>
-              <AreaCard area={area} onMenuClick={handleMenuClick} />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
+      <ListCard
+        areas={areas}
+        isLoading={isLoadingAreas}
+        handleMenuClick={handleMenuClick}
+        headerComponent={
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <MeetingRoom color="primary" /> Áreas de la Sucursal
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              onClick={handleAddArea}
+            >
+              Agregar Área
+            </Button>
+          </Box>
+        }
+      />
+      <AreaForm
+        area={currentArea}
+        onSave={handleSaveArea}
+        onClose={handleOnCloseAreaForm}
+        open={showAreaForm}
+        isEditing={isEditing}
+      />
       <Menu
         anchorEl={menuAnchorEl}
         open={Boolean(menuAnchorEl)}
@@ -240,51 +184,6 @@ export function BranchDetail() {
         </MenuItem>
       </Menu>
 
-      <Dialog
-        open={showAreaForm}
-        onClose={() => setShowAreaForm(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          {isEditing ? "Editar Área" : "Nueva Área"}
-        </DialogTitle>
-        <DialogContent>
-          <AreaForm
-            area={currentArea}
-            onSave={handleSaveArea}
-            onClose={() => {
-              setShowAreaForm(false)
-            }}
-            open={showAreaForm}
-            isEditing={isEditing}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={deleteConfirmOpen}
-        onClose={() => setDeleteConfirmOpen(false)}
-      >
-        <DialogTitle>Confirmar Eliminación</DialogTitle>
-        <DialogContent>
-          <Typography>
-            ¿Está seguro que desea eliminar esta área?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteConfirmOpen(false)}>
-            Cancelar
-          </Button>
-          <Button
-            onClick={confirmDeleteArea}
-            color="error"
-            variant="contained"
-          >
-            Eliminar
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   )
 }
