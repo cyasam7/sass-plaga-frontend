@@ -15,28 +15,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ApplicationTypeDialog from './dialogs/ApplicationTypeDialog';
-
-interface ApplicationType {
-    id: string;
-    name: string;
-    description: string;
-}
+import { IApplicationType } from './types';
 
 interface ApplicationTypesProps {
-    applicationTypes: ApplicationType[];
+    applicationTypes: IApplicationType[];
 }
 
-interface FormData {
-    name: string;
-    description: string;
-}
+
 
 export default function ApplicationTypes({ applicationTypes }: ApplicationTypesProps) {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
-    const [selectedApplication, setSelectedApplication] = React.useState<ApplicationType | null>(null);
+    const [selectedApplication, setSelectedApplication] = React.useState<IApplicationType | null>(null);
 
-    const handleOpenDialog = (application?: ApplicationType) => {
+    const handleOpenDialog = (application?: IApplicationType) => {
         if (application) {
             setIsEditing(true);
             setSelectedApplication(application);

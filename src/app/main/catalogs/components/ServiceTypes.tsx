@@ -2,7 +2,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
@@ -15,15 +14,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ServiceTypeDialog from './dialogs/ServiceTypeDialog';
-
-interface ServiceType {
-    id: string;
-    name: string;
-    description: string;
-}
+import { IServiceType } from './types';
 
 interface ServiceTypesProps {
-    serviceTypes: ServiceType[];
+    serviceTypes: IServiceType[];
 }
 
 interface FormData {
@@ -34,9 +28,9 @@ interface FormData {
 export default function ServiceTypes({ serviceTypes }: ServiceTypesProps) {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
-    const [selectedService, setSelectedService] = React.useState<ServiceType | null>(null);
+    const [selectedService, setSelectedService] = React.useState<IServiceType | null>(null);
 
-    const handleOpenDialog = (service?: ServiceType) => {
+    const handleOpenDialog = (service?: IServiceType) => {
         if (service) {
             setIsEditing(true);
             setSelectedService(service);

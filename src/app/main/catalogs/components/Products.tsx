@@ -16,20 +16,10 @@ import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ScaleIcon from '@mui/icons-material/Scale';
 import ProductDialog from './dialogs/ProductDialog';
-
-interface Product {
-    id: string;
-    name: string;
-    chemicalName?: string;
-    description: string;
-    availableDoses?: Array<{
-        amount: string;
-        unit: string;
-    }>;
-}
+import { IProduct } from './types';
 
 interface ProductsProps {
-    products: Product[];
+    products: IProduct[];
 }
 
 interface FormData {
@@ -44,9 +34,9 @@ interface FormData {
 export default function Products({ products }: ProductsProps) {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
-    const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
+    const [selectedProduct, setSelectedProduct] = React.useState<IProduct | null>(null);
 
-    const handleOpenDialog = (product?: Product) => {
+    const handleOpenDialog = (product?: IProduct) => {
         if (product) {
             setIsEditing(true);
             setSelectedProduct(product);

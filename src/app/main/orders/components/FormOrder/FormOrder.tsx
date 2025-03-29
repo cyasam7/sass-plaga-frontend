@@ -119,7 +119,7 @@ function FormOrder(props: IFormOrderProps) {
 											size: 'small'
 										}}
 										onChangeAddress={(value) => field.onChange(value)}
-										onPlaceSelect={() => {}}
+										onPlaceSelect={() => { }}
 									/>
 								)}
 							/>

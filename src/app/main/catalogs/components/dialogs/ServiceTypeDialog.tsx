@@ -9,12 +9,7 @@ import { useForm } from 'react-hook-form';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { Box, useTheme } from '@mui/material';
 import BuildIcon from '@mui/icons-material/Build';
-
-interface ServiceType {
-    id: string;
-    name: string;
-    description: string;
-}
+import { IServiceType } from '../types';
 
 interface FormData {
     name: string;
@@ -24,7 +19,7 @@ interface FormData {
 interface ServiceTypeDialogProps {
     open: boolean;
     isEditing: boolean;
-    selectedService: ServiceType | null;
+    selectedService: IServiceType | null;
     onClose: () => void;
     onSubmit: (data: FormData) => void;
 }

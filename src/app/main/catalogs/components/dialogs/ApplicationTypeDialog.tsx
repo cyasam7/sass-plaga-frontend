@@ -9,12 +9,8 @@ import { useForm } from 'react-hook-form';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { Box, useTheme } from '@mui/material';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import { IApplicationType } from '../types';
 
-interface ApplicationType {
-    id: string;
-    name: string;
-    description: string;
-}
 
 interface FormData {
     name: string;
@@ -24,7 +20,7 @@ interface FormData {
 interface ApplicationTypeDialogProps {
     open: boolean;
     isEditing: boolean;
-    selectedApplication: ApplicationType | null;
+    selectedApplication: IApplicationType | null;
     onClose: () => void;
     onSubmit: (data: FormData) => void;
 }

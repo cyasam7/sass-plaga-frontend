@@ -12,16 +12,7 @@ import ScienceIcon from '@mui/icons-material/Science';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-
-interface Product {
-    id: string;
-    name: string;
-    description: string;
-    availableDoses?: Array<{
-        amount: string;
-        unit: string;
-    }>;
-}
+import { IProduct } from '../types';
 
 interface FormData {
     name: string;
@@ -35,7 +26,7 @@ interface FormData {
 interface ProductDialogProps {
     open: boolean;
     isEditing: boolean;
-    selectedProduct: Product | null;
+    selectedProduct: IProduct | null;
     onClose: () => void;
     onSubmit: (data: FormData) => void;
 }

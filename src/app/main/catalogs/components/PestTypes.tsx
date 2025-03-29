@@ -15,15 +15,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BugReportIcon from '@mui/icons-material/BugReport';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PestTypeDialog from './dialogs/PestTypeDialog';
-
-interface PestType {
-    id: string;
-    name: string;
-    description: string;
-}
+import { IPestType } from './types';
 
 interface PestTypesProps {
-    pestTypes: PestType[];
+    pestTypes: IPestType[];
 }
 
 interface FormData {
@@ -34,9 +29,9 @@ interface FormData {
 export default function PestTypes({ pestTypes }: PestTypesProps) {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [isEditing, setIsEditing] = React.useState(false);
-    const [selectedPest, setSelectedPest] = React.useState<PestType | null>(null);
+    const [selectedPest, setSelectedPest] = React.useState<IPestType | null>(null);
 
-    const handleOpenDialog = (pest?: PestType) => {
+    const handleOpenDialog = (pest?: IPestType) => {
         if (pest) {
             setIsEditing(true);
             setSelectedPest(pest);

@@ -9,12 +9,7 @@ import { useForm } from 'react-hook-form';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { Box, useTheme } from '@mui/material';
 import BugReportIcon from '@mui/icons-material/BugReport';
-
-interface PestType {
-    id: string;
-    name: string;
-    description: string;
-}
+import { IPestType } from '../types';
 
 interface FormData {
     name: string;
@@ -24,7 +19,7 @@ interface FormData {
 interface PestTypeDialogProps {
     open: boolean;
     isEditing: boolean;
-    selectedPest: PestType | null;
+    selectedPest: IPestType | null;
     onClose: () => void;
     onSubmit: (data: FormData) => void;
 }
