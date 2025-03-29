@@ -14,21 +14,12 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { IProduct } from '../types';
 
-interface FormData {
-    name: string;
-    description: string;
-    availableDoses: Array<{
-        amount: string;
-        unit: string;
-    }>;
-}
-
 interface ProductDialogProps {
     open: boolean;
     isEditing: boolean;
     selectedProduct: IProduct | null;
     onClose: () => void;
-    onSubmit: (data: FormData) => void;
+    onSubmit: (data: IProduct) => void;
 }
 
 const units = [
@@ -46,40 +37,48 @@ export default function ProductDialog({
     onSubmit
 }: ProductDialogProps) {
     const theme = useTheme();
-    const { control, handleSubmit, reset } = useForm<FormData>({
+    const { control, handleSubmit, reset } = useForm<IProduct>({
         defaultValues: {
-            name: '',
+            id: '',
+            commercialName: '',
+            chemicalName: '',
             description: '',
-            availableDoses: []
+            doses: []
         }
     });
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "availableDoses"
+        name: "doses"
     });
 
     React.useEffect(() => {
         if (selectedProduct) {
             reset({
-                name: selectedProduct.name,
+                id: selectedProduct.id,
+                commercialName: selectedProduct.commercialName || '',
+                chemicalName: selectedProduct.chemicalName || '',
                 description: selectedProduct.description,
-                availableDoses: selectedProduct.availableDoses || []
+                doses: selectedProduct.doses || []
             });
         } else {
             reset({
-                name: '',
+                id: '',
+                commercialName: '',
+                chemicalName: '',
                 description: '',
-                availableDoses: []
+                doses: []
             });
         }
     }, [selectedProduct, reset]);
 
     const handleClose = () => {
         reset({
-            name: '',
+            id: '',
+            commercialName: '',
+            chemicalName: '',
             description: '',
-            availableDoses: []
+            doses: []
         });
         onClose();
     };
@@ -119,16 +118,24 @@ export default function ProductDialog({
                 </DialogContentText>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Box sx={{ mb: 4 }}>
-                        <TextFieldForm<FormData>
+                        <TextFieldForm<IProduct>
                             control={control}
-                            name="name"
-                            label="Nombre del Producto"
+                            name="commercialName"
+                            label="Nombre Comercial"
                             fullWidth
                             autoFocus
                             margin="dense"
                             sx={{ mt: 2 }}
                         />
-                        <TextFieldForm<FormData>
+                        <TextFieldForm<IProduct>
+                            control={control}
+                            name="chemicalName"
+                            label="Nombre Químico"
+                            fullWidth
+                            margin="dense"
+                            sx={{ mt: 2 }}
+                        />
+                        <TextFieldForm<IProduct>
                             control={control}
                             name="description"
                             label="Descripción del Producto"
@@ -161,9 +168,9 @@ export default function ProductDialog({
                             >
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={5}>
-                                        <TextFieldForm<FormData>
+                                        <TextFieldForm<IProduct>
                                             control={control}
-                                            name={`availableDoses.${index}.amount`}
+                                            name={`doses.${index}.amount`}
                                             label="Cantidad"
                                             fullWidth
                                             margin="dense"
@@ -171,9 +178,9 @@ export default function ProductDialog({
                                         />
                                     </Grid>
                                     <Grid item xs={5}>
-                                        <TextFieldForm<FormData>
+                                        <TextFieldForm<IProduct>
                                             control={control}
-                                            name={`availableDoses.${index}.unit`}
+                                            name={`doses.${index}.unit`}
                                             label="Unidad"
                                             fullWidth
                                             select

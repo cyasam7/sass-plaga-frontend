@@ -41,7 +41,7 @@ export function ClientsApp() {
 	return (
 		<Root
 			content={
-				<Container sx={{ py: 4, maxWidth: '1400px !important' }}>
+				<Container maxWidth="xl" sx={{ py: 4 }}>
 					<ClientList
 						clients={data}
 						onSaveClient={handleSaveClient}

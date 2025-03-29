@@ -8,53 +8,54 @@ import Button from '@mui/material/Button';
 import { useForm } from 'react-hook-form';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import { Box, useTheme } from '@mui/material';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import { IPestType } from '../types';
+import BuildIcon from '@mui/icons-material/Build';
+import { IServiceType } from '../types';
 
-interface FormData {
-    name: string;
-    description: string;
-}
 
-interface PestTypeDialogProps {
+
+interface ServiceTypeDialogProps {
     open: boolean;
     isEditing: boolean;
-    selectedPest: IPestType | null;
+    selectedService: IServiceType | null;
     onClose: () => void;
-    onSubmit: (data: FormData) => void;
+    onSubmit: (data: IServiceType) => void;
 }
 
-export default function PestTypeDialog({
+export default function ServiceTypeDialog({
     open,
     isEditing,
-    selectedPest,
+    selectedService,
     onClose,
     onSubmit
-}: PestTypeDialogProps) {
+}: ServiceTypeDialogProps) {
     const theme = useTheme();
-    const { control, handleSubmit, reset } = useForm<FormData>({
+    const { control, handleSubmit, reset } = useForm<IServiceType>({
         defaultValues: {
+            id: '',
             name: '',
             description: ''
         }
     });
 
     React.useEffect(() => {
-        if (selectedPest) {
+        if (selectedService) {
             reset({
-                name: selectedPest.name,
-                description: selectedPest.description
+                id: selectedService.id,
+                name: selectedService.name,
+                description: selectedService.description
             });
         } else {
             reset({
+                id: '',
                 name: '',
                 description: ''
             });
         }
-    }, [selectedPest, reset]);
+    }, [selectedService, reset]);
 
     const handleClose = () => {
         reset({
+            id: '',
             name: '',
             description: ''
         });
@@ -72,26 +73,26 @@ export default function PestTypeDialog({
             }}
         >
             <Box sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.contrastText,
                 p: 2,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1
             }}>
-                <BugReportIcon />
+                <BuildIcon />
                 <DialogTitle sx={{ p: 0, color: 'inherit' }}>
-                    {isEditing ? 'Editar Plaga' : 'Nueva Plaga'}
+                    {isEditing ? 'Editar Tipo de Servicio' : 'Nuevo Tipo de Servicio'}
                 </DialogTitle>
             </Box>
             <DialogContent>
                 <DialogContentText sx={{ mt: 2 }}>
                     {isEditing
-                        ? 'Modifica los datos de la plaga.'
-                        : 'Agrega un nuevo tipo de plaga al catálogo.'}
+                        ? 'Modifica los datos del tipo de servicio.'
+                        : 'Agrega un nuevo tipo de servicio al catálogo.'}
                 </DialogContentText>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <TextFieldForm<FormData>
+                    <TextFieldForm<IServiceType>
                         control={control}
                         name="name"
                         label="Nombre"
@@ -100,7 +101,7 @@ export default function PestTypeDialog({
                         margin="dense"
                         sx={{ mt: 2 }}
                     />
-                    <TextFieldForm<FormData>
+                    <TextFieldForm<IServiceType>
                         control={control}
                         name="description"
                         label="Descripción"
@@ -115,8 +116,8 @@ export default function PestTypeDialog({
                         <Button
                             type="submit"
                             variant="contained"
-                            color="primary"
-                            sx={{ color: theme.palette.primary.contrastText }}
+                            color="secondary"
+                            sx={{ color: theme.palette.secondary.contrastText }}
                         >
                             {isEditing ? 'Actualizar' : 'Guardar'}
                         </Button>

@@ -11,18 +11,12 @@ import { Box, useTheme } from '@mui/material';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import { IApplicationType } from '../types';
 
-
-interface FormData {
-    name: string;
-    description: string;
-}
-
 interface ApplicationTypeDialogProps {
     open: boolean;
     isEditing: boolean;
     selectedApplication: IApplicationType | null;
     onClose: () => void;
-    onSubmit: (data: FormData) => void;
+    onSubmit: (data: IApplicationType) => void;
 }
 
 export default function ApplicationTypeDialog({
@@ -33,8 +27,9 @@ export default function ApplicationTypeDialog({
     onSubmit
 }: ApplicationTypeDialogProps) {
     const theme = useTheme();
-    const { control, handleSubmit, reset } = useForm<FormData>({
+    const { control, handleSubmit, reset } = useForm<IApplicationType>({
         defaultValues: {
+            id: '',
             name: '',
             description: ''
         }
@@ -43,11 +38,13 @@ export default function ApplicationTypeDialog({
     React.useEffect(() => {
         if (selectedApplication) {
             reset({
+                id: selectedApplication.id,
                 name: selectedApplication.name,
                 description: selectedApplication.description
             });
         } else {
             reset({
+                id: '',
                 name: '',
                 description: ''
             });
@@ -56,6 +53,7 @@ export default function ApplicationTypeDialog({
 
     const handleClose = () => {
         reset({
+            id: '',
             name: '',
             description: ''
         });
@@ -92,7 +90,7 @@ export default function ApplicationTypeDialog({
                         : 'Agrega un nuevo tipo de aplicación al catálogo.'}
                 </DialogContentText>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <TextFieldForm<FormData>
+                    <TextFieldForm<IApplicationType>
                         control={control}
                         name="name"
                         label="Nombre"
@@ -101,7 +99,7 @@ export default function ApplicationTypeDialog({
                         margin="dense"
                         sx={{ mt: 2 }}
                     />
-                    <TextFieldForm<FormData>
+                    <TextFieldForm<IApplicationType>
                         control={control}
                         name="description"
                         label="Descripción"

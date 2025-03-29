@@ -1,7 +1,7 @@
 import { IPestType } from 'src/app/main/catalogs/components/types';
 import { AxiosFetcher } from '../../fetcher';
 
-export class PlagueTypeService {
+export class PestTypeService {
   static getById(id: string): Promise<IPestType> {
     return AxiosFetcher<IPestType>({
       url: `plague-type/${id}`

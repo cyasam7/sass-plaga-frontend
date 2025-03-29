@@ -12,13 +12,13 @@ export interface IPestType {
 
 export interface IProduct {
   id: string;
-  name: string;
-  chemicalName?: string;
+  commercialName: string;
+  chemicalName: string;
   description: string;
-  availableDoses?: Array<{
+  doses: {
     amount: string;
     unit: string;
-  }>;
+  }[];
 }
 
 export interface IApplicationType {

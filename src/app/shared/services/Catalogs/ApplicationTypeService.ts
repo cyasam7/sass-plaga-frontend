@@ -4,20 +4,20 @@ import { AxiosFetcher } from '../../fetcher';
 export class ApplicationTypeService {
   static getById(id: string): Promise<IApplicationType> {
     return AxiosFetcher<IApplicationType>({
-      url: `application-types/${id}`
+      url: `application-type/${id}`
     });
   }
 
   static byQuery(query: string): Promise<IApplicationType[]> {
     return AxiosFetcher<IApplicationType[]>({
-      url: `application-types`,
+      url: `application-type`,
       params: query
     });
   }
 
   static save(applicationType: IApplicationType): Promise<IApplicationType> {
     return AxiosFetcher<IApplicationType>({
-      url: `application-types`,
+      url: `application-type`,
       method: 'POST',
       data: applicationType
     });
@@ -25,7 +25,7 @@ export class ApplicationTypeService {
 
   static delete(id: string): Promise<void> {
     return AxiosFetcher<void>({
-      url: `application-types/${id}`,
+      url: `application-type/${id}`,
       method: 'DELETE'
     });
   }
