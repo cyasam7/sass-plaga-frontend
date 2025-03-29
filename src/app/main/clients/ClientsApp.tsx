@@ -5,6 +5,8 @@ import { ClientService } from 'src/app/shared/services/ClientService';
 import { useQuery } from 'react-query';
 import { ClientList } from './ClientDetail/ClientList';
 import { FormClientValues } from './Forms/NewClientForm/types';
+import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
+import SimpleHeader from 'app/shared-components/SimpleHeader';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -12,7 +14,10 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 		borderBottomWidth: 1,
 		borderStyle: 'solid',
 		borderColor: theme.palette.divider
-	}
+	},
+	'& .FusePageSimple-content': {},
+	'& .FusePageSimple-sidebarHeader': {},
+	'& .FusePageSimple-sidebarContent': {}
 }));
 
 /**
@@ -21,7 +26,6 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 export function ClientsApp() {
 	const {
 		data = [],
-		isLoading,
 		refetch
 	} = useQuery({
 		queryKey: ['clients'],
@@ -40,6 +44,16 @@ export function ClientsApp() {
 
 	return (
 		<Root
+			header={
+				<FusePageSimpleHeader
+					header={
+						<SimpleHeader
+							title="Clientes"
+							subtitle="Gestiona los clientes del sistema"
+						/>
+					}
+				/>
+			}
 			content={
 				<Container maxWidth="xl" sx={{ py: 4 }}>
 					<ClientList

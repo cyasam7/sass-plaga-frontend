@@ -24,6 +24,8 @@ import { validateIfOrderIsPending } from './utils';
 import AssignOrderDialog from './components/AssignOrderDialog/AssignOrderDialog';
 import { ETabsPlagues } from './components/HeaderFilters/HeaderFilterProps';
 import { MobileCard } from './components/MobileCard/MobileCard';
+import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
+import SimpleHeader from 'app/shared-components/SimpleHeader';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -226,42 +228,40 @@ function Order() {
 	return (
 		<Root
 			header={
-				<div className="p-16 sm:p-24 w-full">
-					<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-y-2">
-						<Typography
-							variant="h6"
-							className="text-lg sm:text-xl"
-						>
-							Ordenes de servicio
-						</Typography>
-						<div className="flex gap-2 w-full sm:w-auto">
-							{isMobile && (
-								<IconButton
-									color="primary"
-									onClick={() => setOpenFilterDrawer(true)}
-									className="flex-shrink-0"
-								>
-									<FilterList />
-								</IconButton>
-							)}
-							<Button
-								color="primary"
-								variant="contained"
-								size="small"
-								className="w-full sm:w-auto"
-								onClick={() => {
-									setOpen(true);
-									setShouldOpenDialogAssign(true);
-								}}
-							>
-								Nuevo
-							</Button>
-						</div>
-					</div>
-				</div>
+				<FusePageSimpleHeader
+					header={
+						<SimpleHeader
+							title="Ordenes de servicio"
+							subtitle="Gestiona las ordenes de servicio"
+						/>
+					}
+				/>
 			}
 			content={
 				<div className="p-16 sm:p-24 w-full">
+					<div className="flex gap-2 w-full sm:w-auto">
+						{isMobile && (
+							<IconButton
+								color="primary"
+								onClick={() => setOpenFilterDrawer(true)}
+								className="flex-shrink-0"
+							>
+								<FilterList />
+							</IconButton>
+						)}
+						<Button
+							color="primary"
+							variant="contained"
+							size="small"
+							className="w-full sm:w-auto"
+							onClick={() => {
+								setOpen(true);
+								setShouldOpenDialogAssign(true);
+							}}
+						>
+							Nuevo
+						</Button>
+					</div>
 					<OrderDialog
 						open={open}
 						id={orderId}
@@ -318,7 +318,7 @@ function Order() {
 						className="p-8 sm:p-24 w-full"
 						sx={{
 							height: '100%',
-							maxHeight: 'calc(100vh - 200px)',
+							maxHeight: 'calc(100vh - 300px)',
 							display: 'flex',
 							flexDirection: 'column'
 						}}

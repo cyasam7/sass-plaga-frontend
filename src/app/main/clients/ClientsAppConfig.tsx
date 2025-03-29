@@ -1,8 +1,8 @@
-import { StyledContainerClients } from './styled-components';
 import { ClientsApp } from './ClientsApp';
 import { ClientDetail } from './ClientDetail';
 import { AreaDetail } from './AreaDetail';
 import { BranchDetail } from './BranchDetail';
+import { Container } from '@mui/material';
 
 
 /**
@@ -22,28 +22,28 @@ const ClientsAppConfig = {
 	routes: [
 		{
 			path: '/clients',
-			element: <StyledContainerClients>
-				<ClientsApp />
-			</StyledContainerClients>,
+			element: <ClientsApp />
 		},
 		{
 			path: '/clients/:clientId',
-			element: <StyledContainerClients>
-				<ClientDetail />
-			</StyledContainerClients>,
+			element:
+				<Container maxWidth="xl">
+					<ClientDetail />
+				</Container>
 		},
 		{
 			path: 'clients/:clientId/branches/:branchId',
 			element:
-				<StyledContainerClients>
+				<Container maxWidth="xl">
 					<BranchDetail />
-				</StyledContainerClients>,
+				</Container>
 		},
 		{
 			path: '/clients/:clientId/branches/:branchId/areas/:areaId',
-			element: <StyledContainerClients>
-				<AreaDetail />
-			</StyledContainerClients>,
+			element:
+				<Container maxWidth="xl">
+					<AreaDetail />
+				</Container>
 		}
 	]
 };

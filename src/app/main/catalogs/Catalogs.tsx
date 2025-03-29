@@ -13,6 +13,8 @@ import { Container, Stack } from '@mui/material';
 import ServiceTypes from './components/service-types/ServiceTypes';
 import Products from './components/products/Products';
 import PestTypes from './components/pest-types/PestTypes';
+import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
+import SimpleHeader from 'app/shared-components/SimpleHeader';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -36,20 +38,21 @@ export default function CatalogsV2() {
 
 	return (
 		<Root
+			header={
+				<FusePageSimpleHeader
+					header={
+						<SimpleHeader
+							title="Catálogos"
+							subtitle="Gestiona los catálogos del sistema: tipos de servicio, tipos de aplicación, productos y plagas"
+						/>
+					}
+				/>
+			}
 			content={
 				<Container maxWidth="xl" sx={{ py: 4 }}>
 					<Paper elevation={1} sx={{ borderRadius: 2 }}>
-						<Box sx={{ px: 3, pt: 3, pb: 2 }}>
-							<Typography variant="h4" component="h1" gutterBottom>
-								Catálogos
-							</Typography>
-							<Typography variant="subtitle1" color="text.secondary">
-								Gestiona los catálogos del sistema: tipos de servicio, tipos de aplicación, productos y plagas
-							</Typography>
-						</Box>
-
-						<Box>
-							<Box sx={{ px: 3, borderBottom: 1, borderColor: 'divider' }}>
+						<Box pt={2}>
+							<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 								<Tabs value={tabValue} onChange={handleTabChange} aria-label="catálogos tabs">
 									<Tab label="Tipos de Servicio" />
 									<Tab label="Tipos de Aplicación" />
@@ -57,7 +60,7 @@ export default function CatalogsV2() {
 									<Tab label="Tipos de Plagas" />
 								</Tabs>
 							</Box>
-							<Box sx={{ p: 3 }}>
+							<Box>
 								<TabPanel value={tabValue} index={0}>
 									<ServiceTypes />
 								</TabPanel>
