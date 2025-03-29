@@ -17,6 +17,8 @@ import HeaderGrid from './components/HeaderGrid/HeaderGrid';
 import DialogUser from './components/DialogUser/DialogUser';
 import DialogSigner from '../../shared-components/DialogSigner/DialogSigner';
 import SignViewer from './components/SignViewer/SignViewer';
+import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
+import SimpleHeader from 'app/shared-components/SimpleHeader';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -195,9 +197,14 @@ function Users() {
 	return (
 		<Root
 			header={
-				<div className="p-24">
-					<Typography variant="h6">Usuarios</Typography>
-				</div>
+				<FusePageSimpleHeader
+					header={
+						<SimpleHeader
+							title="Usuarios"
+							subtitle="Gestiona los usuarios dentro de tu organización"
+						/>
+					}
+				/>
 			}
 			content={
 				<div className="p-24 w-full">

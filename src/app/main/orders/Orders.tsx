@@ -381,6 +381,7 @@ function Order() {
 									slots={{
 										toolbar: isMobile ? undefined : HeaderFilters
 									}}
+									hideFooterPagination
 									slotProps={{
 										toolbar: {
 											selectedTab: tabFilter,
