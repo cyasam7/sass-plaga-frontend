@@ -26,5 +26,5 @@ jobs:
         run: |
           npm i
           npm run build
-          sudo rm -rf /var/www/app.fumigation-hub.com/*
-          sudo cp -r build/* /var/www/app.fumigation-hub.com
+          rm -rf /home/cyasam/frontend/*
+          cp -r build/* /home/cyasam/frontend
