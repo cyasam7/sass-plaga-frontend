@@ -51,7 +51,7 @@ function DialogUser(props: IDialogUserProps) {
 				});
 				return;
 			}
-
+			console.log(values);
 			await UserService.save({
 				id: userId,
 				email: values.email,
@@ -98,6 +98,7 @@ function DialogUser(props: IDialogUserProps) {
 			content={
 				<FormUser
 					loading={isLoading}
+					isEditing={!!userId}
 					hook={formHandler}
 				/>
 			}

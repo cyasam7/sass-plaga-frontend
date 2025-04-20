@@ -9,7 +9,7 @@ import MoveUpIcon from '@mui/icons-material/MoveUp';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import { Delete, FileDownload, FilterList } from '@mui/icons-material';
+import { Delete, FileDownload, FilterList, Add } from '@mui/icons-material';
 import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
 import { columnsOrders } from './columns';
@@ -26,6 +26,7 @@ import { ETabsPlagues } from './components/HeaderFilters/HeaderFilterProps';
 import { MobileCard } from './components/MobileCard/MobileCard';
 import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
 import SimpleHeader from 'app/shared-components/SimpleHeader';
+import './styles/actionButtons.css';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -86,6 +87,7 @@ function Order() {
 							setOpen(true);
 						}}
 						disabled={[EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
+						className="action-button"
 					/>,
 					<GridActionsCellItem
 						key={1}
@@ -97,6 +99,7 @@ function Order() {
 							setOpenAssign(true);
 						}}
 						disabled={[EStatusOrder.DONE, EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
+						className="action-button"
 					/>,
 					<GridActionsCellItem
 						key={3}
@@ -107,6 +110,7 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpenFollow(true);
 						}}
+						className="action-button"
 					/>,
 					<GridActionsCellItem
 						key={4}
@@ -117,6 +121,7 @@ function Order() {
 							setOrderId(params.row.id);
 							setOpenDetails(true);
 						}}
+						className="action-button"
 					/>,
 					<GridActionsCellItem
 						key={6}
@@ -130,6 +135,7 @@ function Order() {
 								id: params.row.id
 							});
 						}}
+						className="action-button download"
 					/>,
 					<GridActionsCellItem
 						key={7}
@@ -140,6 +146,7 @@ function Order() {
 						onClick={async () => {
 							await OrderService.downloadServicesOrder(params.row.id);
 						}}
+						className="action-button download"
 					/>,
 					<GridActionsCellItem
 						key={5}
@@ -165,6 +172,7 @@ function Order() {
 								}
 							});
 						}}
+						className="action-button delete"
 					/>
 				];
 			}
@@ -233,6 +241,19 @@ function Order() {
 						<SimpleHeader
 							title="Ordenes de servicio"
 							subtitle="Gestiona las ordenes de servicio"
+							actions={
+								<Button
+									color="primary"
+									variant="contained"
+									startIcon={<Add />}
+									onClick={() => {
+										setOpen(true);
+										setShouldOpenDialogAssign(true);
+									}}
+								>
+									Nuevo
+								</Button>
+							}
 						/>
 					}
 				/>
@@ -249,18 +270,6 @@ function Order() {
 								<FilterList />
 							</IconButton>
 						)}
-						<Button
-							color="primary"
-							variant="contained"
-							size="small"
-							className="w-full sm:w-auto"
-							onClick={() => {
-								setOpen(true);
-								setShouldOpenDialogAssign(true);
-							}}
-						>
-							Nuevo
-						</Button>
 					</div>
 					<OrderDialog
 						open={open}
@@ -318,7 +327,7 @@ function Order() {
 						className="p-8 sm:p-24 w-full"
 						sx={{
 							height: '100%',
-							maxHeight: 'calc(100vh - 300px)',
+							maxHeight: 'calc(100vh - 240px)',
 							display: 'flex',
 							flexDirection: 'column'
 						}}

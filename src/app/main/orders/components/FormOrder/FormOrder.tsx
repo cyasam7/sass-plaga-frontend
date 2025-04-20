@@ -6,6 +6,7 @@ import { DateTimePickerField } from 'app/shared-components/DateTimePicker';
 import { IFormOrderProps } from './FormOrderProps';
 import { CatalogService } from '../../../../shared/services/CatalogService';
 import { AutocompleteMaps } from '../AutocompleteMaps/AutocompleteMaps';
+import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 
 function FormOrder(props: IFormOrderProps) {
 	const { formHandler, disabled, disableSpecificField } = props;
@@ -15,7 +16,8 @@ function FormOrder(props: IFormOrderProps) {
 		priceField = false,
 		clientNameField = false,
 		clientPhoneField = false,
-		clientAddressField = false
+		clientAddressField = false,
+		descriptionField = false
 	} = disableSpecificField;
 
 	async function handleAutoCompleteClient(): Promise<void> {
@@ -83,6 +85,7 @@ function FormOrder(props: IFormOrderProps) {
 						<Grid
 							item
 							xs={12}
+							md={6}
 						>
 							<Controller
 								control={formHandler.control}
@@ -106,6 +109,7 @@ function FormOrder(props: IFormOrderProps) {
 						<Grid
 							item
 							xs={12}
+							md={6}
 						>
 							<Controller
 								control={formHandler.control}
@@ -124,6 +128,22 @@ function FormOrder(props: IFormOrderProps) {
 								)}
 							/>
 						</Grid>
+					</Grid>
+					<Grid
+						item
+						xs={12}
+					>
+						<TextFieldForm
+							name="description"
+							control={formHandler.control}
+							label="Descripción"
+							disabled={disabled || descriptionField}
+							fullWidth
+							multiline
+							rows={4}
+							variant="outlined"
+							size="small"
+						/>
 					</Grid>
 				</Grid>
 				<Grid
@@ -180,6 +200,7 @@ function FormOrder(props: IFormOrderProps) {
 						)}
 					/>
 				</Grid>
+
 			</Grid>
 		</Grid>
 	);

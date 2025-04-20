@@ -1,4 +1,4 @@
-import { Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography, Box } from '@mui/material';
 import { GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 
@@ -19,9 +19,26 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		disableColumnMenu: true,
 		renderCell: ({ row }) => {
 			return (
-				<Stack>
-					<Typography variant="subtitle2">{`${row.client.name}. Tel. (${row.client.phone})`}</Typography>
-					<Typography variant="body2">{`${row.client.address}`}</Typography>
+				<Stack spacing={0.5}>
+					<Typography variant="subtitle2" fontWeight="medium">
+						{row.client.name}
+					</Typography>
+					<Stack direction="row" spacing={1}>
+						<Typography variant="body2" color="text.secondary">
+							Dirección:
+						</Typography>
+						<Typography variant="body2">
+							{row.client.address}
+						</Typography>
+					</Stack>
+					<Stack direction="row" spacing={1}>
+						<Typography variant="body2" color="text.secondary">
+							Teléfono:
+						</Typography>
+						<Typography variant="body2">
+							{row.client.phone}
+						</Typography>
+					</Stack>
 				</Stack>
 			);
 		}
@@ -40,7 +57,6 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 			return <ChipOrder status={status} />;
 		}
 	},
-
 	{
 		headerName: 'FECHA DE SERVICIO',
 		headerAlign: 'left',
@@ -52,28 +68,28 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		disableColumnMenu: true,
 		renderCell: ({ row }) => {
 			return (
-				<Stack>
-					<Stack
-						direction="row"
-						alignItems="center"
-						spacing={0.2}
-					>
-						<Typography variant="subtitle2">Fecha:</Typography>
-						<Typography variant="body2">{`${dayjs(row.date).format(DATE_FORMAT)}`}</Typography>
+				<Stack spacing={0.5}>
+					<Stack direction="row" alignItems="center" spacing={1}>
+						<Typography variant="subtitle2" color="text.secondary">
+							Fecha:
+						</Typography>
+						<Typography variant="body2" fontWeight="medium">
+							{dayjs(row.date).format(DATE_FORMAT)}
+						</Typography>
 					</Stack>
-					<Stack
-						direction="row"
-						alignItems="center"
-						spacing={0.2}
-					>
-						<Typography variant="subtitle2">Hora:</Typography>
-						<Typography variant="body2">{`${dayjs(row.date).format(TIME_FORMAT)}`}</Typography>
+					<Stack direction="row" alignItems="center" spacing={1}>
+						<Typography variant="subtitle2" color="text.secondary">
+							Hora:
+						</Typography>
+						<Typography variant="body2" fontWeight="medium">
+							{dayjs(row.date).format(TIME_FORMAT)}
+						</Typography>
 					</Stack>
 				</Stack>
 			);
 		}
 	},
-	{
+	/* {
 		headerName: 'INICIAL',
 		field: 'type',
 		sortable: false,
@@ -88,10 +104,16 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 				<Chip
 					color={condition ? 'info' : 'secondary'}
 					label={value as string}
+					sx={{
+						fontWeight: 500,
+						'& .MuiChip-label': {
+							px: 1,
+						},
+					}}
 				/>
 			);
 		}
-	},
+	}, */
 	{
 		headerName: 'ASIGNADA',
 		field: 'assignedName',
@@ -104,7 +126,16 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		disableColumnMenu: true,
 		valueGetter({ value }) {
 			return (value || 'Sin asignar') as string;
-		}
+		},
+		renderCell: ({ value }) => (
+			<Typography
+				variant="body2"
+				color={value === 'Sin asignar' ? 'text.secondary' : 'text.primary'}
+				fontWeight={value === 'Sin asignar' ? 'normal' : 'medium'}
+			>
+				{value}
+			</Typography>
+		)
 	},
 	{
 		headerName: 'COSTO',
@@ -118,6 +149,11 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		disableColumnMenu: true,
 		valueFormatter({ value }) {
 			return `$${formatCurrency(String(value))}`;
-		}
+		},
+		renderCell: ({ value }) => (
+			<Typography variant="body2" fontWeight="medium" color="primary">
+				${formatCurrency(String(value))}
+			</Typography>
+		)
 	}
 ];

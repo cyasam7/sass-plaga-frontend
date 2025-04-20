@@ -10,6 +10,7 @@ export interface IFormOrderProps {
 		clientNameField?: boolean;
 		clientPhoneField?: boolean;
 		clientAddressField?: boolean;
+		descriptionField?: boolean;
 	};
 }
 
@@ -20,4 +21,5 @@ export interface IFormCreatePest {
 	clientPhone: string;
 	clientAddress: string;
 	clientId: string;
+	description: string;
 }

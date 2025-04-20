@@ -11,7 +11,7 @@ import { IFormUserProps } from './IFormUser';
 import { ROLE_CATALOG } from './constant';
 
 function FormUser(props: IFormUserProps) {
-	const { hook } = props;
+	const { hook, isEditing, } = props;
 
 	const role = useSelector(selectUserRole);
 	const user = useSelector(selectUser);
@@ -114,37 +114,42 @@ function FormUser(props: IFormUserProps) {
 					))}
 				</TextFieldForm>
 			</Grid>
-			<Grid
-				item
-				xs={12}
-				pt={3}
-			/>
-			<Grid
-				item
-				xs={12}
-				md={6}
-			>
-				<TextFieldForm
-					name="password"
-					type="password"
-					control={hook.control}
-					label="Contraseña"
-					fullWidth
-				/>
-			</Grid>
-			<Grid
-				item
-				xs={12}
-				md={6}
-			>
-				<TextFieldForm
-					name="confirmPassword"
-					type="password"
-					control={hook.control}
-					label="Confirmar contraseña"
-					fullWidth
-				/>
-			</Grid>
+			{!isEditing && (
+				<>
+					<Grid
+						item
+						xs={12}
+						pt={3}
+					/>
+					<Grid
+						item
+						xs={12}
+						md={6}
+					>
+						<TextFieldForm
+							name="password"
+							type="password"
+							control={hook.control}
+							label="Contraseña"
+							fullWidth
+						/>
+					</Grid>
+					<Grid
+						item
+						xs={12}
+						md={6}
+					>
+						<TextFieldForm
+							name="confirmPassword"
+							type="password"
+							control={hook.control}
+							label="Confirmar contraseña"
+							fullWidth
+						/>
+					</Grid>
+
+				</>
+			)}
 		</Grid>
 	);
 }

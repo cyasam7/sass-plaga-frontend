@@ -1,8 +1,4 @@
-import i18next from 'i18next';
 import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType';
-import en from './navigation-i18n/en';
-
-i18next.addResourceBundle('en', 'navigation', en);
 
 /**
  * The navigationConfig object is an array of navigation items for the Fuse application.
@@ -11,46 +7,56 @@ const navigationConfig: FuseNavItemType[] = [
   {
     id: 'modules-app',
     title: 'Módulos',
-    translate: 'MODULES',
-    auth: ['admin', 'staff'],
     type: 'group',
-
     children: [
       {
-        id: 'users',
-        title: 'Users',
-        translate: 'USERS',
+        id: 'membership',
+        title: 'Membresías',
         type: 'item',
         icon: 'heroicons-outline:users',
-        auth: ['admin', 'staff'],
+        auth: ['admin'],
+        url: '/membership'
+      },
+      {
+        id: 'users',
+        title: 'Usuarios',
+        type: 'item',
+        icon: 'heroicons-outline:users',
+        auth: ['staff'],
         url: '/users'
       },
       {
         id: 'orders',
         title: 'Ordenes',
-        translate: 'ORDERS',
         type: 'item',
-        auth: ['admin', 'staff'],
+        auth: ['staff'],
         icon: 'material-outline:assignment',
         url: '/orders',
         children: []
       },
       {
+        id: 'inspection',
+        title: 'Inspecciones',
+        type: 'item',
+        auth: ['staff'],
+        icon: 'material-outline:assignment',
+        url: '/inspection',
+        children: []
+      },
+      {
         id: 'clients',
         title: 'Clientes',
-        translate: 'CLIENTS',
         type: 'item',
-        auth: ['admin', 'staff'],
+        auth: ['staff'],
         icon: 'material-twotone:person_pin',
         url: '/clients',
         children: []
       },
       {
         id: 'catalogs',
-        title: 'Catalogs',
-        translate: 'CATALOGS',
+        title: 'Catálogos',
         type: 'item',
-        auth: ['admin', 'staff'],
+        auth: ['staff'],
         icon: 'heroicons-outline:archive',
         url: '/catalogs',
         children: []
@@ -60,17 +66,15 @@ const navigationConfig: FuseNavItemType[] = [
   {
     id: 'configurations-app',
     title: 'Configuraciones',
-    translate: 'CONFIGURATION',
-    auth: ['admin', 'staff'],
+    auth: ['staff'],
     type: 'group',
     icon: 'heroicons-solid:adjustments',
     children: [
       {
         id: 'configurations-account',
         title: 'Cuenta',
-        translate: 'ACCOUNT',
         type: 'item',
-        auth: ['admin', 'staff'],
+        auth: ['staff'],
         url: '/configuration/account'
       },
       /* {
@@ -78,14 +82,13 @@ const navigationConfig: FuseNavItemType[] = [
 				title: 'Account',
 				translate: 'WHATS_APP',
 				type: 'item',
-				auth: ['admin', 'staff'],
+				auth: [ 'staff'],
 				url: '/configuration/whats-app'
 			}, */ {
         id: 'configurations-reports',
         title: 'Reportes',
-        translate: 'REPORTS',
         type: 'item',
-        auth: ['admin', 'staff'],
+        auth: ['staff'],
         url: '/configuration/reports'
       }
     ]

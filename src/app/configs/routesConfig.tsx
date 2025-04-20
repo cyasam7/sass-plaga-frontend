@@ -14,7 +14,8 @@ import ContactsAppConfig from '../main/clients/ClientsAppConfig';
 import AppConfigurationsConfig from '../main/app-config/AppConfig-Config';
 import UsersConfig from '../main/users/UsersConfig';
 import forgotPasswordPagesConfig from '../main/forgot-password/forgotPasswordPagesConfig';
-
+import InspectionConfig from '../main/inspection/InspectionConfig';
+import MembershipConfig from '../main/memberships/MembershipConfig';
 const routeConfigs: FuseRouteConfigsType = [
 	SignOutConfig,
 	SignInConfig,
@@ -25,7 +26,9 @@ const routeConfigs: FuseRouteConfigsType = [
 	CatalogsConfig,
 	ContactsAppConfig,
 	AppConfigurationsConfig,
-	UsersConfig
+	UsersConfig,
+	InspectionConfig,
+	MembershipConfig
 ];
 
 /**

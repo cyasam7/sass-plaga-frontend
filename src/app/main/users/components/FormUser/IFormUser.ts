@@ -13,4 +13,5 @@ export interface IFormUser {
 export interface IFormUserProps {
 	hook: UseFormReturn<IFormUser>;
 	loading?: boolean;
+	isEditing?: boolean;
 }
