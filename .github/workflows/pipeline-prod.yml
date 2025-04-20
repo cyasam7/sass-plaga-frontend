@@ -26,5 +26,5 @@ jobs:
         run: |
           npm i
           npm run build
-          rm -rf /var/www/app.fumigation-hub.com/*
-          cp -r build/* /var/www/app.fumigation-hub.com
+          sudo rm -rf /var/www/app.fumigation-hub.com/*
+          sudo cp -r build/* /var/www/app.fumigation-hub.com
