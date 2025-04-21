@@ -170,6 +170,12 @@ function FormOrder(props: IFormOrderProps) {
 						control={formHandler.control}
 						name="date"
 						disabled={disabled || dateField}
+						datePickerProps={{
+							timeSteps: { minutes: 15 },
+							ampm: false,
+							format: "DD/MM/YYYY HH:mm",
+							views: ['year', 'month', 'day', 'hours', 'minutes']
+						}}
 					/>
 				</Grid>
 				<Grid

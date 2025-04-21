@@ -16,6 +16,7 @@ import UsersConfig from '../main/users/UsersConfig';
 import forgotPasswordPagesConfig from '../main/forgot-password/forgotPasswordPagesConfig';
 import InspectionConfig from '../main/inspection/InspectionConfig';
 import MembershipConfig from '../main/memberships/MembershipConfig';
+import RedirectionConfig from '../main/_redirect/RedirectionConfig';
 const routeConfigs: FuseRouteConfigsType = [
 	SignOutConfig,
 	SignInConfig,
@@ -28,7 +29,8 @@ const routeConfigs: FuseRouteConfigsType = [
 	AppConfigurationsConfig,
 	UsersConfig,
 	InspectionConfig,
-	MembershipConfig
+	MembershipConfig,
+	RedirectionConfig
 ];
 
 /**
@@ -38,7 +40,7 @@ const routes: FuseRoutesType = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
 	{
 		path: '/',
-		element: <Navigate to="/users" />,
+		element: <Navigate to="/redirect" />,
 		auth: settingsConfig.defaultAuth
 	},
 	{

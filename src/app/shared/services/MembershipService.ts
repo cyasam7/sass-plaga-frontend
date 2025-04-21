@@ -1,38 +1,7 @@
+import { CreateMembershipDTO } from '../entities/Memberships';
+import { Membership } from '../entities/Memberships';
+import { IDataGridMembership } from '../entities/Memberships';
 import { AxiosFetcher } from '../fetcher';
-
-export interface Membership {
-  id: string;
-  tenantId: string;
-  dueDate: Date;
-  type: EMembershipType;
-}
-
-export enum EMembershipType {
-  MONTHLY = 'monthly',
-  YEARLY = 'yearly'
-}
-
-export interface IDataGridMembership {
-  id: string;
-  tenantId: string;
-  tenantName: string;
-  dueDate: Date;
-  type: EMembershipType;
-  ownerId: string;
-  owner: string;
-  ownerEmail: string;
-}
-
-export class CreateMembershipDTO {
-  name: string;
-  phone: string;
-  email: string;
-  password: string;
-  workspaceName: string;
-  companyName: string;
-  membershipType: EMembershipType;
-  dueDate: Date;
-}
 
 export class MembershipService {
   private static readonly baseUrl = 'membership';
@@ -52,10 +21,25 @@ export class MembershipService {
   }
 
   static async create(membership: CreateMembershipDTO): Promise<void> {
-    AxiosFetcher({
+    await AxiosFetcher({
       url: this.baseUrl,
       method: 'POST',
       data: membership
+    });
+  }
+
+  static async extendDueDate(id: string, dueDate: Date, tenantId: string): Promise<void> {
+    await AxiosFetcher({
+      url: `${this.baseUrl}/extend-due-date/${id}`,
+      method: 'PATCH',
+      data: { dueDate, tenantId }
+    });
+  }
+  static async changeIsActive(id: string, isActive: boolean, tenantId: string): Promise<void> {
+    await AxiosFetcher({
+      url: `${this.baseUrl}/is-active/${id}`,
+      method: 'PATCH',
+      data: { isActive, tenantId }
     });
   }
 }

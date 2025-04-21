@@ -101,7 +101,7 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 
 	redirectRoute() {
 		const { userRole, loginRedirectUrl = '/' } = this.props;
-		const redirectUrl = getSessionRedirectUrl() || loginRedirectUrl;
+		const redirectUrl = /* getSessionRedirectUrl() || */ loginRedirectUrl;
 
 		/*
 		User is guest
@@ -111,9 +111,9 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 			setTimeout(() => history.push('/sign-in'), 0);
 		} else {
 			/*
-		  User is member
-		  User must be on unAuthorized page or just logged in
-		  Redirect to dashboard or loginRedirectUrl
+			User is member
+			User must be on unAuthorized page or just logged in
+			Redirect to dashboard or loginRedirectUrl
 			*/
 			setTimeout(() => history.push(redirectUrl), 0);
 			resetSessionRedirectUrl();

@@ -43,7 +43,8 @@ const StyledSnackbar = styled(Snackbar)<StyledSnackbarProps>(({ theme, variant }
 			backgroundColor: amber[600],
 			color: '#FFFFFF'
 		})
-	}
+	},
+	zIndex: 99999
 }));
 
 const variantIcon = {
