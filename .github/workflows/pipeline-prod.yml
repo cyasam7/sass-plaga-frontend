@@ -26,5 +26,8 @@ jobs:
         run: |
           npm i
           npm run build
-          rm -rf /home/cyasam/frontend/*
-          cp -r build/* /home/cyasam/frontend
+
+      - name: Deploy
+        run: |
+          rm -rf /var/www/app.fumigation-hub.com/*
+          cp -r build/* /var/www/app.fumigation-hub.com
