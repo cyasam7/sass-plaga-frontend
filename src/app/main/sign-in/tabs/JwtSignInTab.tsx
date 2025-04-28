@@ -61,17 +61,16 @@ function jwtSignInTab() {
 				(
 					error: AxiosError<
 						{
-							type: 'email' | 'password' | 'remember' | `root.${string}` | 'root';
-							message: string;
-						}[]
+
+							message: string,
+							name: string,
+							response: string,
+							status: number
+						}
 					>
 				) => {
-					const errorData = error.response.data;
-					errorData.forEach((err) => {
-						setError(err.type, {
-							type: 'manual',
-							message: err.message
-						});
+					setError('password', {
+						message: error?.response?.data?.message ?? 'Error en el login'
 					});
 				}
 			);

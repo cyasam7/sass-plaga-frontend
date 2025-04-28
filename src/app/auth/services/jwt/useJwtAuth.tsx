@@ -288,7 +288,8 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
 				if (
 					statusError === 401 &&
-					!originalRequest.url.includes(authConfig.tokenRefreshUrl) &&
+					(!originalRequest.url.includes(authConfig.tokenRefreshUrl) ||
+						!originalRequest.url.includes(authConfig.signInUrl)) &&
 					!originalRequest._retry
 				) {
 					// Lock the token refresh process to avoid multiple simultaneous requests
