@@ -18,6 +18,8 @@ import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormClientValues, NewClientFormProps, formSchema } from "./types"
 import { useEffect } from "react"
+import PhoneInputForm from "app/shared-components/Form/PhoneInputForm/PhoneInputForm"
+import TextFieldForm from "app/shared-components/Form/TextFieldForm/TextFieldForm"
 
 const resetValues: FormClientValues = {
   type: "individual",
@@ -36,7 +38,7 @@ export function NewClientForm({ open, onClose, onSubmit, defaultValues }: NewCli
     handleSubmit,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormClientValues>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues || resetValues,
@@ -78,86 +80,61 @@ export function NewClientForm({ open, onClose, onSubmit, defaultValues }: NewCli
         <form id="new-client-form" onSubmit={handleSubmit(onFormSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Controller
+
+              <TextFieldForm
+                control={control}
                 name="type"
-                control={control}
-                render={({ field }) => (
-                  <FormControl fullWidth error={!!errors.type}>
-                    <InputLabel>Tipo de cliente</InputLabel>
-                    <Select {...field} label="Tipo de cliente">
-                      <MenuItem value="individual">Persona</MenuItem>
-                      <MenuItem value="business">Empresa</MenuItem>
-                    </Select>
-                    {errors.type && <FormHelperText>{errors.type.message}</FormHelperText>}
-                  </FormControl>
-                )}
-              />
+                label="Tipo de cliente"
+                fullWidth
+                size="small"
+                disabled={isSubmitting}
+                select
+              >
+                <MenuItem value="individual">Persona</MenuItem>
+                <MenuItem value="business">Empresa</MenuItem>
+              </TextFieldForm>
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Controller
+              <TextFieldForm
+                control={control}
                 name="name"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={clientType === "business" ? "Nombre de la empresa" : "Nombre completo"}
-                    fullWidth
-                    error={!!errors.name}
-                    helperText={errors.name?.message}
-                  />
-                )}
+                label={clientType === "business" ? "Nombre de la empresa" : "Nombre completo"}
+                fullWidth
+                size="small"
+                disabled={isSubmitting}
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
-              <Controller
+              <TextFieldForm
+                control={control}
                 name="email"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Correo electrónico"
-                    fullWidth
-                    error={!!errors.email}
-                    helperText={errors.email?.message}
-                  />
-                )}
+                label={"Correo electrónico"}
+                fullWidth
+                size="small"
+                disabled={isSubmitting}
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
-              <Controller
+              <PhoneInputForm
                 name="phone"
+                size='small'
                 control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Teléfono"
-                    fullWidth
-                    error={!!errors.phone}
-                    helperText={errors.phone?.message}
-                  />
-                )}
+                label="Teléfono"
+                fullWidth
+                disabled={isSubmitting}
               />
             </Grid>
-
             <Grid item xs={12} md={6}>
-              <Controller
-                name="address"
+              <TextFieldForm
                 control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Dirección"
-                    fullWidth
-                    error={!!errors.address}
-                    helperText={errors.address?.message}
-                  />
-                )}
+                name="address"
+                label={"Dirección"}
+                fullWidth
+                size="small"
+                disabled={isSubmitting}
               />
             </Grid>
-
             {clientType === "business" && (
               <>
                 <Grid item xs={12}>
@@ -167,36 +144,24 @@ export function NewClientForm({ open, onClose, onSubmit, defaultValues }: NewCli
                     </Typography>
                   </Divider>
                 </Grid>
-
                 <Grid item xs={12} md={6}>
-                  <Controller
-                    name="contactPerson"
+                  <TextFieldForm
                     control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Persona de contacto"
-                        fullWidth
-                        error={!!errors.contactPerson}
-                        helperText={errors.contactPerson?.message}
-                      />
-                    )}
+                    name="contactPerson"
+                    label={"Persona de contacto"}
+                    fullWidth
+                    size="small"
+                    disabled={isSubmitting}
                   />
                 </Grid>
-
                 <Grid item xs={12} md={6}>
-                  <Controller
-                    name="position"
+                  <TextFieldForm
                     control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Cargo"
-                        fullWidth
-                        error={!!errors.position}
-                        helperText={errors.position?.message}
-                      />
-                    )}
+                    name="position"
+                    label={"Cargo"}
+                    fullWidth
+                    size="small"
+                    disabled={isSubmitting}
                   />
                 </Grid>
               </>
@@ -204,7 +169,6 @@ export function NewClientForm({ open, onClose, onSubmit, defaultValues }: NewCli
           </Grid>
         </form>
       </DialogContent>
-
       <DialogActions>
         <Button onClick={handleClose}>Cancelar</Button>
         <Button

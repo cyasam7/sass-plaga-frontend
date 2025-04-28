@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, MenuItem, Stack } from '@mui/material';
+import { FormControl, FormLabel, MenuItem, Stack, Typography } from '@mui/material';
 import React from 'react';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import HeaderDialog from 'app/shared-components/DialogSkeleton/HeaderDialog/HeaderDialog';
@@ -94,6 +94,9 @@ function AssignOrderDialog(props: IAssignOrderDialog) {
 							</TextFieldForm>
 						)}
 					</FormControl>
+					<Typography variant="body2" color="text.secondary">
+						Nota: Aquí aparecerán todos los trabajadores que tienen el rol de fumigador, si no aparece el trabajador que buscas, verifica que tenga configurada su firma.
+					</Typography>
 				</Stack>
 			}
 			maxWidth="sm"

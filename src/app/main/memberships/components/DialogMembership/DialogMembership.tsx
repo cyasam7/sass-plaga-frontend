@@ -33,30 +33,33 @@ const DialogMembership = (props: IDialogMembershipProps) => {
   }, [membership]);
 
   const handleSubmit = async (data: IFormSaveMembershipData) => {
-    if (data.password !== data.confirmPassword) {
-      formHandler.setError('confirmPassword', {
-        message: 'Las contraseñas no coinciden'
-      });
-      return;
-    }
-
-    const formattedValuesForm: CreateMembershipDTO = {
-      ...data,
-      membershipType: data.membershipType,
-      dueDate: data.dueDate.toDate(),
-    }
-    await MembershipService.create(formattedValuesForm);
-    displayToast({
-      message: 'Membresía creada correctamente',
-      variant: 'success',
-      autoHideDuration: 3000,
-      anchorOrigin: {
-        vertical: 'bottom',
-        horizontal: 'right'
+    try {
+      if (data.password !== data.confirmPassword) {
+        formHandler.setError('confirmPassword', {
+          message: 'Las contraseñas no coinciden'
+        });
+        return;
       }
-    })
-    onSubmit(data);
-    onClose();
+
+      const formattedValuesForm: CreateMembershipDTO = {
+        ...data,
+        membershipType: data.membershipType,
+        dueDate: data.dueDate.toDate(),
+      }
+      await MembershipService.create(formattedValuesForm);
+      displayToast({
+        message: 'Membresía creada correctamente',
+        variant: 'success',
+        autoHideDuration: 3000,
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right'
+        }
+      })
+      onSubmit(data);
+      onClose();
+    } catch {
+    }
   }
 
   const handleCancel = () => {
