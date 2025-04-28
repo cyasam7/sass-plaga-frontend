@@ -35,10 +35,10 @@ function OrderDialog(props: OrderDialogProps) {
 	useEffect(() => {
 		if (data) {
 			formHandler.reset({
-				clientId: data.client.id,
-				clientAddress: data.client.address,
-				clientName: data.client.name,
-				clientPhone: data.client.phone,
+				clientId: data.clientId ?? "",
+				clientAddress: data.clientAddress,
+				clientName: data.clientName,
+				clientPhone: data.clientPhone,
 				price: String(data.price),
 				date: dayjs(data.date)
 			});
@@ -49,26 +49,31 @@ function OrderDialog(props: OrderDialogProps) {
 	}, [data]);
 
 	async function handleSubmit(data: IFormCreatePest): Promise<void> {
-		const formatValues = {
-			...data,
-			id: isUpdating ? id : undefined,
-			date: data.date.toISOString(),
-			price: data.price,
-			isFollowUp: false
-		};
+		try {
+			const formatValues = {
+				...data,
+				id: isUpdating ? id : undefined,
+				date: data.date.toISOString(),
+				price: data.price,
+				isFollowUp: false
+			};
 
-		const { id: orderIdSaved } = await OrderService.createOrder(formatValues);
-		handleResetForm();
-		displayToast({
-			message: 'Se ha guardado correctamente',
-			autoHideDuration: 4000,
-			variant: 'success',
-			anchorOrigin: {
-				horizontal: 'right',
-				vertical: 'top'
-			}
-		});
-		await onSubmit?.(orderIdSaved, shouldOpenDialogAssign);
+			const orderIdSaved = await OrderService.createOrder(formatValues);
+			console.log('orderIdSaved', orderIdSaved);
+			handleResetForm();
+			displayToast({
+				message: 'Se ha guardado correctamente',
+				autoHideDuration: 4000,
+				variant: 'success',
+				anchorOrigin: {
+					horizontal: 'right',
+					vertical: 'top'
+				}
+			});
+			await onSubmit?.(orderIdSaved.id, shouldOpenDialogAssign);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	function handleCancel(): void {

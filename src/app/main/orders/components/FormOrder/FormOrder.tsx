@@ -4,9 +4,9 @@ import { NumericFormatAdapter } from 'app/shared-components/NumericFormatAdapter
 import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';
 import { DateTimePickerField } from 'app/shared-components/DateTimePicker';
 import { IFormOrderProps } from './FormOrderProps';
-import { CatalogService } from '../../../../shared/services/CatalogService';
 import { AutocompleteMaps } from '../AutocompleteMaps/AutocompleteMaps';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
+import { OrderService } from 'src/app/shared/services/OrderService';
 
 function FormOrder(props: IFormOrderProps) {
 	const { formHandler, disabled, disableSpecificField } = props;
@@ -23,15 +23,16 @@ function FormOrder(props: IFormOrderProps) {
 	async function handleAutoCompleteClient(): Promise<void> {
 		const phone = formHandler.watch('clientPhone');
 		if (phone) {
-			CatalogService.getClientsBy({ phone }).then(({ payload }) => {
-				if (payload) {
-					const [phoneFounded] = payload;
-					if (phoneFounded) {
-						const { address, id, name } = phoneFounded;
-						formHandler.setValue('clientAddress', address);
-						formHandler.setValue('clientId', id);
-						formHandler.setValue('clientName', name);
-					}
+			OrderService.getClientInfoByPhone(phone).then((phoneFounded) => {
+				if (phoneFounded) {
+					const {
+						clientAddress,
+						clientId,
+						clientName
+					} = phoneFounded;
+					formHandler.setValue('clientAddress', clientAddress);
+					formHandler.setValue('clientId', clientId);
+					formHandler.setValue('clientName', clientName);
 				}
 			});
 		}

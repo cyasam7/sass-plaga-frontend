@@ -36,8 +36,8 @@ function OrderDetailDialog(props: IOrderDetailDialogProps) {
 					>
 						<Typography>Información del cliente</Typography>
 						<Stack>
-							<Typography variant="subtitle2">{`${order?.client.name}. Tel. (${order?.client.phone})`}</Typography>
-							<Typography variant="body2">{`${order?.client.address}`}</Typography>
+							<Typography variant="subtitle2">{`${order?.clientName}. Tel. (${order?.clientPhone})`}</Typography>
+							<Typography variant="body2">{`${order?.clientAddress}`}</Typography>
 						</Stack>
 						<Divider />
 						<Typography>Información del servicio</Typography>
