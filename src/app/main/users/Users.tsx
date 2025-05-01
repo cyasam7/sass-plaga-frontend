@@ -19,6 +19,7 @@ import DialogSigner from '../../shared-components/DialogSigner/DialogSigner';
 import SignViewer from './components/SignViewer/SignViewer';
 import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
 import SimpleHeader from 'app/shared-components/SimpleHeader';
+import ChangePasswordDialog from './components/ChangePasswordDialog/ChangePasswordDialog';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -41,6 +42,7 @@ function Users() {
 	const [isActive, setIsActive] = useState<boolean | null>(null);
 	const { invalidate } = useQueryInvalidator();
 	const [openUserDialog, setOpenUserDialog] = useState(false);
+	const [openChangePassword, setOpenChangePassword] = useState(false);
 	const userLogged = useAppSelector(selectUser);
 
 	const { data, isLoading } = useQuery({
@@ -146,6 +148,16 @@ function Users() {
 							setUserId(params.row.userId);
 							setOpenSigner(true);
 						}}
+					/>,
+					<GridActionsCellItem
+						key={0}
+						label="CAMBIAR CONTRASEÑA"
+						icon={<HistoryEdu />}
+						showInMenu
+						onClick={() => {
+							setUserId(params.row.userId);
+							setOpenChangePassword(true);
+						}}
 					/>
 				];
 			}
@@ -222,6 +234,14 @@ function Users() {
 									setUserId('');
 									setOpenUserDialog(false);
 								}}
+							/>
+							<ChangePasswordDialog
+								open={openChangePassword}
+								onClose={() => {
+									setUserId('');
+									setOpenChangePassword(false);
+								}}
+								userId={userId}
 							/>
 							<SignViewer
 								open={openPreviewSign}

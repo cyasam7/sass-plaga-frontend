@@ -52,7 +52,7 @@ export const columnsUsers: GridColDef<IDataGridUserRow>[] = [
       />
     ),
   },
-  {
+  /* {
     field: 'tenant',
     headerName: 'TENANT / COMPAÑÍA',
     flex: 1,
@@ -60,7 +60,7 @@ export const columnsUsers: GridColDef<IDataGridUserRow>[] = [
     renderCell: (params) => (
       <span className="text-gray-600">{params.value}</span>
     ),
-  },
+  }, */
   {
     field: 'isActive',
     headerName: 'ACTIVADO',

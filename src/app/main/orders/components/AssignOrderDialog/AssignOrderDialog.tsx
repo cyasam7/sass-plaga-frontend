@@ -1,5 +1,5 @@
-import { FormControl, FormLabel, MenuItem, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { FormControl, FormLabel, MenuItem, Stack, Typography } from '@mui/material';
 import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
 import HeaderDialog from 'app/shared-components/DialogSkeleton/HeaderDialog/HeaderDialog';
 import DialogSkeleton from 'app/shared-components/DialogSkeleton/DialogSkeleton';
@@ -8,16 +8,14 @@ import { openDialog } from 'app/shared-components/GlobalDialog/openDialog';
 import { useQuery, useQueryClient } from 'react-query';
 import { OrderService } from 'src/app/shared/services/OrderService';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
-import { UserService } from 'src/app/shared/services/UserService';
-import { ERoleCode } from 'src/app/shared/entities/UserEntity';
 import { IAssignOrderDialog, IAssignOrderForm } from './IAssignOrderDialog';
 
 function AssignOrderDialog(props: IAssignOrderDialog) {
 	const { onClose, open, orderId } = props;
 	const queryClient = useQueryClient();
 
-	const { data: fumigators, isLoading } = useQuery({
-		queryFn: () => UserService.getUsersByQuery({ roleCode: ERoleCode.FUMIGATOR_TENANT }),
+	const { data: fumigators = [], isLoading } = useQuery({
+		queryFn: () => OrderService.getFumigatorToAssignOrder(),
 		queryKey: 'users-assign'
 	});
 
@@ -85,8 +83,9 @@ function AssignOrderDialog(props: IAssignOrderDialog) {
 							>
 								{fumigators.map((i) => (
 									<MenuItem
-										key={i.id}
-										value={i.id}
+										key={i.userId}
+										value={i.userId}
+										disabled={i.disabled}
 									>
 										{i.name}
 									</MenuItem>

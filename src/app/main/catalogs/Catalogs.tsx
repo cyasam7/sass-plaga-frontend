@@ -50,7 +50,7 @@ export default function CatalogsV2() {
 			}
 			content={
 				<Container maxWidth="xl" sx={{ py: 4 }}>
-					<Paper elevation={1} sx={{ borderRadius: 2 }}>
+					<Paper elevation={1} sx={{ borderRadius: 2, height: 'calc(100vh - 240px) !important' }}>
 						<Box pt={2}>
 							<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 								<Tabs value={tabValue} onChange={handleTabChange} aria-label="catálogos tabs">

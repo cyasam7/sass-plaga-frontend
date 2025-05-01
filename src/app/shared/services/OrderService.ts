@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DatagridRowOrder, EStatusOrder, OrderEntity } from '../entities/OrderEntity';
+import { DatagridRowOrder, EStatusOrder, IUserValidToStartOrder, OrderEntity } from '../entities/OrderEntity';
 import { AxiosFetcher } from '../fetcher';
 import { ResponseId } from '../entities/UserEntity';
 
@@ -24,7 +24,7 @@ export class OrderService {
     });
   }
 
-  static async createFollowingOrder(data: { id: string; observations: string; date: Date }): Promise<void> {
+  static async createFollowingOrder(data: { id: string; description: string; date: Date }): Promise<void> {
     await AxiosFetcher<ResponseId>({
       url: '/order/followUp',
       data,
@@ -121,11 +121,19 @@ export class OrderService {
         url: `/order/get-client-data/${phone}`,
         method: 'GET'
       });
-      console.log(response);
-
       return response;
     } catch (error) {
       console.log(error);
     }
+  }
+
+  static async getFumigatorToAssignOrder(): Promise<IUserValidToStartOrder[]> {
+    const resp = await AxiosFetcher<IUserValidToStartOrder[]>({
+      url: `/order/fumigators-to-assign-order`,
+      method: 'GET'
+    });
+    console.log(resp);
+
+    return resp;
   }
 }

@@ -42,3 +42,9 @@ export interface DatagridRowOrder {
   assignedId?: string;
   assignedName?: string;
 }
+
+export interface IUserValidToStartOrder {
+  userId: string;
+  name: string;
+  disabled: boolean;
+}
