@@ -72,7 +72,7 @@ function LoginInformation() {
 			<div className="relative z-10 w-full max-w-2xl">
 				<div className="text-7xl font-bold leading-none text-gray-100">
 					<div>Bienvenido a </div>
-					<div>FumigaApp</div>
+					<div>Fumigation Hub</div>
 				</div>
 				<div className="mt-24 text-lg leading-6 tracking-tight text-gray-400">
 					Nuestra aplicación ha sido diseñada específicamente para satisfacer las necesidades de las empresas

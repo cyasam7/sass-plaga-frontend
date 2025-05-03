@@ -5,6 +5,7 @@ import { IFormSaveMembershipData, IFormSaveMembershipProps } from './FormMembers
 import { DatePickerForm } from 'app/shared-components/DatePicker/DatePicker';
 import PhoneInputForm from 'app/shared-components/Form/PhoneInputForm/PhoneInputForm';
 import { EMembershipType } from 'src/app/shared/entities/Memberships';
+import { TextFieldPasswordForm } from 'app/shared-components/Form/TextFieldForm/PasswordInputForm';
 
 export const defaultValuesFormMembership = {
   id: undefined,
@@ -64,7 +65,7 @@ const FormSaveMembership: React.FC<IFormSaveMembershipProps> = ({
       </Grid>
       <Grid container item xs={12} spacing={3}>
         <Grid item xs={12} sm={6}>
-          <TextFieldForm<IFormSaveMembershipData>
+          <TextFieldPasswordForm<IFormSaveMembershipData>
             name="password"
             size='small'
             control={control}
@@ -75,7 +76,7 @@ const FormSaveMembership: React.FC<IFormSaveMembershipProps> = ({
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextFieldForm<IFormSaveMembershipData>
+          <TextFieldPasswordForm<IFormSaveMembershipData>
             name="confirmPassword"
             size='small'
             control={control}

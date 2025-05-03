@@ -37,7 +37,7 @@ function SignInPage() {
 					<Typography className="mt-32 text-4xl font-extrabold leading-tight tracking-tight">
 						Iniciar sesión
 					</Typography>
-					<div className="mt-2 flex items-baseline font-medium">
+					{/* <div className="mt-2 flex items-baseline font-medium">
 						<Typography>¿Aun no tienes cuenta?</Typography>
 						<Link
 							className="ml-4"
@@ -45,7 +45,7 @@ function SignInPage() {
 						>
 							Regístrate
 						</Link>
-					</div>
+					</div> */}
 
 					<JwtLoginTab />
 

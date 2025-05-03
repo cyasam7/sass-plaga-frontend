@@ -9,6 +9,7 @@ import { TenantService } from 'src/app/shared/services/TenantService';
 import { ERoleCode } from 'src/app/shared/entities/UserEntity';
 import { IFormUserProps } from './IFormUser';
 import { ROLE_CATALOG } from './constant';
+import { TextFieldPasswordForm } from 'app/shared-components/Form/TextFieldForm/PasswordInputForm';
 
 function FormUser(props: IFormUserProps) {
 	const { hook, isEditing, } = props;
@@ -126,9 +127,8 @@ function FormUser(props: IFormUserProps) {
 						xs={12}
 						md={6}
 					>
-						<TextFieldForm
+						<TextFieldPasswordForm
 							name="password"
-							type="password"
 							control={hook.control}
 							label="Contraseña"
 							fullWidth
@@ -139,15 +139,13 @@ function FormUser(props: IFormUserProps) {
 						xs={12}
 						md={6}
 					>
-						<TextFieldForm
+						<TextFieldPasswordForm
 							name="confirmPassword"
-							type="password"
 							control={hook.control}
 							label="Confirmar contraseña"
 							fullWidth
 						/>
 					</Grid>
-
 				</>
 			)}
 		</Grid>

@@ -17,6 +17,7 @@ import {
 } from 'src/app/shared-constants/yupMessages';
 import { AxiosError } from 'axios';
 import { SignUpPayload, useAuth } from '../../../auth/AuthRouteProvider';
+import { TextFieldPasswordForm } from 'app/shared-components/Form/TextFieldForm/PasswordInputForm';
 
 /**
  * Form Validation Schema
@@ -125,41 +126,27 @@ function JwtSignUpTab() {
 				)}
 			/>
 
-			<Controller
-				name="password"
+			<TextFieldPasswordForm
 				control={control}
-				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label="Contraseña"
-						type="password"
-						error={!!errors.password}
-						helperText={errors?.password?.message}
-						variant="standard"
-						required
-						fullWidth
-					/>
-				)}
+				name="password"
+				className="mb-24"
+				label="Contraseña"
+				variant="standard"
+				required
+				fullWidth
 			/>
 
-			<Controller
-				name="passwordConfirm"
+
+			<TextFieldPasswordForm
 				control={control}
-				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-24"
-						label="Contraseña (Confirmar)"
-						type="password"
-						error={!!errors.passwordConfirm}
-						helperText={errors?.passwordConfirm?.message}
-						variant="standard"
-						required
-						fullWidth
-					/>
-				)}
+				name={"passwordConfirm"}
+				className="mb-24"
+				label="Contraseña (Confirmar)"
+				variant="standard"
+				required
+				fullWidth
 			/>
+
 			<Controller
 				name="phone"
 				control={control}
@@ -177,6 +164,7 @@ function JwtSignUpTab() {
 					/>
 				)}
 			/>
+			
 			<Controller
 				name="companyName"
 				control={control}
