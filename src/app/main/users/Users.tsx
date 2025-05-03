@@ -20,6 +20,7 @@ import SignViewer from './components/SignViewer/SignViewer';
 import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
 import SimpleHeader from 'app/shared-components/SimpleHeader';
 import ChangePasswordDialog from './components/ChangePasswordDialog/ChangePasswordDialog';
+import SyncLockIcon from '@mui/icons-material/SyncLock';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -152,7 +153,7 @@ function Users() {
 					<GridActionsCellItem
 						key={0}
 						label="CAMBIAR CONTRASEÑA"
-						icon={<HistoryEdu />}
+						icon={<SyncLockIcon />}
 						showInMenu
 						onClick={() => {
 							setUserId(params.row.userId);

@@ -39,8 +39,8 @@ function AssignOrderDialog(props: IAssignOrderDialog) {
 			message: 'Se a actualizado correctamente',
 			variant: 'success'
 		});
-		handleClose();
 		await queryClient.invalidateQueries('orders');
+		handleClose();
 	}
 
 	async function onSubmit(data: IAssignOrderForm): Promise<void> {

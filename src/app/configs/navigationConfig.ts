@@ -77,14 +77,7 @@ const navigationConfig: FuseNavItemType[] = [
         auth: ['staff'],
         url: '/configuration/account'
       },
-      /* {
-				id: 'configurations-whatsapp',
-				title: 'Account',
-				translate: 'WHATS_APP',
-				type: 'item',
-				auth: [ 'staff'],
-				url: '/configuration/whats-app'
-			}, */ {
+      {
         id: 'configurations-reports',
         title: 'Reportes',
         type: 'item',

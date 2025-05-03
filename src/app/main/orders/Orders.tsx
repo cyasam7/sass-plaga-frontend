@@ -1,6 +1,6 @@
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { useQuery } from 'react-query';
-import { Button, Paper, Stack, Typography, IconButton, Drawer, useTheme, useMediaQuery } from '@mui/material';
+import { Button, Paper, Stack, Typography, IconButton, Drawer, useTheme, useMediaQuery, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
@@ -126,7 +126,19 @@ function Order() {
 					<GridActionsCellItem
 						key={6}
 						label="CERTIFICADO DE FUMIGACIÓN"
-						icon={<FileDownload />}
+						icon={
+							<Tooltip
+								title={
+									<>
+										<Typography color="inherit">Tooltip with HTML</Typography>
+										<em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
+										{"It's very engaging. Right?"}
+									</>
+								}
+							>
+								<FileDownload />
+							</Tooltip>
+						}
 						showInMenu
 						disabled={![EStatusOrder.DONE, EStatusOrder.FINISHED].includes(params.row.status)}
 						onClick={async () => {

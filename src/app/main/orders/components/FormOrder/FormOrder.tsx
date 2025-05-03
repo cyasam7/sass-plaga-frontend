@@ -112,21 +112,13 @@ function FormOrder(props: IFormOrderProps) {
 							xs={12}
 							md={6}
 						>
-							<Controller
+							<TextFieldForm
 								control={formHandler.control}
 								name="clientAddress"
-								render={({ field }) => (
-									<AutocompleteMaps
-										propsInput={{
-											disabled: disabled || clientAddressField,
-											label: 'Dirección',
-											value: field.value,
-											size: 'small'
-										}}
-										onChangeAddress={(value) => field.onChange(value)}
-										onPlaceSelect={() => { }}
-									/>
-								)}
+								label="Dirección"
+								disabled={disabled || clientAddressField}
+								fullWidth
+								size='small'
 							/>
 						</Grid>
 					</Grid>

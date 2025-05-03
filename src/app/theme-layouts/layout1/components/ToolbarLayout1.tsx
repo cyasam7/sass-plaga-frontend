@@ -64,18 +64,9 @@ function ToolbarLayout1(props: ToolbarLayout1Props) {
 								</Hidden>
 							</>
 						)}
-
-						<Hidden lgDown>
-							<NavigationShortcuts />
-						</Hidden>
 					</div>
 
 					<div className="flex h-full items-center overflow-x-auto px-8">
-						<LanguageSwitcher />
-						<AdjustFontSize />
-						<FullScreenToggle />
-						<NavigationSearch />
-						<QuickPanelToggleButton />
 						<UserMenu />
 					</div>
 
