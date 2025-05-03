@@ -34,7 +34,7 @@ const navigationConfig: FuseNavItemType[] = [
         url: '/orders',
         children: []
       },
-      {
+      /*  {
         id: 'inspection',
         title: 'Inspecciones',
         type: 'item',
@@ -51,7 +51,7 @@ const navigationConfig: FuseNavItemType[] = [
         icon: 'material-twotone:person_pin',
         url: '/clients',
         children: []
-      },
+      }, */
       {
         id: 'catalogs',
         title: 'Catálogos',
