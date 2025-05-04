@@ -10,12 +10,11 @@ import themeLayouts from 'app/theme-layouts/themeLayouts';
 import { selectMainTheme } from '@fuse/core/FuseSettings/store/fuseSettingsSlice';
 import axios from 'axios';
 import { QueryClientProvider, QueryClient } from 'react-query';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-import { APIProvider } from '@vis.gl/react-google-maps';
 import dayjs from 'dayjs';
 import { pdfjs } from 'react-pdf';
 import withAppProviders from './withAppProviders';
@@ -74,7 +73,7 @@ function App() {
 					direction={langDirection}
 				>
 					<AuthRouteProvider>
-						<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<LocalizationProvider adapterLocale='es' dateAdapter={AdapterDayjs}>
 							<SnackbarProvider
 								maxSnack={5}
 								anchorOrigin={{
