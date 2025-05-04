@@ -31,7 +31,7 @@ export function DatePickerForm<T extends FieldValues>({
 			control={control}
 			name={name}
 			render={({ field, fieldState }) => (
-				<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<>
 					<DatePicker
 						label={required ? `${label} *` : label}
 						disabled={disabled}
@@ -56,7 +56,7 @@ export function DatePickerForm<T extends FieldValues>({
 							{FIELD_REQUIRED}
 						</FormHelperText>
 					)}
-				</LocalizationProvider>
+				</>
 			)}
 		/>
 	);

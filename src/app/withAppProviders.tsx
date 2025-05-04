@@ -38,13 +38,11 @@ function withAppProviders(Component: React.ComponentType<ComponentProps>) {
 		return (
 			<ErrorBoundary>
 				<AppContext.Provider value={val}>
-					<LocalizationProvider dateAdapter={AdapterDateFns}>
-						<Provider store={store}>
-							<StyledEngineProvider injectFirst>
-								<Component {...props} />
-							</StyledEngineProvider>
-						</Provider>
-					</LocalizationProvider>
+					<Provider store={store}>
+						<StyledEngineProvider injectFirst>
+							<Component {...props} />
+						</StyledEngineProvider>
+					</Provider>
 				</AppContext.Provider>
 			</ErrorBoundary>
 		);

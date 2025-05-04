@@ -27,7 +27,6 @@ import 'dayjs/locale/es'; // import locale
  */
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
-// axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
@@ -73,7 +72,7 @@ function App() {
 					direction={langDirection}
 				>
 					<AuthRouteProvider>
-						<LocalizationProvider adapterLocale='es' dateAdapter={AdapterDayjs}>
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<SnackbarProvider
 								maxSnack={5}
 								anchorOrigin={{
