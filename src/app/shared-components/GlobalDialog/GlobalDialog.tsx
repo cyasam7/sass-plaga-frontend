@@ -47,6 +47,7 @@ function GlobalDialog() {
 					onClick={handleSubmit}
 					color="primary"
 					variant="contained"
+					loading={loading}
 				>
 					{textAccept ?? 'Aceptar'}
 				</LoadingButton>

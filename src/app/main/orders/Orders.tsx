@@ -63,6 +63,7 @@ function Order() {
 		queryKey: 'orders',
 		queryFn: () => OrderService.getDatagridOrders()
 	});
+
 	const columns: GridColDef<DatagridRowOrder>[] = [
 		...columnsOrders,
 		{
@@ -399,9 +400,7 @@ function Order() {
 						) : (
 							<Stack sx={{ height: 'calc(100vh - 240px)' }}>
 								<DataGrid
-									slots={{
-										toolbar: isMobile ? undefined : HeaderFilters
-									}}
+									slots={{ toolbar: isMobile ? undefined : HeaderFilters }}
 									hideFooterPagination
 									slotProps={{
 										toolbar: {
@@ -416,12 +415,7 @@ function Order() {
 									loading={isLoading}
 									rows={filterValues(data)}
 									columns={columns}
-									initialState={{
-										pagination: {
-											paginationModel: { pageSize: 10 }
-										}
-									}}
-									pageSizeOptions={[5, 10, 25]}
+									rowSelection={false}
 									density="compact"
 									getRowHeight={() => 'auto'}
 									sx={{

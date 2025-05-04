@@ -89,31 +89,14 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 			);
 		}
 	},
-	/* {
-		headerName: 'INICIAL',
-		field: 'type',
+	{
+		headerName: 'FOLIO',
+		field: 'folio',
 		sortable: false,
 		flex: 1,
 		minWidth: 150,
 		align: 'left',
-		disableColumnMenu: true,
-		valueGetter: ({ row }) => (!row.isFollowUp ? 'INICIAL' : 'SEGUIMIENTO'),
-		renderCell({ row, value }) {
-			const condition = !row.isFollowUp;
-			return (
-				<Chip
-					color={condition ? 'info' : 'secondary'}
-					label={value as string}
-					sx={{
-						fontWeight: 500,
-						'& .MuiChip-label': {
-							px: 1,
-						},
-					}}
-				/>
-			);
-		}
-	}, */
+	},
 	{
 		headerName: 'ASIGNADA',
 		field: 'assignedName',
