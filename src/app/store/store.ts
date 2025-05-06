@@ -1,13 +1,13 @@
 import i18n from 'app/store/i18nSlice';
 import apiService from 'app/store/apiService';
 import {
-	ReducersMapObject,
-	configureStore,
-	Store,
-	combineSlices,
-	buildCreateSlice,
-	asyncThunkCreator,
-	Middleware
+  ReducersMapObject,
+  configureStore,
+  Store,
+  combineSlices,
+  buildCreateSlice,
+  asyncThunkCreator,
+  Middleware
 } from '@reduxjs/toolkit';
 import { createDynamicMiddleware } from '@reduxjs/toolkit/react';
 import { AppDispatchType } from 'app/store/types';
@@ -15,6 +15,10 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { createLogger } from 'redux-logger';
 import { dialogReducer } from 'src/app/auth/user/store/dialogSlice';
+import { fuseMessageSlice } from '@fuse/core/FuseMessage/store/fuseMessageSlice';
+import { fuseSettingsSlice } from '@fuse/core/FuseSettings/store/fuseSettingsSlice';
+import { navbarSlice } from 'app/theme-layouts/shared-components/navbar/store/navbarSlice';
+import { dataSlice } from 'app/theme-layouts/shared-components/quickPanel/store/dataSlice';
 
 /**
  * The dynamic middleware instance.
@@ -28,8 +32,8 @@ export const addAppMiddleware = dynamicInstance.addMiddleware.withTypes<Config>(
 const middlewares: Middleware[] = [apiService.middleware, dynamicMiddleware];
 
 if (process.env.NODE_ENV === 'development') {
-	const logger = createLogger({ collapsed: (getState, action, logEntry) => (logEntry ? !logEntry.error : true) });
-	middlewares.push(logger);
+  const logger = createLogger({ collapsed: (getState, action, logEntry) => (logEntry ? !logEntry.error : true) });
+  middlewares.push(logger);
 }
 
 /**
@@ -40,10 +44,14 @@ export interface LazyLoadedSlices {}
 /**
  * The static reducers.
  */
-const staticReducers: ReducersMapObject = {
-	i18n,
-	[apiService.reducerPath]: apiService.reducer,
-	dialogReducer
+const staticReducers = {
+  i18n,
+  [apiService.reducerPath]: apiService.reducer,
+  dialogReducer,
+  fuseMessage: fuseMessageSlice.reducer,
+  fuseSettings: fuseSettingsSlice.reducer,
+  navbar: navbarSlice.reducer,
+  quickPanel: dataSlice.reducer,
 };
 
 /**
@@ -60,15 +68,15 @@ export type RootState = ReturnType<typeof rootReducer>;
  * Configures the app store.
  */
 export function configureAppStore(initialState?: RootState) {
-	const store = configureStore({
-		reducer: rootReducer,
-		preloadedState: initialState,
-		middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(middlewares)
-	}) as Store<RootState>;
+  const store = configureStore({
+    reducer: rootReducer,
+    preloadedState: initialState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(middlewares)
+  }) as Store<RootState>;
 
-	setupListeners(store.dispatch);
+  setupListeners(store.dispatch);
 
-	return store;
+  return store;
 }
 
 /**
@@ -89,21 +97,21 @@ export const useAppDispatch: () => AppDispatchType = useDispatch;
 /**
  * Shortage for the root state selector.
  */
-export const appSelector = rootReducer.selector;
+export const appSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 /**
  * createAppSlice is a wrapper around createSlice that adds support for asyncThunkCreator.
  */
 export const createAppSlice = buildCreateSlice({
-	creators: { asyncThunk: asyncThunkCreator }
+  creators: { asyncThunk: asyncThunkCreator }
 });
 
 /**
  * The type definition for the config object passed to `withAppMiddleware`.
  */
 type Config = {
-	state: RootState;
-	dispatch: AppDispatch;
+  state: RootState;
+  dispatch: AppDispatch;
 };
 
 export const withAppMiddleware = dynamicInstance.withMiddleware.withTypes<Config>();

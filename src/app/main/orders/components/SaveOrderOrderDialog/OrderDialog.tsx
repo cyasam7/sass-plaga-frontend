@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
