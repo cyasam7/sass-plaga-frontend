@@ -3,6 +3,7 @@ import { FormHelperText } from '@mui/material';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 import { FIELD_REQUIRED } from 'src/app/shared-constants/yupMessages';
+import { TIMEZONE } from 'src/app/shared-constants/dateFormat';
 
 export type DateTimePickerViews = 'year' | 'month' | 'day' | 'hours' | 'minutes';
 interface DateTimePickerFieldProps<T extends FieldValues> {
@@ -34,6 +35,7 @@ export function DateTimePickerField<T extends FieldValues>({
 			render={({ field, fieldState }) => (
 				<>
 					<DateTimePicker
+						timezone={TIMEZONE}
 						label={required ? `${label} *` : label}
 						disabled={disabled}
 						sx={{ width: fullWidth ? '100%' : 'auto' }}
