@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
@@ -57,9 +56,7 @@ function OrderDialog(props: OrderDialogProps) {
 				price: data.price,
 				isFollowUp: false
 			};
-
 			const orderIdSaved = await OrderService.createOrder(formatValues);
-			console.log('orderIdSaved', orderIdSaved);
 			handleResetForm();
 			displayToast({
 				message: 'Se ha guardado correctamente',

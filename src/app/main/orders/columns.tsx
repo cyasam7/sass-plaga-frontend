@@ -24,17 +24,11 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 						{row.client.name}
 					</Typography>
 					<Stack direction="row" spacing={1}>
-						<Typography variant="body2" color="text.secondary">
-							Dirección:
-						</Typography>
 						<Typography variant="body2">
 							{row.client.address}
 						</Typography>
 					</Stack>
 					<Stack direction="row" spacing={1}>
-						<Typography variant="body2" color="text.secondary">
-							Teléfono:
-						</Typography>
 						<Typography variant="body2">
 							{row.client.phone}
 						</Typography>

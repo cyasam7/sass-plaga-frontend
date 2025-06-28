@@ -132,8 +132,6 @@ export class OrderService {
       url: `/order/fumigators-to-assign-order`,
       method: 'GET'
     });
-    console.log(resp);
-
     return resp;
   }
 }

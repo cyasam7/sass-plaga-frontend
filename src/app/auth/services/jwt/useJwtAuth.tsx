@@ -5,6 +5,7 @@ import { PartialDeep } from 'type-fest';
 import { ApiError } from 'src/app/shared-interfaces/ErrorAxios';
 import { UserLoginResponse, AxiosConfigRetry, User as UserType } from '../../user';
 import { formatUserResponse } from './utils';
+import { TIMEZONE } from 'src/app/shared-constants/dateFormat';
 
 export type SignUpPayload = {
 	name: string;
@@ -88,6 +89,7 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 		localStorage.setItem(authConfig.tokenStorageKey, accessToken);
 		axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 		axios.defaults.headers.common['x-tenant'] = tenant;
+		axios.defaults.headers.common['x-timezone'] = TIMEZONE;
 		axios.defaults.headers.common['Content-Type'] = 'application/json';
 	}, []);
 
