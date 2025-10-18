@@ -26,29 +26,41 @@ function AssignOrderDialog(props: IAssignOrderDialog) {
 	});
 
 	async function successRequest({ userId }: IAssignOrderForm): Promise<void> {
-		await OrderService.updateOrderAssigned({
-			orderId,
-			userId
-		});
-		displayToast({
-			anchorOrigin: {
-				horizontal: 'right',
-				vertical: 'top'
-			},
-			autoHideDuration: 4000,
-			message: 'Se a actualizado correctamente',
-			variant: 'success'
-		});
-		await queryClient.invalidateQueries('orders');
-		handleClose();
+		try {
+			await OrderService.updateOrderAssigned({
+				orderId,
+				userId
+			});
+			displayToast({
+				anchorOrigin: {
+					horizontal: 'right',
+					vertical: 'top'
+				},
+				autoHideDuration: 4000,
+				message: 'Se a actualizado correctamente',
+				variant: 'success'
+			});
+			await queryClient.invalidateQueries('orders');
+			handleClose();
+		} catch {
+			displayToast({
+				anchorOrigin: {
+					horizontal: 'right',
+					vertical: 'top'
+				},
+				autoHideDuration: 4000,
+				message: 'Algo salio mal',
+				variant: 'error'
+			});
+		}
 	}
 
-	async function onSubmit(data: IAssignOrderForm): Promise<void> {
+	async function onSubmit(formValues: IAssignOrderForm): Promise<void> {
 		openDialog({
 			title: 'Confirmación requerida',
 			text: '¿Estas seguro que deseas confirmar orden?, una vez confirmada no podrás editar la orden.',
 			onAccept: async () => {
-				await successRequest(data);
+				await successRequest(formValues);
 			}
 		});
 	}
@@ -87,7 +99,7 @@ function AssignOrderDialog(props: IAssignOrderDialog) {
 										value={i.userId}
 										disabled={i.disabled}
 									>
-										{i.name}
+										{`${i.name}  ${i.disabled ? '(Falta configurar firma)' : ''}`}
 									</MenuItem>
 								))}
 							</TextFieldForm>

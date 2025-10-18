@@ -61,6 +61,14 @@ export default function ProductDialog({
                 description: selectedProduct.description,
                 doses: selectedProduct.doses || []
             });
+        } else if (open) {
+            reset({
+                id: '',
+                commercialName: '',
+                chemicalName: '',
+                description: '',
+                doses: []
+            });
         } else {
             reset({
                 id: '',
@@ -70,7 +78,7 @@ export default function ProductDialog({
                 doses: []
             });
         }
-    }, [selectedProduct, reset]);
+    }, [selectedProduct, reset, open]);
 
     const handleClose = () => {
         reset({

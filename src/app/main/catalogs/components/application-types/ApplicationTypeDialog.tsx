@@ -42,6 +42,12 @@ export default function ApplicationTypeDialog({
                 name: selectedApplication.name,
                 description: selectedApplication.description
             });
+        } else if (open) {
+            reset({
+                id: '',
+                name: '',
+                description: ''
+            });
         } else {
             reset({
                 id: '',
@@ -49,7 +55,7 @@ export default function ApplicationTypeDialog({
                 description: ''
             });
         }
-    }, [selectedApplication, reset]);
+    }, [selectedApplication, reset, open]);
 
     const handleClose = () => {
         reset({

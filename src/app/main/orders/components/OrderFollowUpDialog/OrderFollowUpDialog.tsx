@@ -20,20 +20,29 @@ function OrderFollowUpDialog(props: IOrderFollowUpDialogProps) {
 		}
 	});
 
-	async function handleSubmit(data: IFollowUpForm): Promise<void> {
-		await OrderService.createFollowingOrder({
-			id,
-			date: data.date.toDate(),
-			description: data.description
-		});
-		displayToast({
-			anchorOrigin: { horizontal: 'right', vertical: 'top' },
-			autoHideDuration: 1000,
-			message: 'Se creo orden correctamente',
-			variant: 'success'
-		});
-		handleOnClose();
-		await onSubmit();
+	async function handleSubmit(formValues: IFollowUpForm): Promise<void> {
+		try {
+			await OrderService.createFollowingOrder({
+				id,
+				date: formValues.date.utc().toDate(),
+				description: formValues.description
+			});
+			displayToast({
+				anchorOrigin: { horizontal: 'right', vertical: 'top' },
+				autoHideDuration: 1000,
+				message: 'Se creo seguimiento correctamente',
+				variant: 'success'
+			});
+			handleOnClose();
+			await onSubmit();
+		} catch (error) {
+			displayToast({
+				anchorOrigin: { horizontal: 'right', vertical: 'top' },
+				autoHideDuration: 1000,
+				message: 'Algo salio mal',
+				variant: 'error'
+			});
+		}
 	}
 
 	function handleOnClose(): void {

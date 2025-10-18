@@ -44,6 +44,12 @@ export default function ServiceTypeDialog({
                 name: selectedService.name,
                 description: selectedService.description
             });
+        } else if (open) {
+            reset({
+                id: '',
+                name: '',
+                description: ''
+            });
         } else {
             reset({
                 id: '',
@@ -51,7 +57,7 @@ export default function ServiceTypeDialog({
                 description: ''
             });
         }
-    }, [selectedService, reset]);
+    }, [selectedService, reset, open]);
 
     const handleClose = () => {
         reset({

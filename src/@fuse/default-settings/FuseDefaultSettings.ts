@@ -8,7 +8,7 @@ import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
 /**
  * The defaultTheme object defines the default color palette for the application.
  */
-const defaultTheme = {
+export const defaultTheme = {
   palette: {
     mode: 'light',
     text: {

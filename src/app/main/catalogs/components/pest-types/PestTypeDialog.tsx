@@ -43,6 +43,12 @@ export default function PestTypeDialog({
                 name: selectedPest.name,
                 description: selectedPest.description
             });
+        } else if (open) {
+            reset({
+                id: '',
+                name: '',
+                description: ''
+            });
         } else {
             reset({
                 id: '',
@@ -50,7 +56,7 @@ export default function PestTypeDialog({
                 description: ''
             });
         }
-    }, [selectedPest, reset]);
+    }, [selectedPest, reset, open]);
 
     const handleClose = () => {
         reset({

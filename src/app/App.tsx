@@ -35,7 +35,7 @@ dayjs.locale('es');
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const emotionCacheOptions = {
+export const emotionCacheOptions = {
 	rtl: {
 		key: 'muirtl',
 		stylisPlugins: [rtlPlugin],
@@ -63,6 +63,7 @@ function App() {
 	 * The main theme from the Redux store.
 	 */
 	const mainTheme = useSelector(selectMainTheme);
+	console.log("mainTheme", mainTheme);
 
 	return (
 		<QueryClientProvider client={queryClient}>

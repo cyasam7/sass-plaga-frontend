@@ -64,18 +64,12 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 			return (
 				<Stack spacing={0.5}>
 					<Stack direction="row" alignItems="center" spacing={1}>
-						<Typography variant="subtitle2" color="text.secondary">
-							Fecha:
-						</Typography>
-						<Typography variant="body2" fontWeight="medium">
+						<Typography variant="body2">
 							{dayjs(row.date).format(DATE_FORMAT)}
 						</Typography>
 					</Stack>
 					<Stack direction="row" alignItems="center" spacing={1}>
-						<Typography variant="subtitle2" color="text.secondary">
-							Hora:
-						</Typography>
-						<Typography variant="body2" fontWeight="medium">
+						<Typography variant="body2">
 							{dayjs(row.date).format(TIME_FORMAT)}
 						</Typography>
 					</Stack>

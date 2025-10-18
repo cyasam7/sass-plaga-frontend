@@ -47,13 +47,13 @@ function OrderDialog(props: OrderDialogProps) {
 		};
 	}, [data]);
 
-	async function handleSubmit(data: IFormCreatePest): Promise<void> {
+	async function handleSubmit(formValues: IFormCreatePest): Promise<void> {
 		try {
 			const formatValues = {
-				...data,
+				...formValues,
 				id: isUpdating ? id : undefined,
-				date: data.date.toISOString(),
-				price: data.price,
+				date: formValues.date.utc().toISOString(),
+				price: formValues.price,
 				isFollowUp: false
 			};
 			const orderIdSaved = await OrderService.createOrder(formatValues);
@@ -69,7 +69,15 @@ function OrderDialog(props: OrderDialogProps) {
 			});
 			await onSubmit?.(orderIdSaved.id, shouldOpenDialogAssign);
 		} catch (error) {
-			console.log(error);
+			displayToast({
+				anchorOrigin: {
+					horizontal: 'right',
+					vertical: 'top'
+				},
+				autoHideDuration: 4000,
+				message: 'Algo salio mal',
+				variant: 'error'
+			});
 		}
 	}
 
