@@ -36,7 +36,6 @@ export const ClientCard: React.FC<ClientCardProps> = ({
 }) => {
   const isBusiness = client.type === "business"
   const navigate = useNavigate()
-  console.log(client);
 
   return (
     <Card sx={{

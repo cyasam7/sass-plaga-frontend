@@ -1,43 +1,69 @@
-import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography } from '@mui/material';
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import dayjs from 'dayjs';
+import React, { useEffect } from 'react';
+import { Button, Dialog, DialogContent, DialogTitle, MenuItem, Stack, Typography } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { displayToast } from '@fuse/core/FuseMessage/DisplayToast';
-import { DateTimePicker } from '@mui/x-date-pickers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IOrderFollowUpDialogProps } from './IGenerateReportDialog';
 import { IGenerateReportForm, generateReportSchema, TypeReport } from './schema';
 import { OrderService } from '../../../../shared/services/OrderService';
+import TextFieldForm from 'app/shared-components/Form/TextFieldForm/TextFieldForm';
+
+const mapTranslate = {
+	[TypeReport.SERVICE_ORDER]: "Orden de servicio",
+	[TypeReport.CERTIFICATE]: "Certificado",
+}
 
 function GenerateReportDialog(props: IOrderFollowUpDialogProps) {
-	const { open, onClose, onSubmit, id } = props;
+	const { open, onClose, onSubmit } = props;
 
 	const formHandler = useForm<IGenerateReportForm>({
 		resolver: yupResolver(generateReportSchema),
 		defaultValues: {
-			date: null,
-			typeReport: TypeReport.CERTIFICATE
+			days: null,
+			typeReport: TypeReport.SERVICE_ORDER
 		}
 	});
 
+	const { isSubmitting } = formHandler.formState
+
 	async function handleSubmit(data: IGenerateReportForm): Promise<void> {
-		await OrderService.downloadCertificate({
-			daysValid: 1,
-			id
-		});
-		displayToast({
-			anchorOrigin: { horizontal: 'right', vertical: 'top' },
-			autoHideDuration: 1000,
-			message: 'Se creo orden correctamente',
-			variant: 'success'
-		});
-		handleOnClose();
-		await onSubmit();
+
+
+		if (data.typeReport === TypeReport.CERTIFICATE && !data.days) {
+			formHandler.setError("days", { message: "Campo requerido" })
+			return;
+		}
+
+		try {
+			if (data.typeReport === TypeReport.CERTIFICATE) {
+				await OrderService.downloadCertificate({
+					daysValid: data.days,
+					id: props.id
+				});
+			} else if (data.typeReport === TypeReport.SERVICE_ORDER) {
+				await OrderService.downloadServicesOrder(props.id);
+			}
+			await onSubmit?.();
+			displayToast({
+				anchorOrigin: { horizontal: 'right', vertical: 'top' },
+				autoHideDuration: 1000,
+				message: 'Se creo orden correctamente',
+				variant: 'success'
+			});
+		} catch (error) {
+			console.log(error)
+			displayToast({
+				anchorOrigin: { horizontal: 'right', vertical: 'top' },
+				autoHideDuration: 1000,
+				message: 'Hubo un error al descargar reporte',
+				variant: 'error'
+			})
+		}
 	}
 
 	function handleOnClose(): void {
 		onClose();
-		formHandler.reset({ date: null });
+		formHandler.reset({ days: null, typeReport: TypeReport.SERVICE_ORDER });
 	}
 
 	return (
@@ -61,12 +87,14 @@ function GenerateReportDialog(props: IOrderFollowUpDialogProps) {
 							variant="outlined"
 							color="primary"
 							onClick={handleOnClose}
+							disabled={isSubmitting}
 						>
-							Cancelar
+							Cerrar
 						</Button>
 						<Button
 							variant="contained"
 							color="primary"
+							disabled={isSubmitting}
 							onClick={formHandler.handleSubmit(handleSubmit)}
 						>
 							Guardar
@@ -79,29 +107,26 @@ function GenerateReportDialog(props: IOrderFollowUpDialogProps) {
 					py={2}
 					spacing={2}
 				>
-					<Controller
+					<TextFieldForm
 						control={formHandler.control}
-						name="date"
-						render={({ field, fieldState }) => (
-							<DateTimePicker
-								label="Fecha *"
-								timezone="America/Mexico_City"
-								sx={{ width: '100%' }}
-								value={field.value}
-								disabled={formHandler.formState.isSubmitting}
-								minDate={dayjs()}
-								onChange={(newValue) => field.onChange(newValue)}
-								slotProps={{
-									textField: {
-										variant: 'standard',
-										color: fieldState.error?.message ? 'error' : undefined,
-										helperText: fieldState.error?.message,
-										error: !!fieldState.error
-									}
-								}}
-							/>
-						)}
-					/>
+						label={"Tipo de reporte"}
+						name='typeReport'
+						select
+					>
+						{Object.values(TypeReport).map(i =>
+							<MenuItem key={i} value={i}>
+								{mapTranslate[i]}
+							</MenuItem>)
+						}
+					</TextFieldForm>
+					{formHandler.watch("typeReport") === TypeReport.CERTIFICATE && (
+						<TextFieldForm
+							type='number'
+							control={formHandler.control}
+							label={"Dias de valides del reporte"}
+							name='days'
+						/>
+					)}
 				</Stack>
 			</DialogContent>
 		</Dialog>

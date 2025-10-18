@@ -63,7 +63,6 @@ function App() {
 	 * The main theme from the Redux store.
 	 */
 	const mainTheme = useSelector(selectMainTheme);
-	console.log("mainTheme", mainTheme);
 
 	return (
 		<QueryClientProvider client={queryClient}>

@@ -5,7 +5,6 @@ import { BranchCardProps } from "./types"
 
 export function BranchCard({ branch, onMenuClick }: BranchCardProps) {
   const navigate = useNavigate()
-  console.log(branch);
   return (
     <Card sx={{
       height: "100%",

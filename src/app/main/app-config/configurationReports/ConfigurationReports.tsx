@@ -45,7 +45,7 @@ const defaultValuesAccountUser = {
 	licenseSanitary: ''
 };
 
-function AccountUser() {
+function ConfigurationReports() {
 	const user = useSelector(selectUser);
 	const tenantId = user.data.tenant;
 
@@ -113,7 +113,7 @@ function AccountUser() {
 		<Root
 			header={
 				<div className="p-24">
-					<Typography variant="h6">Configuración de empresa</Typography>
+					<Typography variant="h6">Configuración de reportes.</Typography>
 				</div>
 			}
 			content={
@@ -371,4 +371,4 @@ function AccountUser() {
 	);
 }
 
-export default AccountUser;
+export default ConfigurationReports;

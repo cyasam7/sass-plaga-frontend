@@ -65,20 +65,13 @@ const navigationConfig: FuseNavItemType[] = [
   },
   {
     id: 'configurations-app',
-    title: 'Configuraciones',
+    title: 'Reportes',
     auth: ['staff'],
     type: 'group',
     icon: 'heroicons-solid:adjustments',
     children: [
       {
         id: 'configurations-account',
-        title: 'Cuenta',
-        type: 'item',
-        auth: ['staff'],
-        url: '/configuration/account'
-      },
-      {
-        id: 'configurations-reports',
         title: 'Reportes',
         type: 'item',
         auth: ['staff'],

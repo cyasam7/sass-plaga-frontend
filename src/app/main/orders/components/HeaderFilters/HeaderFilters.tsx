@@ -82,7 +82,7 @@ function HeaderFilters({
 	return (
 		<Stack
 			direction="column"
-			spacing={3}
+			spacing={2}
 			sx={{
 				width: '100%',
 				p: isMobile ? 2 : 0

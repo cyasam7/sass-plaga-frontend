@@ -14,7 +14,8 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		field: 'client',
 		sortable: false,
 		flex: 2,
-		minWidth: 300,
+		minWidth: 180,
+		maxWidth: 300,
 		align: 'left',
 		disableColumnMenu: true,
 		renderCell: ({ row }) => {
@@ -23,13 +24,13 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 					<Typography variant="subtitle2" fontWeight="medium">
 						{row.client.name}
 					</Typography>
-					<Stack direction="row" spacing={1}>
-						<Typography variant="body2">
+					<Stack direction="row">
+						<Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
 							{row.client.address}
 						</Typography>
 					</Stack>
-					<Stack direction="row" spacing={1}>
-						<Typography variant="body2">
+					<Stack direction="row">
+						<Typography variant="caption">
 							{row.client.phone}
 						</Typography>
 					</Stack>
@@ -41,8 +42,9 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		headerName: 'ESTATUS',
 		field: 'status',
 		sortable: false,
-		flex: 1,
-		minWidth: 140,
+		flex: 0.8,
+		minWidth: 90,
+		maxWidth: 120,
 		align: 'left',
 		disableColumnMenu: true,
 		valueGetter: ({ row }) => statusLabel[row.status],
@@ -52,13 +54,14 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		}
 	},
 	{
-		headerName: 'FECHA DE SERVICIO',
+		headerName: 'FECHA',
 		headerAlign: 'left',
 		field: 'date',
 		sortable: true,
 		flex: 1,
 		align: 'left',
-		minWidth: 200,
+		minWidth: 120,
+		maxWidth: 160,
 		disableColumnMenu: true,
 		renderCell: ({ row }) => {
 			return (
@@ -82,7 +85,8 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		field: 'folio',
 		sortable: false,
 		flex: 1,
-		minWidth: 150,
+		minWidth: 120,
+		maxWidth: 180,
 		align: 'left',
 	},
 	{
@@ -91,9 +95,10 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		sortable: false,
 		align: 'left',
 		headerAlign: 'left',
-		flex: 0.5,
+		flex: 1,
 		hideSortIcons: true,
-		minWidth: 200,
+		minWidth: 120,
+		maxWidth: 180,
 		disableColumnMenu: true,
 		valueGetter({ value }) {
 			return (value || 'Sin asignar') as string;
@@ -103,6 +108,7 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 				variant="body2"
 				color={value === 'Sin asignar' ? 'text.secondary' : 'text.primary'}
 				fontWeight={value === 'Sin asignar' ? 'normal' : 'medium'}
+				sx={{ wordBreak: 'break-word' }}
 			>
 				{value}
 			</Typography>
@@ -114,9 +120,10 @@ export const columnsOrders: GridColDef<DatagridRowOrder>[] = [
 		sortable: false,
 		align: 'right',
 		headerAlign: 'right',
-		flex: 0.5,
+		flex: 0.8,
 		hideSortIcons: true,
-		minWidth: 150,
+		minWidth: 90,
+		maxWidth: 120,
 		disableColumnMenu: true,
 		valueFormatter({ value }) {
 			return `$${formatCurrency(String(value))}`;

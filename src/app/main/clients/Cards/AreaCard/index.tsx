@@ -5,8 +5,6 @@ import { AreaCardProps } from "./types"
 
 export function AreaCard({ area, onMenuClick }: AreaCardProps) {
   const navigate = useNavigate()
-  console.log(area);
-
   return (
     <Card
       sx={{

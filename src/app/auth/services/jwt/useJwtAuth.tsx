@@ -339,16 +339,16 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 				const userData = response?.data;
 				const formattedUser = formatUserResponse(userData) as User;
 				handleSignInSuccess(formattedUser, userData.accessToken, userData.refreshToken);
-				return true;
+				return true
 			} catch {
-				return false;
+				return false
 			}
 		};
 
 		attemptAutoLogin().then(() => {
-			setIsLoading(false);
-		});
-	}, []);
+			setIsLoading(false)
+		})
+	}, [isAuthenticated]);
 
 	return { user, isAuthenticated, isLoading, signIn, signUp, signOut, updateUser, refreshToken, setIsLoading };
 };

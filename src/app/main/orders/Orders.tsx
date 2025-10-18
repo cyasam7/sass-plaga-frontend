@@ -1,4 +1,4 @@
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, gridClasses, GridColDef } from '@mui/x-data-grid';
 import { useQuery } from 'react-query';
 import { Button, Paper, Stack, Typography, IconButton, Drawer, useTheme, useMediaQuery, Tooltip } from '@mui/material';
 import { useState } from 'react';
@@ -27,6 +27,7 @@ import { MobileCard } from './components/MobileCard/MobileCard';
 import FusePageSimpleHeader from '@fuse/core/FusePageSimple/FusePageSimpleHeader';
 import SimpleHeader from 'app/shared-components/SimpleHeader';
 import './styles/actionButtons.css';
+import GenerateReportDialog from './components/GenerateReportDialog/GenerateReportDialog';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -51,6 +52,7 @@ function Order() {
 	const [openStatus, setOpenStatus] = useState<boolean>(false);
 	const [openAssign, setOpenAssign] = useState<boolean>(false);
 	const [openFollow, setOpenFollow] = useState<boolean>(false);
+	const [openDownloadReport, setOpenDownloadReport] = useState<boolean>(false);
 	const [shouldOpenDialogAssign, setShouldOpenDialogAssign] = useState<boolean>(false);
 	const [orderId, setOrderId] = useState<string>('');
 	const [openFilterDrawer, setOpenFilterDrawer] = useState(false);
@@ -70,28 +72,25 @@ function Order() {
 			headerName: 'ACCIONES',
 			field: 'actions',
 			sortable: false,
-			minWidth: 50,
+			minWidth: 190,
 			align: 'center',
 			type: 'actions',
 			disableColumnMenu: true,
 			getActions: (params) => {
 				const { status, assignedId } = params.row;
-
 				return [
 					<GridActionsCellItem
-						key={0}
-						label="MODIFICAR"
-						icon={<NoteAltIcon />}
-						showInMenu
+						key="view"
+						label="VER"
+						icon={<RemoveRedEyeIcon />}
 						onClick={() => {
 							setOrderId(params.row.id);
-							setOpen(true);
+							setOpenDetails(true);
 						}}
-						disabled={[EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
 						className="action-button"
 					/>,
 					<GridActionsCellItem
-						key={1}
+						key="assign"
 						label={assignedId ? 'RE-ASIGNAR' : 'ASIGNAR'}
 						icon={<AssignmentIndIcon />}
 						showInMenu
@@ -103,7 +102,19 @@ function Order() {
 						className="action-button"
 					/>,
 					<GridActionsCellItem
-						key={3}
+						key="modify"
+						label="MODIFICAR"
+						icon={<NoteAltIcon />}
+						showInMenu
+						onClick={() => {
+							setOrderId(params.row.id);
+							setOpen(true);
+						}}
+						disabled={[EStatusOrder.FINISHED, EStatusOrder.CANCELED].includes(status)}
+						className="action-button"
+					/>,
+					<GridActionsCellItem
+						key="follow"
 						label="CREAR SEGUIMIENTO"
 						icon={<MoveUpIcon />}
 						showInMenu
@@ -114,55 +125,18 @@ function Order() {
 						className="action-button"
 					/>,
 					<GridActionsCellItem
-						key={4}
-						label="VER"
-						icon={<RemoveRedEyeIcon />}
-						showInMenu
-						onClick={() => {
-							setOrderId(params.row.id);
-							setOpenDetails(true);
-						}}
-						className="action-button"
-					/>,
-					<GridActionsCellItem
-						key={6}
-						label="CERTIFICADO DE FUMIGACIÓN"
-						icon={
-							<Tooltip
-								title={
-									<>
-										<Typography color="inherit">Tooltip with HTML</Typography>
-										<em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
-										{"It's very engaging. Right?"}
-									</>
-								}
-							>
-								<FileDownload />
-							</Tooltip>
-						}
-						showInMenu
-						disabled={![EStatusOrder.DONE, EStatusOrder.FINISHED].includes(params.row.status)}
-						onClick={async () => {
-							await OrderService.downloadCertificate({
-								daysValid: 30,
-								id: params.row.id
-							});
-						}}
-						className="action-button download"
-					/>,
-					<GridActionsCellItem
-						key={7}
-						label="ORDEN DE SERVICIO"
+						key="certificate"
+						label="GENERAR REPORTE"
 						icon={<FileDownload />}
-						showInMenu
 						disabled={![EStatusOrder.DONE, EStatusOrder.FINISHED].includes(params.row.status)}
 						onClick={async () => {
-							await OrderService.downloadServicesOrder(params.row.id);
+							setOrderId(params.row.id);
+							setOpenDownloadReport(true)
 						}}
 						className="action-button download"
 					/>,
 					<GridActionsCellItem
-						key={5}
+						key="delete"
 						label="ELIMINAR"
 						icon={<Delete />}
 						showInMenu
@@ -284,6 +258,14 @@ function Order() {
 							</IconButton>
 						)}
 					</div>
+					<GenerateReportDialog
+						id={orderId}
+						open={openDownloadReport}
+						onClose={() => {
+							setOrderId("")
+							setOpenDownloadReport(false)
+						}}
+					/>
 					<OrderDialog
 						open={open}
 						id={orderId}
@@ -337,13 +319,8 @@ function Order() {
 						}}
 					/>
 					<Paper
-						className="p-8 sm:p-24 w-full"
-						sx={{
-							height: '100%',
-							maxHeight: 'calc(100vh - 240px)',
-							display: 'flex',
-							flexDirection: 'column'
-						}}
+						className="p-4 sm:p-24 w-full"
+						sx={{ display: 'flex', flexDirection: 'column' }}
 					>
 						{isMobile ? (
 							<Stack
@@ -398,10 +375,11 @@ function Order() {
 								))}
 							</Stack>
 						) : (
-							<Stack sx={{ height: 'calc(100vh - 240px)' }}>
+							<Stack sx={{ height: 'calc(100vh - 280px)' }}>
 								<DataGrid
 									slots={{ toolbar: isMobile ? undefined : HeaderFilters }}
 									hideFooterPagination
+									hideFooter
 									slotProps={{
 										toolbar: {
 											selectedTab: tabFilter,
@@ -416,17 +394,26 @@ function Order() {
 									rows={filterValues(data)}
 									columns={columns}
 									rowSelection={false}
-									density="compact"
+									density="comfortable"
 									getRowHeight={() => 'auto'}
 									sx={{
+										[`& .${gridClasses.main}`]: {
+											mt: 2,
+											border: 1,
+											borderColor: 'divider',
+											borderRadius: "10px"
+										},
+										height: "100% !important",
 										'& .MuiDataGrid-cell': {
 											py: 1,
 											px: 1,
 											wordBreak: 'break-word'
 										},
-										'& .MuiDataGrid-columnHeader': {
-											py: 1,
-											px: 1
+										'& .MuiDataGrid-root': {
+											overflowX: 'hidden'
+										},
+										'& .MuiDataGrid-virtualScroller': {
+											overflowX: 'hidden'
 										}
 									}}
 								/>

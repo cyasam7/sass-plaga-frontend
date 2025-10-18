@@ -16,8 +16,6 @@ const navigationAdapter = createEntityAdapter<FuseFlatNavItemType>();
 
 const emptyInitialState = navigationAdapter.getInitialState([]);
 
-
-
 const initialState = navigationAdapter.upsertMany(
   emptyInitialState,
   FuseNavigationHelper.flattenNavigation(navigationConfig)
@@ -34,7 +32,6 @@ export const appendNavigationItem =
   async (dispatch, getState) => {
     const AppState = getState() as AppRootStateType;
     const navigation = FuseNavigationHelper.unflattenNavigation(selectNavigationAll(AppState));
-    console.log({ navigation });
     dispatch(setNavigation(FuseNavigationHelper.appendNavItem(navigation, FuseNavItemModel(item), parentId)));
 
     return Promise.resolve();
