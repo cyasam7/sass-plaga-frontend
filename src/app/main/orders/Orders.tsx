@@ -409,12 +409,6 @@ function Order() {
 											px: 1,
 											wordBreak: 'break-word'
 										},
-										'& .MuiDataGrid-root': {
-											overflowX: 'hidden'
-										},
-										'& .MuiDataGrid-virtualScroller': {
-											overflowX: 'hidden'
-										}
 									}}
 								/>
 							</Stack>
